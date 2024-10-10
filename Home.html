@@ -681,7 +681,6 @@ function hideSpinner() {
     document.getElementById('spinner').style.display = 'none';
 }
 
-
 // Function to calculate distance
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in km
@@ -704,60 +703,6 @@ async function getAllUsersData() {
     const snapshot = await get(usersRef);
     return snapshot.exists() ? snapshot.val() : null;
 }
-
-// Example of initializing the custom alert box in HTML
-document.body.innerHTML += `
-    <div id="customAlert" class="custom-alert hidden">
-        <p></p>
-        <button onclick="closeAlert()">OK</button>
-    </div>
-`;
-
-// CSS for the custom alert (as discussed previously)
-const style = document.createElement('style');
-style.innerHTML = `
-.custom-alert {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
-    backdrop-filter: blur(15px); /* Stronger blur effect */
-    border-radius: 15px;
-    border: 1px solid rgba(0, 128, 0, 0.5); /* Green border */
-    color: #000; /* Black text */
-    text-align: center;
-    z-index: 1000;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
-    display: none;
-    width: 300px; /* Increase the width of the alert */
-}
-
-.custom-alert p {
-    margin: 0 0 10px;
-}
-
-.custom-alert button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    background: rgba(0, 128, 0, 0.7); /* Green background */
-    color: #fff; /* White text for the button */
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.custom-alert button:hover {
-    background: rgba(0, 128, 0, 0.9); /* Darker green on hover */
-}
-
-.hidden {
-    display: none;
-}
-
-`;
-document.head.appendChild(style);
 
 </script>
 <script>
@@ -789,19 +734,6 @@ function scrollToCategory(category) {
     } else {
         console.error(`Category section "${category}" not found.`);
     }
-}
-// Custom alert function
-function showAlert(message) {
-    const alertBox = document.getElementById('customAlert');
-    alertBox.querySelector('p').innerText = message;
-    alertBox.classList.remove('hidden');
-    alertBox.style.display = 'block'; // Show the alert
-}
-
-function closeAlert() {
-    const alertBox = document.getElementById('customAlert');
-    alertBox.classList.add('hidden');
-    alertBox.style.display = 'none'; // Hide the alert
 }
 
 
