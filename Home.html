@@ -264,34 +264,41 @@
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
-                const { latitude, longitude } = position.coords;
-
-                // Store latitude and longitude in local storage with timestamp
-                const locationData = {
-                    latitude,
-                    longitude,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem('userLocation', JSON.stringify(locationData));
-
-                resolve(locationData);
+                // ...
             }, () => {
-                // Only alert if there is no stored location
                 const storedLocation = getStoredLocation();
                 if (storedLocation) {
                     resolve(storedLocation);
                 } else {
-                    showAlert("Unable to retrieve your location. Please enable location services.");
+                    const alertBox = document.createElement('div');
+                    alertBox.innerHTML = 'Unable to retrieve your location. Please enable location services.';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.top = '50%';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translate(-50%, -50%)';
+                    alertBox.style.background = 'rgba(0, 0, 0, 0.8)';
+                    alertBox.style.padding = '20px';
+                    alertBox.style.borderRadius = '10px';
+                    alertBox.style.color = 'white';
+                    document.body.appendChild(alertBox);
+                    setTimeout(() => {
+                        alertBox.remove();
+                    }, 3000);
                     reject("Unable to retrieve your location.");
                 }
             });
         } else {
-            showAlert("Geolocation is not supported by this browser.");
+            const alertBox = document.createElement('div');
+            alertBox.innerHTML = 'Geolocation is not supported by this browser.';
+            // ... (same styles as above)
+            document.body.appendChild(alertBox);
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
             reject("Geolocation is not supported by this browser.");
         }
     });
 }
-
 function getStoredLocation() {
     const storedData = localStorage.getItem('userLocation');
     if (storedData) {
@@ -645,10 +652,10 @@ async function addToCart(product, quantity) {
     storeCartInLocalStorage(cartItems); 
     renderProducts(allProducts); 
 }
-
 function filterProducts() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase() || 
                        document.getElementById('searchInputDesktop').value.toLowerCase();
+    console.log('Search Term:', searchTerm); // Debugging line
     const filteredProducts = {};
 
     for (const category in allProducts) {
@@ -661,6 +668,7 @@ function filterProducts() {
         }
     }
 
+    console.log('Filtered Products:', filteredProducts); // Debugging line
     renderProducts(filteredProducts);
 }
 
@@ -735,8 +743,6 @@ function scrollToCategory(category) {
         console.error(`Category section "${category}" not found.`);
     }
 }
-
-
 </script>
 
 </body>
