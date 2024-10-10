@@ -52,8 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardsContainer.addEventListener('touchmove', (event) => {
         const moveX = event.touches[0].clientX - startX;
+
         // Only allow swipe if the movement is significant
-        if (Math.abs(moveX) > 50) { 
+        if (Math.abs(moveX) > 50) {
+            event.preventDefault(); // Prevent default scrolling behavior
             if (moveX > 0) {
                 // Swipe right: move to previous card
                 currentIndex = (currentIndex - 1 + cards.length) % cards.length;
