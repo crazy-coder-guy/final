@@ -393,7 +393,7 @@
 <!-- Firebase and Custom Script -->
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js';
-    import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js';
+    import { getDatabase, ref, get, set, onValue  } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js';
     import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js';
 
@@ -415,7 +415,6 @@ function updateProfileIcon(photoURL) {
     const profileIconMobile = document.querySelector('#profileLink img');
     profileIconMobile.src = photoURL || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
 }
-
 // Function to display user data in the UI
 function displayUserData(userData) {
     document.getElementById('fullNameDisplay').innerText = userData.fullName || '';
@@ -432,7 +431,6 @@ function displayUserData(userData) {
         document.getElementById('updateProfileCard').style.display = 'none'; // Hide input fields
     }
 }
-
 // Load user data from local storage or Firebase on page load
 async function loadUserData() {
     const localUserData = localStorage.getItem('userData');
@@ -441,51 +439,60 @@ async function loadUserData() {
     if (localUserData && expiration && Date.now() < expiration) {
         const userData = JSON.parse(localUserData);
         displayUserData(userData);
+        startUserDataListener(); // Start listening for changes
     } else {
         await fetchUserDataFromFirebase();
     }
 }
 
-async function fetchUserDataFromFirebase() {
+// Function to start listening for user data changes
+function startUserDataListener() {
     const uid = auth.currentUser.uid; // Get the current user's UID
     const userRef = ref(database, 'users/' + uid);
-    
-    // Fetch user data from Firebase
-    const snapshot = await get(userRef);
-    if (snapshot.exists()) {
-        const userData = snapshot.val();
-        localStorage.setItem('userData', JSON.stringify(userData)); // Store user data locally
-        localStorage.setItem('dataExpiration', Date.now() + 3600000); // Set expiration to 1 hour
-        displayUserData(userData);
-    } else {
-        // Clear local storage if user data does not exist
-        localStorage.removeItem('userData');
-        localStorage.removeItem('dataExpiration');
-        document.getElementById('updateProfileCard').style.display = 'block'; // Show input fields
-    }
+
+    onValue(userRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            updateLocalStorage(userData); // Update local storage
+            displayUserData(userData); // Update the UI with new data
+        } else {
+            // Handle data deletion or modification externally
+            localStorage.removeItem('userData');
+            localStorage.removeItem('dataExpiration');
+            document.getElementById('updateProfileCard').style.display = 'block'; // Show input fields
+        }
+    }, (error) => {
+        console.error("Error listening for user data:", error);
+    });
 }
 
-// Function to start background check for user data
-let userCheckInterval;
-
-function startBackgroundCheck() {
-    userCheckInterval = setInterval(async () => {
-        if (auth.currentUser) {
-            await fetchUserDataFromFirebase();
-        }
-    }, 30000); // Check every 30 seconds (adjust as necessary)
+// Update local storage with new data and expiration
+function updateLocalStorage(userData) {
+    localStorage.setItem('userData', JSON.stringify(userData));
+    localStorage.setItem('dataExpiration', Date.now() + 3600000); // Set expiration to 1 hour
 }
 
 // Authentication state listener
 onAuthStateChanged(auth, (user) => {
     if (user) {
         loadUserData();
-        startBackgroundCheck(); // Start background check for user data
     } else {
-        clearInterval(userCheckInterval); // Clear interval if user is logged out
+        localStorage.removeItem('userData'); // Clear local storage on logout
+        document.getElementById('updateProfileCard').style.display = 'block'; // Show input fields
         alert('You need to log in to view your profile.');
     }
 });
+// Authentication state listener
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        loadUserData();
+    } else {
+        localStorage.removeItem('userData'); // Clear local storage on logout
+        document.getElementById('updateProfileCard').style.display = 'block'; // Show input fields
+        alert('You need to log in to view your profile.');
+    }
+});
+
 
 // Function to create or update user profile
 async function createProfile(name, mobile, address, email, photoFile) {
@@ -503,8 +510,6 @@ async function createProfile(name, mobile, address, email, photoFile) {
             alert("Failed to upload photo. Please try again.");
             return; // Exit if upload fails
         }
-    } else {
-        console.warn("No photo file provided. Using default value.");
     }
 
     const userData = {
