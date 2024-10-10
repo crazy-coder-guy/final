@@ -282,25 +282,25 @@
 </div>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-    import { getDatabase, ref, get, remove, set, update } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+import { getDatabase, ref, get, remove, set, update } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBjZDiWXkOclw7RmmU31822nPuj9px1hSA",
-        authDomain: "quickbuy-29329.firebaseapp.com",
-        projectId: "quickbuy-29329",
-        storageBucket: "quickbuy-29329.appspot.com",
-        messagingSenderId: "956510631625",
-        appId: "1:956510631625:web:678411a2530ef065b97f18"
-    };
+const firebaseConfig = {
+    apiKey: "AIzaSyBjZDiWXkOclw7RmmU31822nPuj9px1hSA",
+    authDomain: "quickbuy-29329.firebaseapp.com",
+    projectId: "quickbuy-29329",
+    storageBucket: "quickbuy-29329.appspot.com",
+    messagingSenderId: "956510631625",
+    appId: "1:956510631625:web:678411a2530ef065b97f18"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const auth = getAuth(app);
-    let currentUserId = null;
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+let currentUserId = null;
 
-    onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserId = user.uid;
         loadCartFromLocalStorage();
@@ -337,12 +337,12 @@
 
         if (profileIconDesktop) {
             profileIconDesktop.src = userProfilePic;
-            profileIconDesktop.alt = 'User Profile Picture';
+            profileIconDesktop.alt = 'User  Profile Picture';
         }
 
         if (profileIconMobile) {
             profileIconMobile.src = userProfilePic;
-            profileIconMobile.alt = 'User Profile Picture';
+            profileIconMobile.alt = 'User  Profile Picture';
         }
     } else {
         alert('You need to log in to view your cart.');
@@ -367,23 +367,22 @@ async function fetchCart() {
     }
 }
 
-
-    function loadCartFromLocalStorage() {
-        const cart = JSON.parse(localStorage.getItem(`cart_${currentUserId}`));
-        if (cart) {
-            console.log("Loaded cart from local storage:", cart);
-            renderCart(cart);
-        } else {
-            console.log("No cart found in local storage.");
-        }
+function loadCartFromLocalStorage() {
+    const cart = JSON.parse(localStorage.getItem(`cart_${currentUserId}`));
+    if (cart) {
+        console.log("Loaded cart from local storage:", cart);
+        renderCart(cart);
+    } else {
+        console.log("No cart found in local storage.");
     }
+}
 
-    function storeCartInLocalStorage(cart) {
-        localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
-        console.log("Stored cart in local storage.");
-    }
+function storeCartInLocalStorage(cart) {
+    localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
+    console.log("Stored cart in local storage.");
+}
 
-    function renderCart(cart) {
+async function renderCart(cart) {
     const cartItemsContainer = document.getElementById('cartItems');
     const totalAmountElement = document.getElementById('totalAmount');
     const totalMRPElement = document.getElementById('totalMRP');
@@ -464,47 +463,76 @@ async function fetchCart() {
         cartItemsContainer.appendChild(col);
 
         const itemQuantity = parseInt(item.quantity);
-const itemFinalPrice = parseFloat(item.finalPrice);
-const itemOriginalPrice = parseFloat(item.originalPrice);
+        const itemFinalPrice = parseFloat(item.finalPrice);
+        const itemOriginalPrice = parseFloat(item.originalPrice);
 
-totalAmount += itemFinalPrice * itemQuantity;
-totalMRP += itemOriginalPrice * itemQuantity;
-totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
-    });
-// Calculate delivery charge
-let deliveryCharge = 0;
-if (totalAmount <= 500) {
-    deliveryCharge = 70; // Charge of 70 if total is less than or equal to 500
-} else if (totalAmount <= 1999) {
-    deliveryCharge = 50; // Charge of 50 if total is less than or equal to 1999
-} // Free delivery for totals of 2000 and above
-// Update total amounts in the UI
-totalAmount += deliveryCharge; // Add delivery charge to total amount
-totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
-totalMRPElement.innerHTML = `₹${totalMRP.toFixed(2)}`;
-totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
-totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
-deliveryChargeElement.innerHTML = `₹${deliveryCharge.toFixed(2)}`;
-}
-    async function removeCartItem(productId) {
-        const cartRef = ref(database, `carts/${currentUserId}`);
-        try {
-            const snapshot = await get(cartRef);
+        totalAmount += itemFinalPrice * itemQuantity;
+        totalMRP += itemOriginalPrice * itemQuantity;
+        totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+
+        // Check stock availability every second
+        const productId = key;
+        const productRef = ref(database, `products/${productId}`);
+        const stockCheckInterval = setInterval(async () => {
+            const snapshot = await get(productRef);
             if (snapshot.exists()) {
-                const cart = snapshot.val();
-                delete cart[productId];
+                const productData = snapshot.val();
+                const currentStock = productData.stockAvailable;
 
-                await set(cartRef, cart);
-                console.log('Item removed:', productId);
-                storeCartInLocalStorage(cart);
-                fetchCart();
+                if (currentStock <= 0) {
+                    // Update image to black and white if stock is 0
+                    
+                    col.style.textDecoration = 'line-through';
+                    img.style.filter = 'grayscale(100%)';
+                    img.style.opacity = '0.5';
+                    
+                } else {
+                    // Reset image if stock is available
+                    img.style.filter = '';
+                    img.style.opacity = '';
+                }
+
+                
             }
-        } catch (error) {
-            console.error('Error deleting item:', error);
+        }, 1000); // Check every second
+    });
+
+    // Calculate delivery charge
+    let deliveryCharge = 0;
+    if (totalAmount <= 500) {
+        deliveryCharge = 70; // Charge of 70 if total is less than or equal to 500
+    } else if (totalAmount <= 1999) {
+        deliveryCharge = 50; // Charge of 50 if total is less than or equal to 1999
+    } // Free delivery for totals of 2000 and above
+    
+    // Update total amounts in the UI
+    totalAmount += deliveryCharge; // Add delivery charge to total amount
+    totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
+    totalMRPElement.innerHTML = `₹${totalMRP.toFixed(2)}`;
+    totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
+    totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
+    deliveryChargeElement.innerHTML = `₹${deliveryCharge.toFixed(2)}`;
+}
+
+async function removeCartItem(productId) {
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    try {
+        const snapshot = await get(cartRef);
+        if (snapshot.exists()) {
+            const cart = snapshot.val();
+            delete cart[productId];
+
+            await set(cartRef, cart);
+            console.log('Item removed:', productId);
+            storeCartInLocalStorage(cart);
+            fetchCart();
         }
-        
+    } catch (error) {
+        console.error('Error deleting item:', error);
     }
-    async function createOrder(cart) {
+}
+
+async function createOrder(cart) {
     const uid = auth.currentUser.uid;
 
     // Fetch user data to get the email
@@ -525,21 +553,36 @@ deliveryChargeElement.innerHTML = `₹${deliveryCharge.toFixed(2)}`;
     const ordersRef = ref(database, `orders/${uid}/${orderId}`);
     await set(ordersRef, orderData);
     console.log('Order created:', orderData);
+
+    // Update stock availability for each product in the cart
+    await updateStockAvailability(cart);
 }
 
-async function updateStock(cart) {
-    for (const itemId in cart) {
-        const item = cart[itemId];
-        const productRef = ref(database, `products/${itemId}`);
+async function updateStockAvailability(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
 
-        // Decrease stock by the quantity ordered
-        await update(productRef, {
-            stockAvailable: item.stockAvailable - item.quantity
-        });
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+
+            if (currentStock >= quantityOrdered) {
+                const newStock = currentStock - quantityOrdered;
+                await update(productRef, { stockAvailable: newStock });
+                console.log(`Updated stock for product ${productId}: ${newStock}`);
+            } else {
+                console.error(`Insufficient stock for product ${productId}`);
+            }
+        } else {
+            console.error(`Product ${productId} not found`);
+        }
     }
 }
 
-    function calculateTotalAmount(cart) {
+
+function calculateTotalAmount(cart) {
     let total = 0;
     Object.values(cart).forEach(item => {
         total += item.finalPrice * item.quantity;
@@ -559,6 +602,7 @@ async function updateStock(cart) {
     return total.toFixed(2);
 }
 
+
 document.getElementById('payButton').addEventListener('click', async () => {
     const uid = auth.currentUser.uid;
     const userRef = ref(database, `users/${uid}`);
@@ -567,17 +611,17 @@ document.getElementById('payButton').addEventListener('click', async () => {
     // Check if user data exists
     if (!userSnapshot.exists()) {
         alert('Your profile is incomplete. Please update your address and mobile number.');
-        window.location.href = 'User-Profile.html'; // Redirect to profile page
+        window.location.href = 'User -Profile.html'; // Redirect to profile page
         return;
     }
 
     const userData = userSnapshot.val();
-    console.log('User data:', userData); // Debugging line
+    console.log('User  data:', userData); // Debugging line
 
     // Check if user details are complete
     if (!userData.fullName || !userData.address || !userData.mobile) {
         alert('Please update your profile with your name, address, and mobile number.');
-        window.location.href = 'User-Profile.html'; // Redirect to profile page
+        window.location.href = 'User -Profile.html'; // Redirect to profile page
         return;
     }
 
@@ -585,7 +629,14 @@ document.getElementById('payButton').addEventListener('click', async () => {
     const snapshot = await get(cartRef);
     if (snapshot.exists()) {
         const cart = snapshot.val();
-        
+
+        // Check stock availability for each product in the cart
+        const stockAvailability = await checkStockAvailability(cart);
+        if (!stockAvailability) {
+            alert('Sorry, some items in your cart are out of stock. Please try again later.');
+            return;
+        }
+
         // Prepare Razorpay payment options
         const options = {
             key: "rzp_test_XxEv4eXXqaPM4o", // Your Razorpay test key
@@ -616,8 +667,27 @@ document.getElementById('payButton').addEventListener('click', async () => {
     }
 });
 
+async function checkStockAvailability(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
 
-    async function removeAllCartItems() {
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+
+            if (currentStock < quantityOrdered) {
+                return false; // Insufficient stock
+            }
+        } else {
+            return false; // Product not found
+        }
+    }
+
+    return true; // Stock available for all products
+}
+async function removeAllCartItems() {
         const cartRef = ref(database, `carts/${currentUserId}`);
         try {
             await remove(cartRef);
@@ -628,14 +698,15 @@ document.getElementById('payButton').addEventListener('click', async () => {
             console.error('Error removing cart items:', error);
         }
     }
+function showSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
+}
 
-    function showSpinner() {
-        document.getElementById('spinner').style.display = 'flex';
-    }
-
-    function hideSpinner() {
-        document.getElementById('spinner').style.display = 'none';
-    }
+function hideSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'none';
+}
 </script>
 </body>
 </html>
