@@ -1,0 +1,540 @@
+body {
+    background-color: #f8f9fa;
+    font-family:  "Montserrat", sans-serif;
+}
+.alert {
+    display: none; /* Hidden by default */
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.alert .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+.new-info {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #347928;
+    color: white;
+    padding: 5px;
+    border-radius: 2px; /* Unified border-radius property */
+    border: none; /* Changed from groove to none */
+    font-size: 15px;
+    text-align: left; /* Align text to the left */
+    border-top-left-radius: 12px;
+}
+
+.profile-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.product-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    height: 150px !important; /* Force the height to 80px */
+    object-fit: contain;
+    border-top-left-radius: 6px; /* Smaller radius */
+    border-top-right-radius: 6px; /* Smaller radius */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Reduced border thickness */
+}
+
+.category-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding: 10px 0;
+}
+
+.card-body {
+    line-height: 1; /* Keep existing line height */
+    font-size: 0.875rem;
+}
+
+.card-body h5 {
+    text-align: left; /* Align product title to left */
+    text-transform: uppercase; /* Make title lowercase */
+    font-size: 1rem;
+}
+
+.qty-container {
+    margin-top: 0;
+}
+
+.btn-primary {
+    background-color: #347928;
+    border: none;
+    border-radius: 25px;
+    transition: background-color 0.3s, transform 0.3s; /* Added transform for hover effect */
+    padding: 10px 0;
+    margin-top: 10px;
+}
+
+.btn.add {
+  background-color: #347928;
+    color: #ffffff; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Optional: rounded corners */
+    padding: 10px; /* Optional: padding for better spacing */
+    font-size: 16px; /* Optional: font size */
+}
+
+.overflow-auto {
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+.price-container {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between elements */
+    margin-bottom: 0; /* Ensure no extra margin at the bottom */
+}
+
+.discount-amount {
+    color: green; /* Green color for discount */
+    font-size: 0.875rem; /* Adjust font size */
+    line-height: 1; /* Ensure consistent line height */
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: rgb(80, 80, 80);
+    font-size: 0.875rem; /* Adjust font size */
+    line-height: 1; /* Ensure consistent line height */
+}
+
+.final-price {
+    color: green; /* Green color for final price */
+    font-weight: bold;
+    font-size: 0.875rem; /* Adjust font size */
+    line-height: 1; /* Ensure consistent line height */
+}
+
+@media (max-width: 768px) {
+    .bottom-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+    }
+    .bottom-nav a {
+        font-size: 18px;
+        color: #000;
+        text-align: center;
+        flex-grow: 1;
+        text-decoration: none;
+    }
+    .desktop-nav {
+        display: none;
+    }
+   .mobile-nav {
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space out items */
+    align-items: center; /* Center items vertically */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    padding: 10px;
+}
+
+.nav-search-container {
+    flex: 1; /* Allow the search container to grow */
+    display: flex; /* Use flexbox for the search container */
+}
+
+.nav-search {
+    width: 100%; /* Ensure the search bar takes full width */
+}
+
+.input-group {
+    flex: 1; /* Make input group flexible */
+}
+}
+
+@media (min-width: 769px) {
+    .bottom-nav {
+        display: none;
+    }
+    .desktop-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #fff;
+    }
+    .nav-search {
+        max-width: 500px;
+    }
+    .mobile-nav {
+        display: none;
+    }
+    .delivery-info {
+    margin-bottom: 10px;
+    
+}
+
+}
+
+.card-title {
+    font-size: 1.5em; /* Default font size */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+}
+
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1em; /* Smaller font size for mobile */
+    }
+}
+
+
+.desktop-nav, .mobile-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+}
+
+.bottom-nav {
+    z-index: 1000;
+}
+
+.qty-container {
+    display: flex;
+    align-items: center; /* Center items vertically */
+}
+
+.qty-container {
+    display: flex;
+    align-items: center; /* Center items vertically */
+}
+
+.qty-display-container {
+    margin: 0 10px; /* Add margin for spacing */
+    text-align: center; /* Center the text within the span */
+    background-color: rgb(255, 255, 255); /* White background for the quantity display */
+    padding: 1px; /* Add some padding for better spacing */
+    border-radius: 4px; /* Optional: rounded corners */
+}
+
+.btn {
+    width: 30px; /* Fixed width for buttons */
+    margin: 5px; /* No margin between buttons */
+    background-color: green; /* Green background for buttons */
+    color: white; /* White text for buttons */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Optional: rounded corners */
+}
+
+.btn:hover {
+    background-color: darkgreen; /* Darker green on hover */
+}
+.spinner-container {
+    position: fixed; /* Fixed positioning */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background-color: rgb(255, 255, 255); /* Optional: semi-transparent background */
+    z-index: 1000; /* Ensure it appears on top */
+    display: none; /* Initially hidden */
+}
+
+.loader {
+    width: 20px;
+    aspect-ratio: 1;
+    background: #25b09b;
+    box-shadow: 0 0 60px 15px #25b09b;
+    transform: translate(-80px);
+    clip-path: inset(0);
+    animation:
+        l4-1 0.5s ease-in-out infinite alternate,
+        l4-2 1s ease-in-out infinite;
+}
+
+@keyframes l4-1 {
+    100% { transform: translateX(80px); }
+}
+
+@keyframes l4-2 {
+    33% { clip-path: inset(0 0 0 -100px); }
+    50% { clip-path: inset(0 0 0 0); }
+    83% { clip-path: inset(0 -100px 0 0); }
+}.category-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use inherited color for modern look */
+    display: block; /* Make the link block level to cover the entire area */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for transform and shadow */
+}
+
+.category {
+    position: relative; /* Position relative for absolute children */
+    overflow: hidden; /* Hide overflow */
+    padding: 20px; /* Add some padding */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+   
+}
+
+.category:hover {
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+    transform: translateY(-5px); /* Lift the card slightly */
+}
+
+.category-link:hover .category-name {
+    color: #372847; /* Change color on hover */
+}
+
+.category-name {
+    font-weight: 600; /* Bold text for modern appearance */
+    font-size: 16px; /* Default font size */
+    margin-top: 8px; /* Space between image and text */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+@media (max-width: 576px) { /* For small devices */
+    .category-name {
+        font-size: 14px; /* Smaller font size for mobile */
+    }
+}
+/* Optional: Change image opacity on hover */
+.category-link img {
+    transition: opacity 0.3s ease; /* Smooth transition for image */
+}
+
+.category-link:hover img {
+    opacity: 0.8; /* Slightly fade the image on hover */
+}
+.offer-slider {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+.offer-card {
+    min-width: 25%; /* Show 4 cards in desktop view */
+    transition: transform 0.5s ease;
+    text-align: center;
+}
+
+.offer-card img {
+    width: 100%;
+    height: 300px; /* Adjust as needed for height */
+    object-fit: contain;
+}
+
+/* Optional: Add media queries for responsiveness */
+@media (max-width: 768px) {
+    .offer-card {
+        min-width: 100%; /* Full width in mobile view */
+    }
+}
+
+@media (min-width: 769px) {
+    .offer-card {
+        min-width: 33.33%; /* Show 3 cards in desktop view */
+    }
+}
+
+.dots-container {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #717171;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+    .offer-card {
+        min-width: 50%; /* Show 2 cards at a time */
+    }
+}
+
+@media (max-width: 768px) {
+    .offer-card {
+        min-width: 100%; /* Show 1 card at a time */
+    }
+}
+
+.category-img {
+    height: 120px; /* Fixed height for both mobile and desktop */
+    width: 100%; /* Full width */
+    object-fit: cover; /* Fill the space while maintaining aspect ratio */
+    border-radius: 6px; /* Optional: rounded corners */
+    display: block; /* Ensures no extra space below the image */
+    margin: 0 auto; /* Center the image horizontally */
+}
+
+@media (min-width: 577px) { /* For desktop and larger screens */
+    .category-img {
+        height: 200px; /* Keep the same fixed height */
+        width: 100%; /* Full width */
+    }
+    
+}
+.category-video {
+    width: 100%; /* Make the video take the full width of its parent */
+    height: 120px; /* Set a fixed height to match your images */
+    object-fit: cover; /* Ensure the video covers the area without distortion */
+    border-radius: 12px; /* Optional: for rounded corners */
+    display: block; /* Ensures no extra space below the video */
+    margin: 0 auto; /* Center the video horizontally */
+}
+
+@media (min-width: 577px) { /* For desktop and larger screens */
+    .category-video {
+        width: 100%; /* Full width */
+        height: 200px; /* Keep the same fixed height */
+    }
+}
+
+footer {
+    background-color: #1A5319 !important;/* Custom background color */
+}
+@media (max-width: 576px) { /* For small devices */
+    footer {
+        margin-bottom: 50px; /* Adjust as needed */
+    }
+}
+.mobile-background {
+    background-color: white; /* Default background for larger screens */
+}
+
+@media (max-width: 768px) { /* Mobile view */
+    .mobile-background {
+        background-color: inherit; /* Allows the background image to show */
+    }
+
+    /* If you want to show a specific background color for mobile */
+    .mobile-background {
+        background-color: your-mobile-color; /* Set your desired mobile background color here */
+    }
+}
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Blurring effect */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Optional: border for better visibility */
+    color: #fff; /* Text color */
+    text-align: center;
+    z-index: 1000; /* Ensure it appears on top */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    display: none; /* Hidden by default */
+}
+
+.custom-alert p {
+    margin: 0 0 10px; /* Margin for the message */
+}
+
+.custom-alert button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.7); /* Slightly opaque button */
+    color: #333; /* Button text color */
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.custom-alert button:hover {
+    background: rgba(255, 255, 255, 0.9); /* Change on hover */
+}
+
+.hidden {
+    display: none; /* Class to hide the alert */
+}
+
+.offer-slider {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.offer-cards {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 400%; /* 100% per card */
+}
+
+.offer-card {
+    min-width: 100%; /* Each card takes full width */
+    box-sizing: border-box;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: gray; /* Default color */
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for color change */
+}
+
+.dot.active {
+    background-color: green; /* Active color */
+    transform: scale(1.2); /* Slightly enlarge the active dot */
+}

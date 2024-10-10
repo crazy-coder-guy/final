@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>QuickBuy - Cart</title>
+    <style>
+         body {
+            background-color: #ffffff;
+            font-family:  "Montserrat", sans-serif;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-img-top {
+            border-radius: 12px;
+            object-fit: contain;
+            height: 80px;
+        }
+        .total-price {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .delete-btn {
+            cursor: pointer;
+            color: red;
+            font-size: 0.9rem;
+        }
+        .price-text {
+            font-size: 0.9rem;
+        }
+        .bg-light-gray {
+            background-color: #ffffff;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+        }
+        .price-details {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+        .discount-price, .total-amount {
+            color: green;
+            font-weight: bold;
+        }
+        .amount-value {
+            color: green;
+            font-weight: bold;
+        }
+        @media (max-width: 576px) {
+            h2 {
+                font-size: 1.5rem;
+                text-align: center; /* Center title on mobile */
+            }
+            .total-price {
+                font-size: 1rem;
+            }
+            .delete-btn {
+                font-size: 1rem;
+            }
+            .card-img-top {
+                height: 60px;
+            }
+            .price-details {
+                padding: 10px; /* Adjust padding for mobile */
+            }
+            .scrollable-column {
+                padding: 5px; /* Less padding for mobile */
+            }
+            .bottom-nav a {
+                font-size: 14px; /* Smaller font size for mobile */
+            }
+        }
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #ffffff;
+                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+                padding: 10px 0;
+                z-index: 1000; /* Ensure the bottom nav appears above other content */
+            }
+            .bottom-nav a {
+                font-size: 18px;
+                color: #000;
+                text-align: center;
+                flex-grow: 1;
+                text-decoration: none;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                background-color: #ffffff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            .nav-search {
+                max-width: 60%;
+            }
+        }
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+            .desktop-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                background-color: #ffffff;
+            }
+            .nav-search {
+                max-width: 500px;
+            }
+            .mobile-nav {
+                display: none;
+            }
+        }
+        .profile-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .desktop-nav, .mobile-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #ffffff;
+        }
+        .scrollable-column {
+            max-height: 60vh; /* Adjust height as needed */
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px; /* Add some padding for better spacing */
+        }
+        .price-details {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff; /* Ensure background color for sticky */
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .pay-button {
+            margin-bottom: 5%;
+            font-size: 1rem; /* Larger font size */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        .pay-button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+     /* Spinner Styles */
+     .loader {
+            width: 20px;
+            aspect-ratio: 1;
+            background: #25b09b;
+            box-shadow: 0 0 60px 15px #25b09b;
+            transform: translate(-80px);
+            clip-path: inset(0);
+            animation:
+                l4-1 0.5s ease-in-out infinite alternate,
+                l4-2 1s ease-in-out infinite;
+        }
+
+        @keyframes l4-1 {
+            100% {transform: translateX(80px)}
+        }
+
+        @keyframes l4-2 {
+            33% {clip-path: inset(0 0 0 -100px)}
+            50% {clip-path: inset(0 0 0 0)}
+            83% {clip-path: inset(0 -100px 0 0)}
+        }
+
+        #spinner {
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgb(255, 255, 255); /* Semi-transparent background */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Navbar -->
+<nav class="navbar mobile-nav">
+    <a class="navbar-brand" href="#">QuickBuy</a>
+</nav>
+
+<!-- Desktop Navbar -->
+<nav class="navbar desktop-nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">QuickBuy</a>
+        <form class="d-flex nav-search">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="search" class="form-control border-start-0" placeholder="Search for apples..." aria-label="Search" id="searchInputDesktop">
+            </div>
+        </form>
+        <div class="d-flex align-items-center">
+            <a href="cart.html" class="me-3"><i class="fas fa-shopping-cart fa-2"></i></a>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" id="profileImage">
+        </div>
+    </div>
+</nav>
+<div id="spinner">
+    <div class="loader"></div>
+</div>
+<!-- Bottom Navbar for Mobile View -->
+<nav class="bottom-nav">
+    <a href="Home.html"><i class="fas fa-home"></i><br>Home</a>
+    <a href="profile.html" id="profileLink"><img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" style="width: 24px; height: 24px;"><br>You</a>
+    <a href="#"><i class="fas fa-ellipsis-h"></i><br>More</a>
+    <a href="cart.html"><i class="fas fa-shopping-cart fa-2"></i><br>Cart</a>
+</nav>
+
+<div class="container mt-3">
+    <h2 class="text-left mb-4 section-title">Shopping Cart</h2>
+    <div class="row">
+        <div class="col-lg-8 col-md-12 scrollable-column" id="cartItemsContainer">
+            <div id="cartItems" class="row"></div>
+            <img id="illustratorImage" src="src/undraw_empty_cart_co35.svg" alt="No items in cart" style="display: none; width: 100%; max-width: 400px; margin: auto;">
+        </div>
+        
+        <div class="col-lg-4 col-md-12">
+            <div class="price-details">
+                <h5 class="text-center">Price Details</h5>
+                <div class="mb-2">
+                    <strong>Total MRP:</strong> <span id="totalMRP">0.00</span>
+                </div>
+                <div class="mb-2">
+                    <strong>Total Discount:</strong> <span id="totalDiscount" class="amount-value">0.00</span>
+                </div>
+                <div class="mb-3">
+                    <strong>Delivery Charge:</strong> <span id="deliveryCharge">0.00</span>
+                </div>
+                <div class="mb-3">
+                    <strong>Total Amount:</strong> <span id="totalAmount" class="amount-value">0.00</span>
+                </div>
+                <div class="mb-3">
+                    <strong>You Save:</strong> <span id="totalSavings">0.00</span>
+                </div>
+                <div class="text-center mb-5"> <!-- Added mb-5 for bottom margin -->
+                    <button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button> <!-- Added btn-lg for larger button -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+    import { getDatabase, ref, get, remove, set, update } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBjZDiWXkOclw7RmmU31822nPuj9px1hSA",
+        authDomain: "quickbuy-29329.firebaseapp.com",
+        projectId: "quickbuy-29329",
+        storageBucket: "quickbuy-29329.appspot.com",
+        messagingSenderId: "956510631625",
+        appId: "1:956510631625:web:678411a2530ef065b97f18"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+    let currentUserId = null;
+
+    onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUserId = user.uid;
+        loadCartFromLocalStorage();
+        fetchCart();
+
+        // Default Gmail profile icon URL
+        const gmailProfilePic = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'; 
+
+        // Check local storage for user data
+        const localStorageUserData = localStorage.getItem('userData');
+        let userProfilePic;
+
+        if (localStorageUserData) {
+            const userData = JSON.parse(localStorageUserData);
+            userProfilePic = userData.photo || gmailProfilePic; // Use local data if available
+        } else {
+            // Fetch user data from Firebase
+            const userSnapshot = await get(ref(database, `users/${currentUserId}`));
+
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.val();
+                userProfilePic = userData.photo || gmailProfilePic; // Fallback to Gmail logo if photo is not available
+                
+                // Store the fetched data in local storage
+                localStorage.setItem('userData', JSON.stringify(userData));
+            } else {
+                // If user data doesn't exist, use Gmail logo
+                userProfilePic = gmailProfilePic;
+            }
+        }
+
+        const profileIconDesktop = document.getElementById('profileImage');
+        const profileIconMobile = document.querySelector('#profileLink img');
+
+        if (profileIconDesktop) {
+            profileIconDesktop.src = userProfilePic;
+            profileIconDesktop.alt = 'User Profile Picture';
+        }
+
+        if (profileIconMobile) {
+            profileIconMobile.src = userProfilePic;
+            profileIconMobile.alt = 'User Profile Picture';
+        }
+    } else {
+        alert('You need to log in to view your cart.');
+    }
+});
+
+async function fetchCart() {
+    showSpinner();
+    if (!currentUserId) return;
+
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    const snapshot = await get(cartRef);
+    hideSpinner();
+
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+        storeCartInLocalStorage(cart);
+        renderCart(cart);
+    } else {
+        console.log("No data available");
+        renderCart({}); // Render empty cart
+    }
+}
+
+
+    function loadCartFromLocalStorage() {
+        const cart = JSON.parse(localStorage.getItem(`cart_${currentUserId}`));
+        if (cart) {
+            console.log("Loaded cart from local storage:", cart);
+            renderCart(cart);
+        } else {
+            console.log("No cart found in local storage.");
+        }
+    }
+
+    function storeCartInLocalStorage(cart) {
+        localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
+        console.log("Stored cart in local storage.");
+    }
+
+    function renderCart(cart) {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const totalAmountElement = document.getElementById('totalAmount');
+    const totalMRPElement = document.getElementById('totalMRP');
+    const totalDiscountElement = document.getElementById('totalDiscount');
+    const totalSavingsElement = document.getElementById('totalSavings');
+    const deliveryChargeElement = document.getElementById('deliveryCharge');
+    const illustratorImage = document.getElementById('illustratorImage');
+
+    cartItemsContainer.innerHTML = '';
+
+    // Check if the cart is empty
+    if (!cart || Object.keys(cart).length === 0) {
+        // Show illustrator image if cart is empty
+        illustratorImage.style.display = 'block'; // Show the image
+        totalAmountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
+        totalMRPElement.innerHTML = '₹0.00';
+        totalDiscountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
+        totalSavingsElement.innerHTML = '₹0.00';
+        deliveryChargeElement.innerHTML = '₹0.00';
+        return; // Exit the function if the cart is empty
+    } else {
+        // Hide the illustrator image if the cart is not empty
+        illustratorImage.style.display = 'none';
+    }
+
+    let totalAmount = 0;
+    let totalMRP = 0;
+    let totalDiscount = 0;
+
+    Object.entries(cart).forEach(([key, item]) => {
+        const col = document.createElement('div');
+        col.className = 'col-12 mb-3 bg-light-gray';
+
+        const row = document.createElement('div');
+        row.className = 'row align-items-center';
+
+        const imgCol = document.createElement('div');
+        imgCol.className = 'col-3';
+        const img = document.createElement('img');
+        img.src = item.imageURL;
+        img.className = 'card-img-top';
+        imgCol.appendChild(img);
+        row.appendChild(imgCol);
+
+        const nameQtyCol = document.createElement('div');
+        nameQtyCol.className = 'col-5';
+        const title = document.createElement('h5');
+        title.className = 'card-title mb-0';
+        title.textContent = item.productName;
+        nameQtyCol.appendChild(title);
+
+        const qty = document.createElement('p');
+        qty.className = 'mb-0';
+        qty.textContent = `Qty: ${item.quantity} ${item.qtyUnit}`; // Display quantity and unit
+        nameQtyCol.appendChild(qty);
+        row.appendChild(nameQtyCol);
+
+        const priceCol = document.createElement('div');
+        priceCol.className = 'col-3';
+        const finalPrice = document.createElement('p');
+        finalPrice.className = 'price-text';
+        finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
+        priceCol.appendChild(finalPrice);
+        row.appendChild(priceCol);
+
+        const deleteCol = document.createElement('div');
+        deleteCol.className = 'col-1 text-center';
+        const deleteBtn = document.createElement('span');
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.addEventListener('click', () => {
+            removeCartItem(key);
+        });
+        deleteCol.appendChild(deleteBtn);
+        row.appendChild(deleteCol);
+
+        col.appendChild(row);
+        cartItemsContainer.appendChild(col);
+
+        const itemQuantity = parseInt(item.quantity);
+const itemFinalPrice = parseFloat(item.finalPrice);
+const itemOriginalPrice = parseFloat(item.originalPrice);
+
+totalAmount += itemFinalPrice * itemQuantity;
+totalMRP += itemOriginalPrice * itemQuantity;
+totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+    });
+// Calculate delivery charge
+let deliveryCharge = 0;
+if (totalAmount <= 500) {
+    deliveryCharge = 70; // Charge of 70 if total is less than or equal to 500
+} else if (totalAmount <= 1999) {
+    deliveryCharge = 50; // Charge of 50 if total is less than or equal to 1999
+} // Free delivery for totals of 2000 and above
+// Update total amounts in the UI
+totalAmount += deliveryCharge; // Add delivery charge to total amount
+totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
+totalMRPElement.innerHTML = `₹${totalMRP.toFixed(2)}`;
+totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
+totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
+deliveryChargeElement.innerHTML = `₹${deliveryCharge.toFixed(2)}`;
+}
+    async function removeCartItem(productId) {
+        const cartRef = ref(database, `carts/${currentUserId}`);
+        try {
+            const snapshot = await get(cartRef);
+            if (snapshot.exists()) {
+                const cart = snapshot.val();
+                delete cart[productId];
+
+                await set(cartRef, cart);
+                console.log('Item removed:', productId);
+                storeCartInLocalStorage(cart);
+                fetchCart();
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+        
+    }
+    async function createOrder(cart) {
+    const uid = auth.currentUser.uid;
+
+    // Fetch user data to get the email
+    const userSnapshot = await get(ref(database, `users/${uid}`));
+    const userData = userSnapshot.val();
+    const userEmail = userData.email; // Extract the email
+
+    const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const orderData = {
+        orderId: orderId,
+        userId: uid,
+        userEmail: userEmail, // Include the user email in the order data
+        items: cart,
+        totalAmount: calculateTotalAmount(cart),
+        orderDate: new Date().toISOString()
+    };
+
+    const ordersRef = ref(database, `orders/${uid}/${orderId}`);
+    await set(ordersRef, orderData);
+    console.log('Order created:', orderData);
+}
+
+async function updateStock(cart) {
+    for (const itemId in cart) {
+        const item = cart[itemId];
+        const productRef = ref(database, `products/${itemId}`);
+
+        // Decrease stock by the quantity ordered
+        await update(productRef, {
+            stockAvailable: item.stockAvailable - item.quantity
+        });
+    }
+}
+
+    function calculateTotalAmount(cart) {
+    let total = 0;
+    Object.values(cart).forEach(item => {
+        total += item.finalPrice * item.quantity;
+    });
+    
+    // Add delivery charges based on total amount
+    let deliveryCharge = 0;
+    if (total < 500) {
+        deliveryCharge = 70;
+    } else if (total <= 1500) {
+        deliveryCharge = 50;
+    } else {
+        deliveryCharge = 0; // Free delivery for orders above 2000
+    }
+
+    total += deliveryCharge; // Add delivery charge to total
+    return total.toFixed(2);
+}
+
+document.getElementById('payButton').addEventListener('click', async () => {
+    const uid = auth.currentUser.uid;
+    const userRef = ref(database, `users/${uid}`);
+    const userSnapshot = await get(userRef);
+
+    // Check if user data exists
+    if (!userSnapshot.exists()) {
+        alert('Your profile is incomplete. Please update your address and mobile number.');
+        window.location.href = 'User-Profile.html'; // Redirect to profile page
+        return;
+    }
+
+    const userData = userSnapshot.val();
+    console.log('User data:', userData); // Debugging line
+
+    // Check if user details are complete
+    if (!userData.fullName || !userData.address || !userData.mobile) {
+        alert('Please update your profile with your name, address, and mobile number.');
+        window.location.href = 'User-Profile.html'; // Redirect to profile page
+        return;
+    }
+
+    const cartRef = ref(database, `carts/${uid}`);
+    const snapshot = await get(cartRef);
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+        
+        // Prepare Razorpay payment options
+        const options = {
+            key: "rzp_test_XxEv4eXXqaPM4o", // Your Razorpay test key
+            amount: (calculateTotalAmount(cart) * 100).toFixed(0), // Convert to paise
+            currency: "INR",
+            name: "QuickBuy",
+            description: "Your Order Description",
+            handler: async function(response) {
+                // Create order after successful payment
+                await createOrder(cart);
+                await removeAllCartItems();
+                alert('Payment successful! Your cart has been cleared.');
+            },
+            prefill: {
+                name: userData.fullName || "Customer Name",
+                email: userData.email || "customer@example.com",
+                contact: userData.mobile || "9999999999"
+            },
+            theme: {
+                color: "#F37254"
+            }
+        };
+
+        const razorpay = new Razorpay(options);
+        razorpay.open();
+    } else {
+        alert('Your cart is empty.');
+    }
+});
+
+
+    async function removeAllCartItems() {
+        const cartRef = ref(database, `carts/${currentUserId}`);
+        try {
+            await remove(cartRef);
+            console.log('All items removed from cart.');
+            localStorage.removeItem(`cart_${currentUserId}`);
+            fetchCart();
+        } catch (error) {
+            console.error('Error removing cart items:', error);
+        }
+    }
+
+    function showSpinner() {
+        document.getElementById('spinner').style.display = 'flex';
+    }
+
+    function hideSpinner() {
+        document.getElementById('spinner').style.display = 'none';
+    }
+</script>
+</body>
+</html>

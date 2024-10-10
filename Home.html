@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>QuickBuy - Products</title>
+</head>
+<body>
+   
+<!-- Mobile Navbar -->
+<nav class="navbar mobile-nav">
+    <a class="navbar-brand" href="#">QuickBuy</a>
+    <div class="nav-search-container">
+        <form id="searchForm" class="d-flex nav-search">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0 search-icon">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" class="form-control modern-search" placeholder="Search for products..." />
+            </div>
+        </form>
+    </div>
+</nav>
+
+<!-- Desktop Navbar -->
+<nav class="navbar desktop-nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">QuickBuy</a>
+        <form class="d-flex nav-search">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="search" class="form-control border-start-0" placeholder="Search for apples..." aria-label="Search" id="searchInputDesktop">
+            </div>
+        </form>
+        <div class="d-flex align-items-center">
+            <a href="cart.html" class="me-3"><i class="fas fa-shopping-cart fa-2"></i></a>
+           <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" id="profileImage">
+        </div>
+    </div>
+</nav><!-- Bottom Navbar for Mobile View -->
+<nav class="bottom-nav">
+    <a href="#"><i class="fas fa-home"></i><br>Home</a>
+    <a href="profile.html" id="profileLink"><img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" style="width: 24px; height: 24px;"><br>You</a>
+    <a href="#"><i class="fas fa-ellipsis-h"></i><br>More</a>
+    <a href="cart.html"><i class="fas fa-shopping-cart fa-2"></i><br>Cart</a>
+</nav>
+
+<div id="spinner" class="spinner-container">
+    <div class="loader"></div>
+</div>
+<div class="category mt-1">
+    <h2 class="text-center mb-4">Categories</h2>
+    <div class="row g-1">
+        <div class="col-4 mb-2 custom-margin">
+            <a href="#SnacksandSweets" class="category-link" onclick="scrollToCategory('SnacksandSweets'); return false;">
+                <img src="https://www.foodinfotech.com/wp-content/uploads/2023/05/Savory-Snacks.jpg" class="img-fluid category-img" alt="Snacks and Sweets" />
+                <div class="text-center category-name">Snacks and Sweets</div>
+            </a>
+        </div>
+        <div class="col-4 mb-2 custom-margin">
+            <a href="#Bakery" class="category-link" onclick="scrollToCategory('Bakery'); return false;">
+                <img src="https://img.freepik.com/premium-photo/bakery-items-against-white-background_410516-39016.jpg" class="img-fluid category-video" alt="Bakery" />
+                <div class="text-center category-name">Bakery</div>
+            </a>
+        </div>
+        
+        
+        <div class="col-4 mb-2 custom-margin">
+            <a href="#PersonalCare" class="category-link" onclick="scrollToCategory('PersonalCare'); return false;">
+                <img src="https://img.freepik.com/premium-photo/skincare-products-isolated-white-background_621955-41975.jpg" class="img-fluid category-img" alt="Personal Care" />
+                <div class="text-center category-name">Personal Care</div>
+            </a>
+        </div>
+        <div class="col-4 mb-2 custom-margin">
+            <a href="#DairyProducts" class="category-link" onclick="scrollToCategory('DairyProducts'); return false;">
+                <img src="https://img.freepik.com/premium-photo/different-fresh-dairy-products-isolated-white-background_185193-29499.jpg" class="img-fluid category-img" alt="Dairy Products" />
+                <div class="text-center category-name">Dairy Products</div>
+            </a>
+        </div>
+        <div class="col-4 mb-2 custom-margin">
+            <a href="#Beverages" class="category-link" onclick="scrollToCategory('Beverages'); return false;">
+                <img src="https://www.shutterstock.com/image-photo/glasses-cola-orange-soda-drink-600nw-1388932460.jpg" class="img-fluid category-img" alt="Beverages" />
+                <div class="text-center category-name">Beverages</div>
+            </a>
+        </div>
+        <div class="col-4 mb-2 custom-margin">
+            <a href="#HouseholdEssentials" class="category-link" onclick="scrollToCategory('HouseholdEssentials'); return false;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIYj3-N-ge5lRRjOhvec0z-BenB_BufU-Cbg&s" class="img-fluid category-img" alt="Household Essentials" />
+                <div class="text-center category-name">Household Essentials</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="offer-slider mt-1">
+    <div class="offer-cards">
+        <div class="offer-card">
+            <img src="https://img.freepik.com/free-vector/hand-drawn-supermarket-sale-banner_23-2150381144.jpg" alt="Offer 1" />
+        </div>
+        <div class="offer-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyNOiIVNNjMQTjIsSdkP3pLj8ci1t-TDJFFg&s" alt="Offer 2" />
+        </div>
+        <div class="offer-card">
+            <img src="https://assets.indiadesire.com/images/jiomart%20grocery%20shopping.jpg" alt="Offer 3" />
+        </div>
+        <div class="offer-card">
+            <img src="https://cdn.grabon.in/gograbon/images/merchant/1572609154076.png" alt="Offer 4" />
+        </div>
+    </div>
+    <div class="dots-container"></div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4"></h2>
+    <div id="productCategories" class="row"></div>
+    <img id="illustratorImage" src="src/undraw_no_data_re_kwbl.svg" alt="No products available" style="display: none; width: 100%; max-width: 400px; margin: auto;">
+</div>
+
+<div class="ad-video-container">
+    <video class="img-fluid ad-video" muted loop playsinline autoplay>
+        <source src="src/Pringles’ Commercial _ Stop Motion Animation (HD).mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<footer class="text-white text-center py-3">
+        <div class="container">
+            <p>© 2024 QuickBuy | All Rights Reserved</p>
+        </div>
+    </footer>
+<!-- FontAwesome CDN for Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="js/offer.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+    import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"; 
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBjZDiWXkOclw7RmmU31822nPuj9px1hSA",
+        authDomain: "quickbuy-29329.firebaseapp.com",
+        projectId: "quickbuy-29329",
+        storageBucket: "quickbuy-29329.appspot.com",
+        messagingSenderId: "956510631625",
+        appId: "1:956510631625:web:678411a2530ef065b97f18"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+
+    let allProducts = {};
+    let currentUserUid = null;
+    let cartItems = {};
+    const defaultProfilePicUrl = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+
+    onAuthStateChanged(auth, async (user) => {
+    showSpinner();
+    const defaultProfilePicUrl = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'; // Default image URL
+
+    if (user) {
+        currentUserUid = user.uid;
+        
+        // Fetch user data from Firebase
+        const userSnapshot = await get(ref(database, `users/${currentUserUid}`));
+        
+        if (userSnapshot.exists()) {
+            const userData = userSnapshot.val();
+            console.log(userData); // Check the data
+
+            // Use user photo from Firebase, fallback to default
+            const userProfilePicUrl = userData.photo || defaultProfilePicUrl;
+
+            // Update the profile image
+            const profileImageElement = document.getElementById('profileImage');
+            if (profileImageElement) {
+                profileImageElement.src = userProfilePicUrl;
+            } else {
+                console.error('Profile image element not found');
+            }
+
+            const profileLinkElement = document.getElementById('profileLink');
+            if (profileLinkElement) {
+                profileLinkElement.innerHTML = `<img src="${userProfilePicUrl}" alt="Profile" class="profile-img" style="width: 24px; height: 24px;"> <br> You`;
+            } else {
+                console.error('Profile link element not found');
+            }
+
+            // Update local storage with the profile picture URL
+            localStorage.setItem('userProfilePic', userProfilePicUrl);
+        } else {
+            // Fallback if no user data found
+            const profileImageElement = document.getElementById('profileImage');
+            const profileLinkElement = document.getElementById('profileLink');
+
+            if (profileImageElement) {
+                profileImageElement.src = defaultProfilePicUrl;
+            }
+
+            if (profileLinkElement) {
+                profileLinkElement.innerHTML = `<img src="${defaultProfilePicUrl}" alt="Profile" class="profile-img" style="width: 24px; height: 24px;"> <br> You`;
+            }
+
+            localStorage.setItem('userProfilePic', defaultProfilePicUrl); // Store default image
+        }
+
+        await fetchCartItems();
+        hideSpinner();
+        
+        const storedCity = localStorage.getItem('userCity');
+        if (storedCity) {
+            fetchProductsForCity(storedCity);
+        } else {
+            showSpinner();
+            getUserLocation().then(location => {
+                hideSpinner();
+                const { latitude, longitude } = location;
+                getCityFromCoordinates(latitude, longitude).then(city => {
+                    localStorage.setItem('userCity', city);
+                    set(ref(database, `users/${currentUserUid}/location`), { city, latitude, longitude });
+                    fetchProductsForLocation(latitude, longitude);
+                });
+            }).catch(error => {
+                hideSpinner();
+                console.error(error);
+            });
+        }
+    } else {
+        // User is not logged in
+        const profileImageElement = document.getElementById('profileImage');
+        const profileLinkElement = document.getElementById('profileLink');
+
+        if (profileImageElement) {
+            profileImageElement.src = defaultProfilePicUrl;
+        }
+
+        if (profileLinkElement) {
+            profileLinkElement.innerHTML = `<img src="${defaultProfilePicUrl}" alt="Profile" class="profile-img" style="width: 24px; height: 24px;"> <br> You`;
+        }
+
+        localStorage.setItem('userProfilePic', defaultProfilePicUrl); // Store default image
+    }
+
+    hideSpinner(); // Ensure spinner is hidden after all operations
+});
+
+    window.addEventListener('beforeunload', () => {
+        localStorage.removeItem('userCity'); // Remove user location from local storage
+        if (currentUserUid) {
+            set(ref(database, `users/${currentUserUid}/location`), null).catch(error => {
+                console.error("Error removing location from Firebase:", error);
+            }); // Remove location from Firebase
+        }
+    });
+    function getUserLocation() {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const { latitude, longitude } = position.coords;
+
+                // Store latitude and longitude in local storage with timestamp
+                const locationData = {
+                    latitude,
+                    longitude,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('userLocation', JSON.stringify(locationData));
+
+                resolve(locationData);
+            }, () => {
+                // Only alert if there is no stored location
+                const storedLocation = getStoredLocation();
+                if (storedLocation) {
+                    resolve(storedLocation);
+                } else {
+                    showAlert("Unable to retrieve your location. Please enable location services.");
+                    reject("Unable to retrieve your location.");
+                }
+            });
+        } else {
+            showAlert("Geolocation is not supported by this browser.");
+            reject("Geolocation is not supported by this browser.");
+        }
+    });
+}
+
+function getStoredLocation() {
+    const storedData = localStorage.getItem('userLocation');
+    if (storedData) {
+        const locationData = JSON.parse(storedData);
+        const currentTime = Date.now();
+
+        // Check if the stored data is older than 1 hour (3600000 milliseconds)
+        if (currentTime - locationData.timestamp < 3600000) {
+            return {
+                latitude: locationData.latitude,
+                longitude: locationData.longitude
+            };
+        } else {
+            // Remove expired location data
+            localStorage.removeItem('userLocation');
+        }
+    }
+    return null;
+}
+
+async function getCityFromCoordinates(lat, lon) {
+    const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+    const data = await response.json();
+    return data.city || data.locality || "Unknown City";
+}
+
+async function fetchUserCity() {
+    try {
+        // Get the user's location
+        const { latitude, longitude } = await getUserLocation();
+
+        // Fetch the city name using the obtained coordinates
+        const city = await getCityFromCoordinates(latitude, longitude);
+        console.log(`User's city is: ${city}`);
+
+        // Fetch products for the user's location
+        await fetchProductsForLocation(latitude, longitude);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Call the function to fetch the user's city
+fetchUserCity();
+
+async function fetchProductsForLocation(lat, lon) {
+    showSpinner();
+    const productsRef = ref(database, 'products');
+    onValue(productsRef, snapshot => {
+        hideSpinner();
+        const products = snapshot.val() || {};
+        const filteredProducts = [];
+
+        for (const key in products) {
+            const productLat = parseFloat(products[key].latitude); // Ensure latitude is a number
+            const productLon = parseFloat(products[key].longitude); // Ensure longitude is a number
+            const distance = calculateDistance(lat, lon, productLat, productLon);
+            if (distance <= 10) { // Only show products within 10 km
+                const product = {
+                    id: key,
+                    availability: products[key].availability,
+                    category: products[key].category,
+                    city: products[key].city,
+                    finalPrice: products[key].finalPrice,
+                    imageURL: products[key].imageURL,
+                    listingPrice: products[key].listingPrice,
+                    originalPrice: products[key].originalPrice,
+                    productName: products[key].productName,
+                    productType: products[key].productType,
+                    qtyUnit: products[key].qtyUnit,
+                    quantity: products[key].quantity,
+                    stockAvailable: products[key].stockAvailable,
+                    timestamp: products[key].timestamp,
+                };
+                filteredProducts.push(product);
+            }
+        }
+
+        allProducts = groupProductsByCategory(filteredProducts);
+        renderProducts(allProducts);
+    });
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = degreesToRadians(lat2 - lat1);
+    const dLon = degreesToRadians(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
+}
+
+function degreesToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+function groupProductsByCategory(products) {
+    return products.reduce((acc, product) => {
+        const category = product.category || 'Others';
+        if (!acc[category]) {
+            acc[category] = [];
+        }
+        acc[category].push(product);
+        return acc;
+    }, {});
+}
+
+
+    async function fetchCartItems() {
+    const localCart = JSON.parse(localStorage.getItem(`cart_${currentUserUid}`)) || {};
+    
+    if (Object.keys(localCart).length > 0) {
+        // Load cart from local storage if available
+        cartItems = localCart;
+        console.log("Loaded cart from local storage:", cartItems);
+    } else {
+        // If local cart is empty, fetch from the database
+        const cartRef = ref(database, `carts/${currentUserUid}`);
+        const snapshot = await get(cartRef);
+        
+        if (snapshot.exists()) {
+            // If cart exists in the database, load it
+            cartItems = snapshot.val();
+            console.log("Loaded cart from database:", cartItems);
+        } else {
+            // No cart found in both local storage and database
+            cartItems = {};
+            console.log("No cart found in local storage or database.");
+        }
+    }
+
+    // Store the loaded cart items in local storage
+    storeCartInLocalStorage(cartItems);
+}
+
+    function storeCartInLocalStorage(cart) {
+        localStorage.setItem(`cart_${currentUserUid}`, JSON.stringify(cart));
+        console.log("Stored cart in local storage.");
+    }
+
+    function renderProducts(products) {
+    const categoriesContainer = document.getElementById('productCategories');
+    categoriesContainer.innerHTML = ''; // Clear previous content
+
+    const currentTime = new Date().getTime();
+    const categoryBackgrounds = {
+    'Household Essentials': 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-1Brcmfz-hRA9YbARJK49YKAd5eKv4iZ7HQ&s")',
+    'Beverages': 'url("https://xmple.com/color/b4e9d6.svg")',
+    'Personal Care': 'url("https://xmple.com/color/a8d780.svg")',
+    'Dairy Products': 'url("https://xmple.com/color/d6efd8.svg")',
+    'Bakery': 'url("https://xmple.com/color/d6efd8.svg")',
+};
+
+for (const category in products) {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'col-12 mobile-background'; // Added class for mobile background
+
+    // Set the background with a faded effect
+    const backgroundImage = categoryBackgrounds[category] || 'none';
+    categoryDiv.style.backgroundImage = `linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8)), ${backgroundImage}`;
+    
+    categoryDiv.style.backgroundSize = 'contain'; 
+    categoryDiv.style.minHeight = '150px';
+    categoryDiv.style.borderRadius = '8px';
+    categoryDiv.style.padding = '10px 1px';
+    categoryDiv.style.margin = '0 0 0 10px'; 
+    categoryDiv.style.width = 'calc(100% - 10px)';
+    categoryDiv.style.boxSizing = 'border-box';
+
+    const categoryTitle = document.createElement('h4');
+    categoryTitle.className = 'text-left mb-4 text-dark';
+    categoryTitle.textContent = category;
+    categoryTitle.style.marginTop = '10px';
+
+    categoryDiv.appendChild(categoryTitle);
+    categoriesContainer.appendChild(categoryDiv);
+
+        // Assign an ID to the category title for smooth scrolling
+        categoryTitle.id = category.replace(/\s+/g, ''); // Remove spaces for the ID
+
+        categoryDiv.appendChild(categoryTitle);
+
+        // Create a product row for the current category
+        const productRow = document.createElement('div');
+        productRow.className = 'd-flex overflow-auto gap-3'; // Flexbox for horizontal scrolling
+
+        products[category].forEach(product => {
+            const productCol = document.createElement('div');
+            productCol.className = 'col-auto'; // Make sure columns are auto-sized
+
+            const productCard = document.createElement('div');
+            productCard.className = 'card product-card';
+            productCard.style.width = '200px'; // Fixed width for cards
+
+            const productImage = document.createElement('img');
+            productImage.src = product.imageURL;
+            productImage.className = 'card-img-top';
+            productCard.appendChild(productImage);
+
+            const productBody = document.createElement('div');
+            productBody.className = 'card-body text-left';
+
+            const productName = document.createElement('h5');
+            productName.className = 'card-title';
+            productName.textContent = product.productName;
+            productBody.appendChild(productName);
+
+            const productLabel = document.createElement('span');
+            productLabel.className = 'new-info mb-2';
+            productLabel.textContent = product.productType;
+
+            const productTimestamp = new Date(product.timestamp).getTime();
+            const oneMinuteInMillis = 1 * 60 * 1000; // 1 minute in milliseconds
+
+            const timeDiff = currentTime - productTimestamp;
+
+            // Show label only if product was listed within the last minute
+            if (timeDiff < oneMinuteInMillis) {
+                productBody.appendChild(productLabel);
+
+                // Set a timeout to remove the product label after 1 minute
+                setTimeout(() => {
+                    productLabel.remove();
+                }, oneMinuteInMillis - timeDiff); // Adjust timeout based on remaining time
+            }
+
+            const priceContainer = document.createElement('div');
+            priceContainer.className = 'price-container mb-2';
+
+            // Calculate discount percentage
+            const originalPrice = parseFloat(product.originalPrice);
+            const finalPrice = parseFloat(product.finalPrice);
+            const discountAmount = originalPrice - finalPrice;
+
+            const discountPercentage = originalPrice !== 0 ? Math.floor((discountAmount / originalPrice) * 100) : 0; // This will be 1%
+
+            const discountElement = document.createElement('span');
+            discountElement.className = 'discount-amount text-success';
+            discountElement.innerHTML = `<i class="fa-solid fa-arrow-down fa-fade"></i> ${discountPercentage}%`;
+
+            const originalPriceElement = document.createElement('span');
+            originalPriceElement.className = 'original-price';
+            originalPriceElement.innerHTML = `₹${originalPrice.toFixed(2)}`;
+
+            const finalPriceElement = document.createElement('span');
+            finalPriceElement.className = 'final-price';
+            finalPriceElement.innerHTML = `₹${finalPrice.toFixed(2)}`;
+
+            priceContainer.appendChild(discountElement);
+            priceContainer.appendChild(originalPriceElement);
+            priceContainer.appendChild(finalPriceElement);
+            productBody.appendChild(priceContainer);
+
+            const qtyInfo = document.createElement('p');
+            qtyInfo.className = 'qty-info';
+            qtyInfo.textContent = `${product.quantity} ${product.qtyUnit}`; 
+            productBody.appendChild(qtyInfo);
+
+            // Quantity buttons
+            const qtyContainer = document.createElement('div');
+            qtyContainer.className = 'd-flex align-items-center qty-container mt-2';
+
+            const qtyLabel = document.createElement('span');
+            qtyLabel.textContent = 'QTY:';
+            qtyLabel.className = 'me-2';
+
+            const minusButton = document.createElement('button');
+            minusButton.textContent = '-';
+            minusButton.className = 'btn btn-secondary btn-sm';
+            minusButton.onclick = () => {
+                let currentQty = parseInt(qtyDisplay.textContent);
+                if (currentQty > 1) { // Prevent going below 1
+                    currentQty--;
+                    qtyDisplay.textContent = currentQty;
+                }
+            };
+
+            const qtyDisplay = document.createElement('span');
+            qtyDisplay.textContent = '1'; // Start with 1 by default
+            qtyDisplay.className = 'qty-display-container me-2';
+
+            const plusButton = document.createElement('button');
+            plusButton.textContent = '+';
+            plusButton.className = 'btn btn-secondary btn-sm';
+            plusButton.onclick = () => {
+                let currentQty = parseInt(qtyDisplay.textContent);
+                const maxQty = Math.min(5, product.stockAvailable);
+                if (currentQty < maxQty) {
+                    currentQty++;
+                    qtyDisplay.textContent = currentQty;
+                }
+            };
+
+            qtyContainer.appendChild(qtyLabel);
+            qtyContainer.appendChild(minusButton);
+            qtyContainer.appendChild(qtyDisplay);
+            qtyContainer.appendChild(plusButton);
+            productBody.appendChild(qtyContainer);
+
+            const addToCartButton = document.createElement('button');
+            addToCartButton.className = 'btn btn-primary w-100';
+            addToCartButton.innerHTML = 'Put in Cart <i class="fa-solid fa-cart-shopping"></i>';
+
+            addToCartButton.addEventListener('click', () => {
+                const quantity = qtyDisplay.textContent;
+                if (parseInt(quantity) > 0) {
+                    addToCart(product, quantity);
+                    addToCartButton.innerHTML = '<i class="fa fa-spinner" aria-hidden="true"></i>';
+                    addToCartButton.disabled = true;
+                }
+            });
+
+            // Check if item is already in the cart
+            if (cartItems[product.id]) {
+                addToCartButton.className = 'btn add w-100';
+                addToCartButton.innerHTML = '<i class="fa-solid fa-basket-shopping fa-bounce"></i> Already in Cart';
+                addToCartButton.disabled = true;
+            }
+
+            productBody.appendChild(addToCartButton);
+            productCard.appendChild(productBody);
+            productCol.appendChild(productCard);
+            productRow.appendChild(productCol);
+        });
+
+        categoryDiv.appendChild(productRow);
+        categoriesContainer.appendChild(categoryDiv);
+    }
+}
+async function addToCart(product, quantity) {
+    const cartRef = ref(database, `carts/${currentUserUid}/${product.id}`);
+    const cartItem = {
+        productName: product.productName,
+        finalPrice: product.finalPrice,
+        quantity: parseInt(quantity),
+        totalPrice: (product.finalPrice * quantity).toFixed(2),
+        imageURL: product.imageURL,
+        productType: product.productType,
+        originalPrice: product.originalPrice,
+        qtyUnit: product.qtyUnit,
+        availableQuantity: product.quantity
+    };
+
+    await set(cartRef, cartItem);
+    console.log('Product added to cart:', cartItem);
+    // alert(`${product.productName} added to cart!`); // Removed the alert message
+
+    cartItems[product.id] = cartItem; 
+    storeCartInLocalStorage(cartItems); 
+    renderProducts(allProducts); 
+}
+
+function filterProducts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase() || 
+                       document.getElementById('searchInputDesktop').value.toLowerCase();
+    const filteredProducts = {};
+
+    for (const category in allProducts) {
+        const productsInCategory = allProducts[category].filter(product =>
+            product.productName.toLowerCase().includes(searchTerm)
+        );
+
+        if (productsInCategory.length > 0) {
+            filteredProducts[category] = productsInCategory;
+        }
+    }
+
+    renderProducts(filteredProducts);
+}
+
+document.getElementById('searchInput').addEventListener('input', filterProducts);
+document.getElementById('searchInputDesktop').addEventListener('input', filterProducts);
+
+// Prevent form submission when Enter is pressed
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevents page reload
+    filterProducts(); // Call your filter function
+});
+
+function showSpinner() {
+    document.getElementById('spinner').style.display = 'flex';
+}
+
+function hideSpinner() {
+    document.getElementById('spinner').style.display = 'none';
+}
+
+
+// Function to calculate distance
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
+
+// Function to fetch all user data from Firebase
+async function getAllUsersData() {
+    const usersRef = ref(database, 'users/');
+    const snapshot = await get(usersRef);
+    return snapshot.exists() ? snapshot.val() : null;
+}
+
+// Example of initializing the custom alert box in HTML
+document.body.innerHTML += `
+    <div id="customAlert" class="custom-alert hidden">
+        <p></p>
+        <button onclick="closeAlert()">OK</button>
+    </div>
+`;
+
+// CSS for the custom alert (as discussed previously)
+const style = document.createElement('style');
+style.innerHTML = `
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+    backdrop-filter: blur(15px); /* Stronger blur effect */
+    border-radius: 15px;
+    border: 1px solid rgba(0, 128, 0, 0.5); /* Green border */
+    color: #000; /* Black text */
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+    display: none;
+    width: 300px; /* Increase the width of the alert */
+}
+
+.custom-alert p {
+    margin: 0 0 10px;
+}
+
+.custom-alert button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(0, 128, 0, 0.7); /* Green background */
+    color: #fff; /* White text for the button */
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.custom-alert button:hover {
+    background: rgba(0, 128, 0, 0.9); /* Darker green on hover */
+}
+
+.hidden {
+    display: none;
+}
+
+`;
+document.head.appendChild(style);
+
+</script>
+<script>
+    const placeholders = ["Products", "Search for Snacks", "Beverages", "Bakery", "Personal Care"];
+let currentIndex = 0;
+
+function changePlaceholder() {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.placeholder = placeholders[currentIndex];
+    currentIndex = (currentIndex + 1) % placeholders.length; // Cycle through the array
+}
+
+// Change the placeholder every 2 seconds (2000 ms)
+setInterval(changePlaceholder, 2000);
+
+// Set the initial placeholder
+changePlaceholder();
+
+function scrollToCategory(category) {
+    const categoryElement = document.getElementById(category);
+    if (categoryElement) {
+        const elementPosition = categoryElement.getBoundingClientRect().top; // Position of the element relative to the viewport
+        const offsetPosition = window.scrollY + elementPosition - (window.innerHeight / 2) + (categoryElement.clientHeight / 2); // Calculate the position to scroll to
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    } else {
+        console.error(`Category section "${category}" not found.`);
+    }
+}
+// Custom alert function
+function showAlert(message) {
+    const alertBox = document.getElementById('customAlert');
+    alertBox.querySelector('p').innerText = message;
+    alertBox.classList.remove('hidden');
+    alertBox.style.display = 'block'; // Show the alert
+}
+
+function closeAlert() {
+    const alertBox = document.getElementById('customAlert');
+    alertBox.classList.add('hidden');
+    alertBox.style.display = 'none'; // Hide the alert
+}
+
+
+</script>
+
+</body>
+</html>
