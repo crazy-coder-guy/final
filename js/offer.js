@@ -52,12 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardsContainer.addEventListener('touchmove', (event) => {
         const moveX = event.touches[0].clientX - startX;
-        if (Math.abs(moveX) > 50) { // Threshold for swipe
+        // Only allow swipe if the movement is significant
+        if (Math.abs(moveX) > 50) { 
             if (moveX > 0) {
-                // Swipe right
+                // Swipe right: move to previous card
                 currentIndex = (currentIndex - 1 + cards.length) % cards.length;
             } else {
-                // Swipe left
+                // Swipe left: move to next card
                 currentIndex = (currentIndex + 1) % cards.length;
             }
             moveToCard(currentIndex);
@@ -78,10 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle mouse wheel events for desktop
     cardsContainer.addEventListener('wheel', (event) => {
         if (event.deltaY > 0) {
-            // Scroll down
+            // Scroll down: move to next card
             currentIndex = (currentIndex + 1) % cards.length;
         } else {
-            // Scroll up
+            // Scroll up: move to previous card
             currentIndex = (currentIndex - 1 + cards.length) % cards.length;
         }
         moveToCard(currentIndex);
