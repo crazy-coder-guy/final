@@ -23,11 +23,12 @@
                     <i class="fas fa-search"></i>
                 </span>
                 <input type="text" id="searchInput" class="form-control modern-search" placeholder="Search for products..." />
+                <span id="closeSearch" class="close-icon" style="display: none;">&times;</span> <!-- Close button -->
             </div>
+            <div id="suggestions" class="suggestions-container hidden"></div>
         </form>
     </div>
 </nav>
-
 <!-- Desktop Navbar -->
 <nav class="navbar desktop-nav">
     <div class="container-fluid">
@@ -650,11 +651,16 @@ function filterProducts() {
                        document.getElementById('searchInputDesktop').value.toLowerCase();
     console.log('Search Term:', searchTerm); // Debugging line
     const filteredProducts = {};
+    const suggestions = [];
 
     for (const category in allProducts) {
-        const productsInCategory = allProducts[category].filter(product =>
-            product.productName.toLowerCase().includes(searchTerm)
-        );
+        const productsInCategory = allProducts[category].filter(product => {
+            const matches = product.productName.toLowerCase().includes(searchTerm);
+            if (matches) {
+                suggestions.push(product); // Add matching product to suggestions
+            }
+            return matches;
+        });
 
         if (productsInCategory.length > 0) {
             filteredProducts[category] = productsInCategory;
@@ -663,7 +669,45 @@ function filterProducts() {
 
     console.log('Filtered Products:', filteredProducts); // Debugging line
     renderProducts(filteredProducts);
+    showSuggestions(suggestions); // Show suggestions
 }
+function showSuggestions(suggestions) {
+    const suggestionsContainer = document.getElementById('suggestions');
+    suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+
+    if (suggestions.length === 0) {
+        suggestionsContainer.style.display = 'none'; // Hide if no suggestions
+        return;
+    }
+
+    suggestions.forEach(product => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.textContent = product.productName;
+
+        // Optional: add click event to select product
+        item.onclick = () => {
+            document.getElementById('searchInput').value = product.productName;
+            suggestionsContainer.style.display = 'none'; // Hide suggestions after selection
+        };
+
+        suggestionsContainer.appendChild(item);
+    });
+
+    suggestionsContainer.style.display = 'block'; // Show suggestions
+}
+document.getElementById('searchInput').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission
+        this.blur(); // Remove focus from the input, which will dismiss the keyboard
+
+        const suggestionsContainer = document.getElementById('suggestions');
+        suggestionsContainer.style.display = 'none'; // Hide suggestions on Enter
+    }
+});
+
+
+
 
 document.getElementById('searchInput').addEventListener('input', filterProducts);
 document.getElementById('searchInputDesktop').addEventListener('input', filterProducts);
@@ -704,7 +748,67 @@ async function getAllUsersData() {
     const snapshot = await get(usersRef);
     return snapshot.exists() ? snapshot.val() : null;
 }
+const style = document.createElement('style');
+style.innerHTML += `
+.suggestions-container {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: calc(100% - 20px);
+    margin-top: 5px;
+    display: none; /* Initially hidden */
+}
 
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: rgba(0, 128, 0, 0.1); /* Highlight on hover */
+}
+`;
+document.head.appendChild(style);
+const searchInput = document.getElementById('searchInput');
+const closeSearch = document.getElementById('closeSearch');
+
+searchInput.addEventListener('input', function() {
+    // Show close button if there is input
+    if (this.value) {
+        closeSearch.style.display = 'block'; // Show the close button
+    } else {
+        closeSearch.style.display = 'none'; // Hide the close button
+    }
+});
+
+closeSearch.addEventListener('click', function() {
+    searchInput.value = ''; // Clear the input
+    closeSearch.style.display = 'none'; // Hide the close button
+    const suggestionsContainer = document.getElementById('suggestions');
+    suggestionsContainer.style.display = 'none'; // Hide suggestions
+
+    // Call function to reset filters and show all products
+    showAllProducts();
+});
+
+function showAllProducts() {
+    // Assuming allProducts is your complete product list
+    renderProducts(allProducts); // Render all products
+}
+
+searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission
+        this.blur(); // Remove focus from the input, which will dismiss the keyboard
+
+        const suggestionsContainer = document.getElementById('suggestions');
+        suggestionsContainer.style.display = 'none'; // Hide suggestions on Enter
+    }
+});
 </script>
 <script>
     const placeholders = ["Products", "Search for Snacks", "Beverages", "Bakery", "Personal Care"];
