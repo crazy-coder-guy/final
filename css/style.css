@@ -223,7 +223,6 @@ body {
     }
 }
 
-
 .desktop-nav, .mobile-nav {
     position: sticky;
     top: 0;
@@ -537,4 +536,40 @@ img {
 .dot.active {
     background-color: green; /* Active color */
     transform: scale(1.2); /* Slightly enlarge the active dot */
+}
+.nav-search-container {
+    position: relative; /* Ensure suggestions are positioned relative to this */
+}
+
+.suggestions-container {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: calc(100% - 20px);
+    margin-top: 5px; /* Space between the input and suggestions */
+    display: none; /* Initially hidden */
+    top: calc(100% + 5px); /* Position just below the input */
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: rgba(0, 128, 0, 0.1); /* Highlight on hover */
+}
+.close-icon {
+    cursor: pointer;
+    padding: 5px 10px; /* Adjust padding for better alignment */
+    font-size: 24px; /* Increase font size for visibility */
+    color: #999; /* Gray color */
+    position: absolute; /* Position it inside the input */
+    right: 10px; /* Distance from the right */
+    top: 50%; /* Center it vertically */
+    transform: translateY(-50%); /* Adjust for vertical alignment */
 }
