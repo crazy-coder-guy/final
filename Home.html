@@ -13,22 +13,21 @@
 </head>
 <body>
    
-<!-- Mobile Navbar -->
-<nav class="navbar mobile-nav">
-    <a class="navbar-brand" href="#">QuickBuy</a>
-    <div class="nav-search-container">
-        <form id="searchForm" class="d-flex nav-search">
-            <div class="input-group">
-                <span class="input-group-text bg-transparent border-end-0 search-icon">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="searchInput" class="form-control modern-search" placeholder="Search for products..." />
-                <span id="closeSearch" class="close-icon" style="display: none;">&times;</span> <!-- Close button -->
-            </div>
-            <div id="suggestions" class="suggestions-container hidden"></div>
-        </form>
-    </div>
-</nav>
+    <nav class="navbar mobile-nav">
+        <a class="navbar-brand" href="#">QuickBuy</a>
+        <div class="nav-search-container">
+            <form id="searchForm" class="d-flex nav-search">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0 search-icon">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" id="searchInput" class="form-control modern-search" placeholder="Search for products..." />
+                    <span id="closeSearch" class="close-icon" style="display: none;">&times;</span> <!-- Close button -->
+                </div>
+                <div id="suggestions" class="suggestions-container hidden"></div> <!-- Suggestions below the input -->
+            </form>
+        </div>
+    </nav>
 <!-- Desktop Navbar -->
 <nav class="navbar desktop-nav">
     <div class="container-fluid">
