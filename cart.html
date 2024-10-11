@@ -567,15 +567,21 @@ async function createOrder(cart) {
     // Fetch user data to get the email
     const userSnapshot = await get(ref(database, `users/${uid}`));
     const userData = userSnapshot.val();
-    const userEmail = userData.email; // Extract the email
+    const userEmail = userData.email; 
+    const userfullname = userData.fullName; 
+    const userMobilenumber = userData.mobile;
+    const userAddress = userData.address;  
 
     const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const orderData = {
+        userName:userfullname,
+        usermobilenumber:userMobilenumber,
+        useraddress:userAddress,
         orderId: orderId,
         userId: uid,
-        userEmail: userEmail, // Include the user email in the order data
+        userEmail: userEmail, 
         items: cart,
-        totalAmount: totalAmount.toFixed(2), // Ensure this does not include delivery charge
+        totalAmount: calculateTotalAmount(cart),
         orderDate: new Date().toISOString()
     };
 
@@ -586,6 +592,7 @@ async function createOrder(cart) {
     // Update stock availability for each product in the cart
     await updateStockAvailability(cart);
 }
+
 
 async function updateStockAvailability(cart) {
     for (const productId in cart) {
