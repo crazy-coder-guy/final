@@ -400,6 +400,8 @@ async function fetchProductsForLocation(lat, lon) {
                 };
                 filteredProducts.push(product);
             }
+        }
+
         allProducts = groupProductsByCategory(filteredProducts);
         renderProducts(allProducts);
     });
