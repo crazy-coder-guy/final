@@ -281,6 +281,8 @@
                 if (storedLocation) {
                     resolve(storedLocation);
                 } else {
+                    // Request location permission again
+                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
                     alert("Unable to retrieve your location. Please enable location services.");
                     reject("Unable to retrieve your location.");
                 }
@@ -311,6 +313,18 @@ function getStoredLocation() {
     }
     return null;
 }
+
+// Check for location updates every 1 second
+setInterval(() => {
+    getUserLocation()
+        .then(location => {
+            // Use the location data (e.g., display on a map)
+            console.log("User location:", location); 
+        })
+        .catch(error => {
+            console.error("Error getting location:", error);
+        });
+}, 1000); // 1000 milliseconds = 1 second
 
 async function getCityFromCoordinates(lat, lon) {
     const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
@@ -485,7 +499,7 @@ function groupProductsByCategory(products) {
             productLabel.textContent = product.productType;
 
             const productTimestamp = new Date(product.timestamp).getTime();
-            const oneMinuteInMillis = 1 * 60 * 1000; // 1 minute in milliseconds
+            const oneMinuteInMillis = 10 * 60 * 1000; 
 
             const timeDiff = currentTime - productTimestamp;
 
