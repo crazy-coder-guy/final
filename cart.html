@@ -209,19 +209,6 @@
             bottom: 0;
             background: rgb(255, 255, 255); /* Semi-transparent background */
         }
-        #freeDeliveryBar {
-    width: 0%; /* Initial width is 0% */
-    height: 10px;
-    background-color: #4CAF50; /* Green color for progress */
-    margin-top: 10px;
-    transition: width 0.5s ease-in-out; /* Smooth transition for width changes */
-  }
-
-  #freeDeliveryMessage {
-    font-size: 14px;
-    color: #555;
-    margin-top: 5px;
-  }
     </style>
 </head>
 <body>
@@ -286,15 +273,8 @@
                 <div class="mb-3">
                     <strong>You Save:</strong> <span id="totalSavings">0.00</span>
                 </div>
-        
-                <!-- Free Delivery Progress Bar -->
-                <div class="free-delivery-bar-container mb-3"> 
-                    <div class="free-delivery-bar" id="freeDeliveryBar"></div>
-                </div>
-                <p class="text-center" id="freeDeliveryMessage">Add ₹2000.00 for Free Delivery!</p> 
-        
-                <div class="text-center mb-5"> 
-                    <button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button> 
+                <div class="text-center mb-5"> <!-- Added mb-5 for bottom margin -->
+                    <button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button> <!-- Added btn-lg for larger button -->
                 </div>
             </div>
         </div>
@@ -410,26 +390,19 @@ async function renderCart(cart) {
     const totalSavingsElement = document.getElementById('totalSavings');
     const deliveryChargeElement = document.getElementById('deliveryCharge');
     const illustratorImage = document.getElementById('illustratorImage');
-    const freeDeliveryBar = document.getElementById('freeDeliveryBar'); // Get the free delivery bar
-    const freeDeliveryMessage = document.getElementById('freeDeliveryMessage'); // Get the message element
 
     cartItemsContainer.innerHTML = '';
 
     // Check if the cart is empty
     if (!cart || Object.keys(cart).length === 0) {
         // Show illustrator image if cart is empty
-        illustratorImage.style.display = 'block'; 
+        illustratorImage.style.display = 'block'; // Show the image
         totalAmountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
         totalMRPElement.innerHTML = '₹0.00';
         totalDiscountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
         totalSavingsElement.innerHTML = '₹0.00';
         deliveryChargeElement.innerHTML = '₹0.00';
-
-        // Reset the free delivery bar for an empty cart
-        freeDeliveryBar.style.width = '0%'; 
-        freeDeliveryMessage.textContent = 'Add ₹2000.00 more for free delivery!';
-
-        return; // Exit the function 
+        return; // Exit the function if the cart is empty
     } else {
         // Hide the illustrator image if the cart is not empty
         illustratorImage.style.display = 'none';
@@ -463,7 +436,7 @@ async function renderCart(cart) {
 
         const qty = document.createElement('p');
         qty.className = 'mb-0';
-        qty.textContent = `Qty: ${item.quantity} ${item.availableQuantity} ${item.qtyUnit} `; 
+        qty.textContent = `Qty: ${item.quantity} ${item.qtyUnit}`; // Display quantity and unit
         nameQtyCol.appendChild(qty);
         row.appendChild(nameQtyCol);
 
@@ -517,7 +490,6 @@ async function renderCart(cart) {
                     // Reset image if stock is available
                     img.style.filter = '';
                     img.style.opacity = '';
-                    col.style.textDecoration = '';
                 }
 
                 
@@ -528,31 +500,18 @@ async function renderCart(cart) {
     // Calculate delivery charge
     let deliveryCharge = 0;
     if (totalAmount <= 500) {
-        deliveryCharge = 70; 
+        deliveryCharge = 70; // Charge of 70 if total is less than or equal to 500
     } else if (totalAmount <= 1999) {
-        deliveryCharge = 50; 
+        deliveryCharge = 50; // Charge of 50 if total is less than or equal to 1999
     } // Free delivery for totals of 2000 and above
     
     // Update total amounts in the UI
-    totalAmount += deliveryCharge; 
+    totalAmount += deliveryCharge; // Add delivery charge to total amount
     totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
     totalMRPElement.innerHTML = `₹${totalMRP.toFixed(2)}`;
     totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
     deliveryChargeElement.innerHTML = `₹${deliveryCharge.toFixed(2)}`;
-
-    // Free Delivery Bar Animation 
-    let targetWidth = (totalAmount / 2000) * 100; 
-    targetWidth = Math.min(targetWidth, 100); 
-
-    freeDeliveryBar.style.width = targetWidth + '%'; 
-
-    if (totalAmount >= 2000) {
-      freeDeliveryMessage.textContent = "You've qualified for free delivery!";
-    } else {
-      const amountToFreeDelivery = 2000 - totalAmount;
-      freeDeliveryMessage.textContent = `Add ₹${amountToFreeDelivery.toFixed(2)} more for free delivery!`;
-    }
 }
 
 async function removeCartItem(productId) {
@@ -579,13 +538,13 @@ async function createOrder(cart) {
     // Fetch user data to get the email
     const userSnapshot = await get(ref(database, `users/${uid}`));
     const userData = userSnapshot.val();
-    const userEmail = userData.email; 
+    const userEmail = userData.email; // Extract the email
 
     const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const orderData = {
         orderId: orderId,
         userId: uid,
-        userEmail: userEmail, 
+        userEmail: userEmail, // Include the user email in the order data
         items: cart,
         totalAmount: calculateTotalAmount(cart),
         orderDate: new Date().toISOString()
@@ -622,6 +581,7 @@ async function updateStockAvailability(cart) {
     }
 }
 
+
 function calculateTotalAmount(cart) {
     let total = 0;
     Object.values(cart).forEach(item => {
@@ -635,34 +595,13 @@ function calculateTotalAmount(cart) {
     } else if (total <= 1500) {
         deliveryCharge = 50;
     } else {
-        deliveryCharge = 0; 
+        deliveryCharge = 0; // Free delivery for orders above 2000
     }
 
-    total += deliveryCharge; 
+    total += deliveryCharge; // Add delivery charge to total
     return total.toFixed(2);
 }
 
-async function removeAllCartItems() {
-    const cartRef = ref(database, `carts/${currentUserId}`);
-    try {
-        await remove(cartRef);
-        console.log('All items removed from cart.');
-        localStorage.removeItem(`cart_${currentUserId}`);
-        fetchCart();
-    } catch (error) {
-        console.error('Error removing cart items:', error);
-    }
-}
-
-function showSpinner() {
-    const spinner = document.getElementById('spinner');
-    spinner.style.display = 'block';
-}
-
-function hideSpinner() {
-    const spinner = document.getElementById('spinner');
-    spinner.style.display = 'none';
-}
 
 document.getElementById('payButton').addEventListener('click', async () => {
     const uid = auth.currentUser.uid;
@@ -672,17 +611,17 @@ document.getElementById('payButton').addEventListener('click', async () => {
     // Check if user data exists
     if (!userSnapshot.exists()) {
         alert('Your profile is incomplete. Please update your address and mobile number.');
-        window.location.href = 'User -Profile.html'; 
+        window.location.href = 'User -Profile.html'; // Redirect to profile page
         return;
     }
 
     const userData = userSnapshot.val();
-    console.log('User  data:', userData); 
+    console.log('User  data:', userData); // Debugging line
 
     // Check if user details are complete
     if (!userData.fullName || !userData.address || !userData.mobile) {
         alert('Please update your profile with your name, address, and mobile number.');
-        window.location.href = 'User -Profile.html'; 
+        window.location.href = 'User -Profile.html'; // Redirect to profile page
         return;
     }
 
@@ -700,8 +639,8 @@ document.getElementById('payButton').addEventListener('click', async () => {
 
         // Prepare Razorpay payment options
         const options = {
-            key: "rzp_test_XxEv4eXXqaPM4o", 
-            amount: (calculateTotalAmount(cart) * 100).toFixed(0), 
+            key: "rzp_test_XxEv4eXXqaPM4o", // Your Razorpay test key
+            amount: (calculateTotalAmount(cart) * 100).toFixed(0), // Convert to paise
             currency: "INR",
             name: "QuickBuy",
             description: "Your Order Description",
@@ -739,14 +678,34 @@ async function checkStockAvailability(cart) {
             const quantityOrdered = cart[productId].quantity;
 
             if (currentStock < quantityOrdered) {
-                return false; 
+                return false; // Insufficient stock
             }
         } else {
-            return false; 
+            return false; // Product not found
         }
     }
 
-    return true; 
+    return true; // Stock available for all products
+}
+async function removeAllCartItems() {
+        const cartRef = ref(database, `carts/${currentUserId}`);
+        try {
+            await remove(cartRef);
+            console.log('All items removed from cart.');
+            localStorage.removeItem(`cart_${currentUserId}`);
+            fetchCart();
+        } catch (error) {
+            console.error('Error removing cart items:', error);
+        }
+    }
+function showSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
+}
+
+function hideSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'none';
 }
 </script>
 </body>
