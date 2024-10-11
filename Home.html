@@ -103,7 +103,7 @@
 <div class="offer-slider mt-1">
     <div class="offer-cards">
         <div class="offer-card">
-            <img src="https://cdn.prod.website-files.com/63bc15b680c7e6464531c13e/668be337cdfc6426bffca741_20%20-%20Importance%20of%20%CE%BFffers%2C%20bundle%20offers%20Hero.jpg" alt="Offer 1" />
+            <img src="src/Launching.jpg" alt="Offer 1" />
         </div>
         <div class="offer-card">
             <img src="src/card2.jpg" alt="Offer 2" />
@@ -439,37 +439,16 @@ function groupProductsByCategory(products) {
     categoriesContainer.innerHTML = ''; // Clear previous content
 
     const currentTime = new Date().getTime();
-    const categoryBackgrounds = {
-    'Household Essentials': 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-1Brcmfz-hRA9YbARJK49YKAd5eKv4iZ7HQ&s")',
-    'Beverages': 'url("https://xmple.com/color/b4e9d6.svg")',
-    'Personal Care': 'url("https://xmple.com/color/a8d780.svg")',
-    'Dairy Products': 'url("https://xmple.com/color/d6efd8.svg")',
-    'Bakery': 'url("https://xmple.com/color/d6efd8.svg")',
-};
 
-for (const category in products) {
-    const categoryDiv = document.createElement('div');
-    categoryDiv.className = 'col-12 mobile-background'; // Added class for mobile background
+    for (const category in products) {
+        // Create a category container
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'col-12 mb-4';
 
-    // Set the background with a faded effect
-    const backgroundImage = categoryBackgrounds[category] || 'none';
-    categoryDiv.style.backgroundImage = `linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8)), ${backgroundImage}`;
-    
-    categoryDiv.style.backgroundSize = 'contain'; 
-    categoryDiv.style.minHeight = '150px';
-    categoryDiv.style.borderRadius = '8px';
-    categoryDiv.style.padding = '10px 1px';
-    categoryDiv.style.margin = '0 0 0 10px'; 
-    categoryDiv.style.width = 'calc(100% - 10px)';
-    categoryDiv.style.boxSizing = 'border-box';
-
-    const categoryTitle = document.createElement('h4');
-    categoryTitle.className = 'text-left mb-4 text-dark';
-    categoryTitle.textContent = category;
-    categoryTitle.style.marginTop = '10px';
-
-    categoryDiv.appendChild(categoryTitle);
-    categoriesContainer.appendChild(categoryDiv);
+        // Create a category section heading
+        const categoryTitle = document.createElement('h4');
+        categoryTitle.className = 'text-left mb-4';
+        categoryTitle.textContent = category;
 
         // Assign an ID to the category title for smooth scrolling
         categoryTitle.id = category.replace(/\s+/g, ''); // Remove spaces for the ID
@@ -489,9 +468,9 @@ for (const category in products) {
             productCard.style.width = '200px'; // Fixed width for cards
 
             const productImage = document.createElement('img');
-            productImage.src = product.imageURL;
-            productImage.className = 'card-img-top';
-            productCard.appendChild(productImage);
+                productImage.src = product.imageURL;
+                productImage.className = 'card-img-top';
+                productCard.appendChild(productImage);
 
             const productBody = document.createElement('div');
             productBody.className = 'card-body text-left';
@@ -528,11 +507,11 @@ for (const category in products) {
             const finalPrice = parseFloat(product.finalPrice);
             const discountAmount = originalPrice - finalPrice;
 
-            const discountPercentage = originalPrice !== 0 ? Math.floor((discountAmount / originalPrice) * 100) : 0; // This will be 1%
+            const discountPercentage = Math.floor((originalPrice - finalPrice) / originalPrice * 100);
 
             const discountElement = document.createElement('span');
             discountElement.className = 'discount-amount text-success';
-            discountElement.innerHTML = `<i class="fa-solid fa-arrow-down fa-fade"></i> ${discountPercentage}%`;
+            discountElement.innerHTML = `<i class="fa-solid fa-arrow-up fa-fade"></i> ${discountPercentage}%`;
 
             const originalPriceElement = document.createElement('span');
             originalPriceElement.className = 'original-price';
@@ -580,7 +559,7 @@ for (const category in products) {
             plusButton.className = 'btn btn-secondary btn-sm';
             plusButton.onclick = () => {
                 let currentQty = parseInt(qtyDisplay.textContent);
-                const maxQty = Math.min(5, product.stockAvailable);
+ const maxQty = Math.min(5, product.stockAvailable);
                 if (currentQty < maxQty) {
                     currentQty++;
                     qtyDisplay.textContent = currentQty;
@@ -596,6 +575,7 @@ for (const category in products) {
             const addToCartButton = document.createElement('button');
             addToCartButton.className = 'btn btn-primary w-100';
             addToCartButton.innerHTML = 'Put in Cart <i class="fa-solid fa-cart-shopping"></i>';
+            addToCartButton.dataset.productId = product.id; // Add a data attribute to the button
 
             addToCartButton.addEventListener('click', () => {
                 const quantity = qtyDisplay.textContent;
@@ -623,6 +603,7 @@ for (const category in products) {
         categoriesContainer.appendChild(categoryDiv);
     }
 }
+
 async function addToCart(product, quantity) {
     const cartRef = ref(database, `carts/${currentUserUid}/${product.id}`);
     const cartItem = {
@@ -639,12 +620,17 @@ async function addToCart(product, quantity) {
 
     await set(cartRef, cartItem);
     console.log('Product added to cart:', cartItem);
-    // alert(`${product.productName} added to cart!`); // Removed the alert message
+
+    // Update the add to cart button instead of re-rendering the entire products list
+    const addToCartButton = document.querySelector(`[data-product-id="${product.id}"]`);
+    addToCartButton.className = 'btn add w-100';
+    addToCartButton.innerHTML = '<i class="fa-solid fa-basket-shopping fa-bounce"></i> Already in Cart';
+    addToCartButton.disabled = true;
 
     cartItems[product.id] = cartItem; 
     storeCartInLocalStorage(cartItems); 
-    renderProducts(allProducts); 
 }
+
 function filterProducts() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase() || 
                        document.getElementById('searchInputDesktop').value.toLowerCase();
