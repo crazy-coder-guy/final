@@ -430,13 +430,11 @@ function displayUserData(userData) {
     } else {
         document.getElementById('updateProfileCard').style.display = 'none'; // Hide input fields
     }
-}
-// Load user data from local storage or Firebase on page load
+}// Load user data from local storage or Firebase on page load
 async function loadUserData() {
     const localUserData = localStorage.getItem('userData');
-    const expiration = localStorage.getItem('dataExpiration');
 
-    if (localUserData && expiration && Date.now() < expiration) {
+    if (localUserData) {
         const userData = JSON.parse(localUserData);
         displayUserData(userData);
         startUserDataListener(); // Start listening for changes
@@ -458,7 +456,6 @@ function startUserDataListener() {
         } else {
             // Handle data deletion or modification externally
             localStorage.removeItem('userData');
-            localStorage.removeItem('dataExpiration');
             document.getElementById('updateProfileCard').style.display = 'block'; // Show input fields
         }
     }, (error) => {
@@ -466,10 +463,29 @@ function startUserDataListener() {
     });
 }
 
-// Update local storage with new data and expiration
+// Update local storage with new data 
 function updateLocalStorage(userData) {
     localStorage.setItem('userData', JSON.stringify(userData));
-    localStorage.setItem('dataExpiration', Date.now() + 3600000); // Set expiration to 1 hour
+}
+
+// Fetch user data from Firebase
+async function fetchUserDataFromFirebase() {
+    const uid = auth.currentUser.uid;
+    const userRef = ref(database, 'users/' + uid);
+
+    try {
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            updateLocalStorage(userData);
+            displayUserData(userData);
+        } else {
+            // If no data in Firebase, show input fields to create a profile
+            document.getElementById('updateProfileCard').style.display = 'block'; 
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+    }
 }
 
 // Authentication state listener
@@ -482,17 +498,6 @@ onAuthStateChanged(auth, (user) => {
         alert('You need to log in to view your profile.');
     }
 });
-// Authentication state listener
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        loadUserData();
-    } else {
-        localStorage.removeItem('userData'); // Clear local storage on logout
-        document.getElementById('updateProfileCard').style.display = 'block'; // Show input fields
-        alert('You need to log in to view your profile.');
-    }
-});
-
 
 // Function to create or update user profile
 async function createProfile(name, mobile, address, email, photoFile) {
@@ -516,45 +521,44 @@ async function createProfile(name, mobile, address, email, photoFile) {
         fullName: name,
         mobile: mobile,
         address: address,
-        email: email, // Add email to user data
-        photo: photoURL || '' // Set photo URL or an empty string if no photo was uploaded
+        email: email, 
+        photo: photoURL || '' 
     };
 
     // Store user data in Firebase Realtime Database
     await set(ref(database, 'users/' + uid), userData);
     alert('Profile created successfully!');
 
-    // Store user data in local storage for faster access with expiration
-    localStorage.setItem('userData', JSON.stringify(userData)); // Store user data locally
-    localStorage.setItem('dataExpiration', Date.now() + 3600000); // Set expiration to 1 hour
+    // Store user data in local storage for faster access
+    updateLocalStorage(userData); 
     displayUserData(userData); // Update the UI with new data
 }
 
-// Call loadUserData on page load
-window.onload = loadUserData;
 
 // Event listener for saving the profile
 document.getElementById('saveProfileButton').onclick = async () => {
     const name = document.getElementById('nameInput').value;
     const mobile = document.getElementById('mobileInput').value;
     const address = document.getElementById('addressInput').value;
-    const email = document.getElementById('emailInput').value; // Assuming you have an email input field
+    const email = document.getElementById('emailInput').value;
     const photoFile = document.getElementById('photoInput').files[0];
 
     // Validate inputs
-    if (!name || !mobile || !address) { // Validate address as well
+    if (!name || !mobile || !address) { 
         alert('Please enter your name, mobile number, and address.');
-        return;
+        return ;
     }
 
     try {
-        await createProfile(name, mobile, address, email, photoFile); // Pass all required fields
+        await createProfile(name, mobile, address, email, photoFile); 
     } catch (error) {
         console.error('Error creating profile:', error);
         alert('There was an error creating your profile. Please try again.');
     }
 };
 
+// Call loadUserData on page load
+window.onload = loadUserData;
     document.getElementById('orderButton').onclick = function() {
         const ordersList = document.getElementById('ordersList');
         const uid = auth.currentUser.uid;
