@@ -376,15 +376,12 @@ async function fetchProductsForLocation(lat, lon) {
         hideSpinner();
         const products = snapshot.val() || {};
         const filteredProducts = [];
-        let hasProducts = false; // Flag to track if any products are found
 
         for (const key in products) {
             const productLat = parseFloat(products[key].latitude); // Ensure latitude is a number
             const productLon = parseFloat(products[key].longitude); // Ensure longitude is a number
             const distance = calculateDistance(lat, lon, productLat, productLon);
-
             if (distance <= 5) { // Only show products within 10 km
-                hasProducts = true; // Mark that we found at least one product
                 const product = {
                     id: key,
                     availability: products[key].availability,
@@ -405,14 +402,11 @@ async function fetchProductsForLocation(lat, lon) {
             }
         }
 
-        if (!hasProducts) {
-            alert("No products available for your location."); // Alert user if no products are found within 10 km
-        } else {
-            allProducts = groupProductsByCategory(filteredProducts);
-            renderProducts(allProducts);
-        }
+        allProducts = groupProductsByCategory(filteredProducts);
+        renderProducts(allProducts);
     });
 }
+
 
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
