@@ -400,6 +400,8 @@ async function fetchProductsForLocation(lat, lon) {
                 };
                 filteredProducts.push(product);
             }
+              else {
+    alert("No products available for your location."); // Alert user if no products are available within 1 km
         }
 
         allProducts = groupProductsByCategory(filteredProducts);
