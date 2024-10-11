@@ -498,45 +498,49 @@ async function renderCart(cart) {
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
     
     // Animate delivery charge display
-    deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
-    setTimeout(() => {
-        deliveryChargeElement.classList.add('show-free-delivery');
-    }, 1000); // Delay the animation
+deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
+setTimeout(() => {
+    deliveryChargeElement.classList.add('show-free-delivery');
+}, 1000); // Delay the animation
 
-    // CSS for the animation (add to your styles)
-    const style = document.createElement('style');
-    style.innerHTML = `
-       .strike-through {
-    animation: strikeThrough 1s forwards;
-}
-
-@keyframes strikeThrough {
-    from {
-        opacity: 1;
+// CSS for the animation (add to your styles)
+const style = document.createElement('style');
+style.innerHTML = `
+    .strike-through {
+        animation: strikeThrough 1s forwards;
     }
-    to {
-        opacity: 0.5;
-        text-decoration: line-through;
-    }
-}
 
-.show-free-delivery {
-    animation: fadeIn 1s forwards;
-    color: green; /* Set text color to green */
-    font-weight: bold; /* Increase text weight */
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+    @keyframes strikeThrough {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
     }
-    to {
-        opacity: 1;
-    }
-}
 
-    `;
-    document.head.appendChild(style);
+    .show-free-delivery {
+        animation: fadeIn 1.5s forwards; /* Adjust duration as needed */
+        color: green; /* Set text color to green */
+        font-weight: bold; /* Increase text weight */
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateX(-100%); /* Start from the left */
+        }
+        70% {
+            opacity: 1;
+            transform: translateX(0); /* Reach original position */
+        }
+        100% {
+            opacity: 1; /* Keep it fully visible */
+        }
+    }
+`;
+document.head.appendChild(style);
 }
 
 async function removeCartItem(productId) {
