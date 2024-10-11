@@ -258,17 +258,14 @@
         <div class="col-lg-4 col-md-12">
             <div class="price-details">
                 <h5 class="text-center">Price Details</h5>
-                <div class="mb-2">
-                    <strong>Total MRP:</strong> <span id="totalMRP">0.00</span>
+                <div class="mb-3">
+                    <strong>Total Amount:</strong> <span id="totalAmount" class="amount-value">0.00</span>
                 </div>
-                <div class="mb-2">
+                <div class="mb-3">
                     <strong>Total Discount:</strong> <span id="totalDiscount" class="amount-value">0.00</span>
                 </div>
                 <div class="mb-3">
                     <strong>Delivery Charge:</strong> <span id="deliveryCharge">0.00</span>
-                </div>
-                <div class="mb-3">
-                    <strong>Total Amount:</strong> <span id="totalAmount" class="amount-value">0.00</span>
                 </div>
                 <div class="mb-3">
                     <strong>You Save:</strong> <span id="totalSavings">0.00</span>
@@ -278,6 +275,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -395,13 +393,10 @@ async function renderCart(cart) {
 
     // Check if the cart is empty
     if (!cart || Object.keys(cart).length === 0) {
-        // Show illustrator image if cart is empty
         illustratorImage.style.display = 'block'; // Show the image
         totalAmountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
-        totalMRPElement.innerHTML = '₹0.00';
         totalDiscountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
-        totalSavingsElement.innerHTML = '₹0.00';
-        deliveryChargeElement.innerHTML = '₹0.00';
+        deliveryChargeElement.innerHTML = 'Free Delivery'; // Set delivery charge to "Free Delivery"
         return; // Exit the function if the cart is empty
     } else {
         // Hide the illustrator image if the cart is not empty
@@ -481,37 +476,66 @@ async function renderCart(cart) {
 
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
-                    
                     col.style.textDecoration = 'line-through';
                     img.style.filter = 'grayscale(100%)';
                     img.style.opacity = '0.5';
-                    
                 } else {
                     // Reset image if stock is available
                     img.style.filter = '';
                     img.style.opacity = '';
                 }
-
-                
             }
         }, 1000); // Check every second
     });
 
-    // Calculate delivery charge
-    let deliveryCharge = 0;
-    if (totalAmount <= 500) {
-        deliveryCharge = 70; // Charge of 70 if total is less than or equal to 500
-    } else if (totalAmount <= 1999) {
-        deliveryCharge = 50; // Charge of 50 if total is less than or equal to 1999
-    } // Free delivery for totals of 2000 and above
-    
+    // Delivery charge logic
+    const deliveryCharge = 49; // Delivery charge of 49
+   
+
     // Update total amounts in the UI
-    totalAmount += deliveryCharge; // Add delivery charge to total amount
     totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
-    totalMRPElement.innerHTML = `₹${totalMRP.toFixed(2)}`;
     totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
-    deliveryChargeElement.innerHTML = `₹${deliveryCharge.toFixed(2)}`;
+    
+    // Animate delivery charge display
+    deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
+    setTimeout(() => {
+        deliveryChargeElement.classList.add('show-free-delivery');
+    }, 1000); // Delay the animation
+
+    // CSS for the animation (add to your styles)
+    const style = document.createElement('style');
+    style.innerHTML = `
+       .strike-through {
+    animation: strikeThrough 1s forwards;
+}
+
+@keyframes strikeThrough {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+        text-decoration: line-through;
+    }
+}
+
+.show-free-delivery {
+    animation: fadeIn 1s forwards;
+    color: green; /* Set text color to green */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+    `;
+    document.head.appendChild(style);
 }
 
 async function removeCartItem(productId) {
@@ -546,7 +570,7 @@ async function createOrder(cart) {
         userId: uid,
         userEmail: userEmail, // Include the user email in the order data
         items: cart,
-        totalAmount: calculateTotalAmount(cart),
+        totalAmount: totalAmount.toFixed(2), // Ensure this does not include delivery charge
         orderDate: new Date().toISOString()
     };
 
@@ -581,27 +605,15 @@ async function updateStockAvailability(cart) {
     }
 }
 
-
 function calculateTotalAmount(cart) {
     let total = 0;
     Object.values(cart).forEach(item => {
         total += item.finalPrice * item.quantity;
     });
     
-    // Add delivery charges based on total amount
-    let deliveryCharge = 0;
-    if (total < 500) {
-        deliveryCharge = 70;
-    } else if (total <= 1500) {
-        deliveryCharge = 50;
-    } else {
-        deliveryCharge = 0; // Free delivery for orders above 2000
-    }
-
-    total += deliveryCharge; // Add delivery charge to total
+    // No delivery charges included in the total for payment
     return total.toFixed(2);
 }
-
 
 document.getElementById('payButton').addEventListener('click', async () => {
     const uid = auth.currentUser.uid;
@@ -616,7 +628,7 @@ document.getElementById('payButton').addEventListener('click', async () => {
     }
 
     const userData = userSnapshot.val();
-    console.log('User  data:', userData); // Debugging line
+    console.log('User data:', userData); // Debugging line
 
     // Check if user details are complete
     if (!userData.fullName || !userData.address || !userData.mobile) {
@@ -629,13 +641,6 @@ document.getElementById('payButton').addEventListener('click', async () => {
     const snapshot = await get(cartRef);
     if (snapshot.exists()) {
         const cart = snapshot.val();
-
-        // Check stock availability for each product in the cart
-        const stockAvailability = await checkStockAvailability(cart);
-        if (!stockAvailability) {
-            alert('Sorry, some items in your cart are out of stock. Please try again later.');
-            return;
-        }
 
         // Prepare Razorpay payment options
         const options = {
@@ -666,6 +671,7 @@ document.getElementById('payButton').addEventListener('click', async () => {
         alert('Your cart is empty.');
     }
 });
+
 
 async function checkStockAvailability(cart) {
     for (const productId in cart) {
