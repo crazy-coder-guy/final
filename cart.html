@@ -463,7 +463,7 @@ async function renderCart(cart) {
 
         const qty = document.createElement('p');
         qty.className = 'mb-0';
-        qty.textContent = `Qty: ${item.quantity} ${item.qtyUnit}`; 
+        qty.textContent = `Qty: ${item.quantity} ${item.availableQuantity} ${item.qtyUnit} `; 
         nameQtyCol.appendChild(qty);
         row.appendChild(nameQtyCol);
 
