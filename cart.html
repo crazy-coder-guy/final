@@ -690,6 +690,17 @@ document.getElementById('payButton').addEventListener('click', async () => {
     }
 });
 
+async function removeAllCartItems() {
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    try {
+        await remove(cartRef);
+        console.log('All items removed from cart.');
+        localStorage.removeItem(`cart_${currentUserId}`);
+        fetchCart();
+    } catch (error) {
+        console.error('Error removing cart items:', error);
+    }
+}
 async function checkStockAvailability(cart) {
     for (const productId in cart) {
         const productRef = ref(database, `products/${productId}`);
