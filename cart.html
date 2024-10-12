@@ -574,15 +574,16 @@ async function createOrder(cart) {
 
     const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const orderData = {
-        userName:userfullname,
-        usermobilenumber:userMobilenumber,
-        useraddress:userAddress,
+        userName: userfullname,
+        usermobilenumber: userMobilenumber,
+        useraddress: userAddress,
         orderId: orderId,
         userId: uid,
         userEmail: userEmail, 
         items: cart,
         totalAmount: calculateTotalAmount(cart),
-        orderDate: new Date().toISOString()
+        orderDate: new Date().toISOString(),
+        isNew: true // Set isNew property to true
     };
 
     const ordersRef = ref(database, `orders/${uid}/${orderId}`);
@@ -592,7 +593,6 @@ async function createOrder(cart) {
     // Update stock availability for each product in the cart
     await updateStockAvailability(cart);
 }
-
 
 async function updateStockAvailability(cart) {
     for (const productId in cart) {
@@ -709,6 +709,15 @@ async function checkStockAvailability(cart) {
     }
 
     return true; 
+}
+function showSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
+}
+
+function hideSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'none';
 }
 </script>
 </script>
