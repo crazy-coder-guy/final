@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dotsContainer = document.querySelector('.dots-container');
     let currentIndex = 0;
     let autoSlideInterval;
+    let isMouseOver = false; // Track if the mouse is over the cardsContainer
+    let touchStartX;
 
     // Create dots for navigation
     cards.forEach((_, index) => {
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set the first dot as active
     dotsContainer.children[currentIndex].classList.add('active');
 
+    // Card UI Functions
     function moveToCard(index) {
         currentIndex = index;
         const offset = -currentIndex * 100;
@@ -35,36 +38,32 @@ document.addEventListener('DOMContentLoaded', () => {
         moveToCard(currentIndex);
     }
 
-    // Auto-slide every 3 seconds
+    // Auto-slide every 4 seconds
     const startAutoSlide = () => {
-        autoSlideInterval = setInterval(showNextCard, 3000);
+        autoSlideInterval = setInterval(showNextCard, 8000);
     };
 
     startAutoSlide();
 
     // Handle touch events for mobile
-    let startX;
-
     cardsContainer.addEventListener('touchstart', (event) => {
-        startX = event.touches[0].clientX;
+        touchStartX = event.touches[0].clientX;
         clearInterval(autoSlideInterval); // Stop auto sliding
     });
 
     cardsContainer.addEventListener('touchmove', (event) => {
-        const moveX = event.touches[0].clientX - startX;
-
-        // Only allow swipe if the movement is significant
+        const moveX = event.touches[0].clientX - touchStartX;
+        // Only process swipe if the distance exceeds the threshold
         if (Math.abs(moveX) > 50) {
-            event.preventDefault(); // Prevent default scrolling behavior
             if (moveX > 0) {
-                // Swipe right: move to previous card
+                // Swipe right: move to the previous card
                 currentIndex = (currentIndex - 1 + cards.length) % cards.length;
             } else {
-                // Swipe left: move to next card
+                // Swipe left: move to the next card
                 currentIndex = (currentIndex + 1) % cards.length;
             }
             moveToCard(currentIndex);
-            startX = null; // Reset startX to avoid multiple triggers
+            touchStartX = null; // Reset touchStartX to prevent multiple triggers
         }
     });
 
@@ -72,22 +71,29 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutoSlide(); // Restart auto sliding
     });
 
-    // Allow tap on card to move to the next card
-    cardsContainer.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % cards.length;
-        moveToCard(currentIndex);
+    // Track mouse enter and leave events to determine when to allow scrolling
+    cardsContainer.addEventListener('mouseenter', () => {
+        isMouseOver = true;
+        clearInterval(autoSlideInterval); // Stop auto sliding
+    });
+
+    cardsContainer.addEventListener('mouseleave', () => {
+        isMouseOver = false;
+        startAutoSlide(); // Restart auto sliding
     });
 
     // Handle mouse wheel events for desktop
     cardsContainer.addEventListener('wheel', (event) => {
-        if (event.deltaY > 0) {
-            // Scroll down: move to next card
-            currentIndex = (currentIndex + 1) % cards.length;
-        } else {
-            // Scroll up: move to previous card
-            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        if (isMouseOver) {
+            if (event.deltaY > 0) {
+                // Scroll down: move to the next card
+                currentIndex = (currentIndex + 1) % cards.length;
+            } else {
+                // Scroll up: move to the previous card
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            }
+            moveToCard(currentIndex);
+            event.preventDefault(); // Prevent scrolling the page
         }
-        moveToCard(currentIndex);
-        event.preventDefault(); // Prevent scrolling the page
     });
 });
