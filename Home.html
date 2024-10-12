@@ -609,7 +609,7 @@ function groupProductsByCategory(products) {
 
             const addToCartButton = document.createElement('button');
             addToCartButton.className = 'btn btn-primary w-100';
-            addToCartButton.innerHTML = 'Just Add<i class="fa-solid fa-cart-shopping"></i>';
+            addToCartButton.innerHTML = 'Add to Cart <i class="fa-solid fa-cart-shopping"></i>';
             addToCartButton.dataset.productId = product.id; // Add a data attribute to the button
 
             addToCartButton.addEventListener('click', () => {
