@@ -346,7 +346,6 @@ onAuthStateChanged(auth, async (user) => {
         alert('You need to log in to view your cart.');
     }
 });
-
 async function fetchCart() {
     showSpinner();
     if (!currentUserId) return;
@@ -429,10 +428,42 @@ async function renderCart(cart) {
         title.textContent = item.productName;
         nameQtyCol.appendChild(title);
 
-        const qty = document.createElement('p');
-        qty.className = 'mb-0';
-        qty.textContent = `Qty: ${item.quantity} ${item.availableQuantity} ${item.qtyUnit} `; 
-        nameQtyCol.appendChild(qty);
+        // Create quantity controls
+        const qtyCol = document.createElement('div');
+        qtyCol.className = 'qty-controls';
+
+        const decrementBtn = document.createElement('button');
+        decrementBtn.textContent = '-';
+        decrementBtn.className = 'qty-btn';
+        decrementBtn.addEventListener('click', () => {
+            if (item.quantity > 1) {
+                item.quantity--;
+                updateQtyDisplay();
+                updateCart();
+            }
+        });
+
+        const qtyDisplay = document.createElement('span');
+        qtyDisplay.className = 'qty-display';
+        qtyDisplay.textContent = item.quantity;
+
+        const incrementBtn = document.createElement('button');
+        incrementBtn.textContent = '+';
+        incrementBtn.className = 'qty-btn';
+        incrementBtn.addEventListener('click', () => {
+            if (item.quantity < Math.min(item.availableQuantity, 5)) {
+                item.quantity++;
+                updateQtyDisplay();
+                updateCart();
+            }
+            checkQuantityLimit();
+        });
+
+        qtyCol.appendChild(decrementBtn);
+        qtyCol.appendChild(qtyDisplay);
+        qtyCol.appendChild(incrementBtn);
+        qtyCol.appendChild(document.createTextNode(` ${item.availableQuantity} ${item.qtyUnit}`));
+        nameQtyCol.appendChild(qtyCol);
         row.appendChild(nameQtyCol);
 
         const priceCol = document.createElement('div');
@@ -474,11 +505,18 @@ async function renderCart(cart) {
                 const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
 
+                // Update item available quantity
+                item.availableQuantity = currentStock;
+
+                // Update quantity controls based on available stock
+                checkQuantityLimit();
+
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
                     col.style.textDecoration = 'line-through';
                     img.style.filter = 'grayscale(100%)';
                     img.style.opacity = '0.5';
+                    incrementBtn.disabled = true; // Disable increment if out of stock
                 } else {
                     // Reset image if stock is available
                     img.style.filter = '';
@@ -486,61 +524,130 @@ async function renderCart(cart) {
                 }
             }
         }, 1000); // Check every second
+
+        function updateQtyDisplay() {
+            qtyDisplay.textContent = item.quantity;
+            finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
+
+            if (item.quantity > item.availableQuantity) {
+                col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
+            } else {
+                col.style.textDecoration = ''; // Remove strike through if quantity is valid
+                img.style.filter = ''; // Reset image color
+                img.style.opacity = '';
+            }
+        }
+
+        function checkQuantityLimit() {
+            if (item.quantity >= item.availableQuantity) {
+                incrementBtn.disabled = true; // Disable increment button
+                if (item.quantity > item.availableQuantity) {
+                    col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
+                }
+            } else {
+                incrementBtn.disabled = false; // Enable increment button
+            }
+        }
     });
 
     // Delivery charge logic
     const deliveryCharge = 49; // Delivery charge of 49
-   
 
     // Update total amounts in the UI
     totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
     totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
-    
+
     // Animate delivery charge display
-deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
-setTimeout(() => {
-    deliveryChargeElement.classList.add('show-free-delivery');
-}, 1000); // Delay the animation
+    deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
+    setTimeout(() => {
+        deliveryChargeElement.classList.add('show-free-delivery');
+    }, 1000); // Delay the animation
 
-// CSS for the animation (add to your styles)
-const style = document.createElement('style');
-style.innerHTML = `
-    .strike-through {
-        animation: strikeThrough 1s forwards;
-    }
+    // CSS for the animation and button styling
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .strike-through {
+            animation: strikeThrough 1s forwards;
+        }
 
-    @keyframes strikeThrough {
-        from {
-            opacity: 1;
+        @keyframes strikeThrough {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0.5;
+                text-decoration: line-through;
+            }
         }
-        to {
-            opacity: 0.5;
-            text-decoration: line-through;
-        }
-    }
 
-    .show-free-delivery {
-        animation: fadeIn 1.5s forwards; /* Adjust duration as needed */
-        color: green; /* Set text color to green */
-        font-weight: bold; /* Increase text weight */
-    }
+        .show-free-delivery {
+            animation: fadeIn 1.5s forwards; /* Adjust duration as needed */
+            color: green; /* Set text color to green */
+            font-weight: bold; /* Increase text weight */
+        }
 
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-            transform: translateX(-100%); /* Start from the left */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%); /* Start from the left */
+            }
+            70% {
+                opacity: 1;
+                transform: translateX(0); /* Reach original position */
+            }
+            100% {
+                opacity: 1; /* Keep it fully visible */
+            }
         }
-        70% {
-            opacity: 1;
-            transform: translateX(0); /* Reach original position */
+
+        .qty-btn {
+            margin: 0 5px;
+            padding: 2px 5px; /* Reduced padding for smaller size */
+            cursor: pointer;
+            font-size: 16px; /* Adjust font size */
+            border: 1px solid #ccc; /* Add border for better visibility */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #f0f0f0; /* Background color */
+            transition: background-color 0.2s; /* Smooth transition */
         }
-        100% {
-            opacity: 1; /* Keep it fully visible */
+
+        .qty-btn:hover {
+            background-color: #e0e0e0; /* Change color on hover */
         }
+
+        .qty-btn:disabled {
+            background-color: #ddd; /* Disabled button color */
+            cursor: not-allowed; /* Change cursor style */
+        }
+    `;
+    document.head.appendChild(style);
+
+    function updateCart() {
+        // Update Firebase with the current cart
+        const cartRef = ref(database, `carts/${currentUserId}`);
+        set(cartRef, cart); // Update the entire cart in Firebase
+
+        // Recalculate totals
+        totalAmount = 0;
+        totalMRP = 0;
+        totalDiscount = 0;
+
+        Object.values(cart).forEach(item => {
+            const itemQuantity = parseInt(item.quantity);
+            const itemFinalPrice = parseFloat(item.finalPrice);
+            const itemOriginalPrice = parseFloat(item.originalPrice);
+
+            totalAmount += itemFinalPrice * itemQuantity;
+            totalMRP += itemOriginalPrice * itemQuantity;
+            totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+        });
+
+        // Update total amounts in the UI
+        totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
+        totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
+        totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
     }
-`;
-document.head.appendChild(style);
 }
 
 async function removeCartItem(productId) {
@@ -690,17 +797,6 @@ document.getElementById('payButton').addEventListener('click', async () => {
     }
 });
 
-async function removeAllCartItems() {
-    const cartRef = ref(database, `carts/${currentUserId}`);
-    try {
-        await remove(cartRef);
-        console.log('All items removed from cart.');
-        localStorage.removeItem(`cart_${currentUserId}`);
-        fetchCart();
-    } catch (error) {
-        console.error('Error removing cart items:', error);
-    }
-}
 async function checkStockAvailability(cart) {
     for (const productId in cart) {
         const productRef = ref(database, `products/${productId}`);
@@ -721,6 +817,17 @@ async function checkStockAvailability(cart) {
 
     return true; 
 }
+async function removeAllCartItems() {
+        const cartRef = ref(database, `carts/${currentUserId}`);
+        try {
+            await remove(cartRef);
+            console.log('All items removed from cart.');
+            localStorage.removeItem(`cart_${currentUserId}`);
+            fetchCart();
+        } catch (error) {
+            console.error('Error removing cart items:', error);
+        }
+    }
 function showSpinner() {
     const spinner = document.getElementById('spinner');
     spinner.style.display = 'block';
