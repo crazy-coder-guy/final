@@ -15,14 +15,29 @@
             font-family:  "Montserrat", sans-serif;
         }
         
-button.qty-btn {
+        button.qty-btn {
     width: 30px; /* Fixed width for buttons */
     margin: 5px; /* No margin between buttons */
     background-color: green; /* Green background for buttons */
     color: white; /* White text for buttons */
     border: none; /* Remove default border */
     border-radius: 4px; /* Optional: rounded corners */
+    transition: background-color 0.2s; /* Smooth transition */
 }
+
+button.qty-btn:hover {
+    background-color: darkgreen; /* Darker green on hover */
+}
+
+button.qty-btn:active {
+    background-color: darkgreen; /* Keep darker green on click */
+}
+
+button.qty-btn:disabled {
+    background-color: #ddd; /* Disabled button color */
+    cursor: not-allowed; /* Change cursor style */
+}
+
         .card {
             border: none;
             border-radius: 12px;
