@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auto-slide every 4 seconds
     const startAutoSlide = () => {
-        autoSlideInterval = setInterval(showNextCard, 8000);
+        autoSlideInterval = setInterval(showNextCard, 4000);
     };
 
     startAutoSlide();
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle touch events for mobile
     cardsContainer.addEventListener('touchstart', (event) => {
         touchStartX = event.touches[0].clientX;
-        clearInterval(autoSlideInterval); // Stop auto sliding
+        clearInterval(autoSlideInterval); // Stop auto sliding on touch
     });
 
     cardsContainer.addEventListener('touchmove', (event) => {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     cardsContainer.addEventListener('touchend', () => {
-        startAutoSlide(); // Restart auto sliding
+        startAutoSlide(); // Restart auto sliding after touch
     });
 
     // Track mouse enter and leave events to determine when to allow scrolling
@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle mouse wheel events for desktop
     cardsContainer.addEventListener('wheel', (event) => {
         if (isMouseOver) {
+            clearInterval(autoSlideInterval); // Stop auto sliding during scroll
             if (event.deltaY > 0) {
                 // Scroll down: move to the next card
                 currentIndex = (currentIndex + 1) % cards.length;
@@ -94,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             moveToCard(currentIndex);
             event.preventDefault(); // Prevent scrolling the page
+
+            // Restart auto slide after a short timeout to give time for scrolling
+            setTimeout(startAutoSlide, 500); // Adjust the timeout as needed
         }
     });
 });
