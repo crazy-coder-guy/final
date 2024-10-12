@@ -8,13 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <title>QuickBuy - Products</title>
 </head>
 <body>
    
     <nav class="navbar mobile-nav">
-        <a class="navbar-brand" href="#">QuickBuy</a>
+        <a class="navbar-brand" href="#">DelightX.</a>
         <div class="nav-search-container">
             <form id="searchForm" class="d-flex nav-search">
                 <div class="input-group">
@@ -31,7 +34,7 @@
 <!-- Desktop Navbar -->
 <nav class="navbar desktop-nav">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">QuickBuy</a>
+        <a class="navbar-brand" href="#">DelightX.</a>
         <form class="d-flex nav-search">
             <div class="input-group">
                 <span class="input-group-text bg-white border-end-0">
@@ -133,7 +136,7 @@
 
 <footer class="text-white text-center py-3">
         <div class="container">
-            <p>© 2024 QuickBuy | All Rights Reserved</p>
+            <p>© 2024 DelightX. | All Rights Reserved</p>
         </div>
     </footer>
 <!-- FontAwesome CDN for Icons -->
@@ -406,8 +409,6 @@ async function fetchProductsForLocation(lat, lon) {
         renderProducts(allProducts);
     });
 }
-
-
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in km
