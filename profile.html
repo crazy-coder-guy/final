@@ -318,6 +318,39 @@
         </div>
     </div>
 
+    <!-- Profile Section -->
+<div class="card" id="profileCard">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Profile</h5>
+        <button id="editProfileButton" class="btn btn-secondary btn-sm">Modify</button>
+    </div>
+    <div class="card-body">
+        <div id="profileFields" style="display: none;">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="text" id="mobile" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="photo">Upload Profile Picture</label>
+                <input type="file" id="photo" class="form-control" />
+            </div>
+            <button id="updateProfileButton" class="btn btn-primary mt-3">Update</button>
+        </div>
+    </div>
+</div>
+
     <div class="card" id="updateProfileCard">
         <div class="card-header">
             <h5 class="mb-0">Create Profile</h5>
@@ -388,7 +421,7 @@
 <!-- Firebase and Custom Script -->
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js';
-    import { getDatabase, ref, get, set, onValue  } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js';
+    import { getDatabase, ref, get, set, onValue, update  } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js';
     import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js';
 
@@ -437,7 +470,71 @@ async function loadUserData() {
         await fetchUserDataFromFirebase();
     }
 }
+document.addEventListener('DOMContentLoaded', function () {
+        let userId = null; // Initialize userId variable
 
+        // Get the logged-in user's ID
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userId = user.uid; // Get user ID from the authenticated user
+                fetchUserData(); // Fetch user data only after obtaining userId
+            } else {
+                console.log('No user is signed in.');
+            }
+        });
+
+        const editProfileButton = document.getElementById('editProfileButton');
+        const profileFields = document.getElementById('profileFields');
+        const fullNameInput = document.getElementById('fullName');
+        const mobileInput = document.getElementById('mobile');
+        const emailInput = document.getElementById('email');
+        const addressInput = document.getElementById('address');
+
+        // Function to fetch user data from Firebase
+        function fetchUserData() {
+            if (userId) {
+                const userRef = ref(database, 'users/' + userId);
+                onValue(userRef, (snapshot) => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        fullNameInput.value = userData.fullName;
+                        mobileInput.value = userData.mobile;
+                        emailInput.value = userData.email;
+                        addressInput.value = userData.address;
+                    }
+                });
+            }
+        }
+
+        // Toggle profile fields
+        editProfileButton.addEventListener('click', function () {
+            if (profileFields.style.display === 'none') {
+                profileFields.style.display = 'block';
+            } else {
+                profileFields.style.display = 'none';
+            }
+        });
+
+        // Update user data in Firebase
+        document.getElementById('updateProfileButton').addEventListener('click', function () {
+            if (userId) {
+                const updatedData = {
+                    fullName: fullNameInput.value,
+                    mobile: mobileInput.value,
+                    email: emailInput.value,
+                    address: addressInput.value,
+                };
+
+                const userRef = ref(database, 'users/' + userId);
+                update(userRef, updatedData).then(() => {
+                    alert('Profile updated successfully!');
+                    profileFields.style.display = 'none';
+                }).catch(error => {
+                    console.error('Error updating profile:', error);
+                });
+            }
+        });
+    });
 // Function to start listening for user data changes
 function startUserDataListener() {
     const uid = auth.currentUser.uid; // Get the current user's UID
