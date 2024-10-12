@@ -8,14 +8,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <title>QuickBuy - Cart</title>
     <style>
          body {
             background-color: #ffffff;
             font-family:  "Montserrat", sans-serif;
         }
-        
-        button.qty-btn {
+        .navbar-brand{
+        font-family: "Righteous", sans-serif;
+    }   
+    button.qty-btn {
     width: 30px; /* Fixed width for buttons */
     margin: 5px; /* No margin between buttons */
     background-color: green; /* Green background for buttons */
@@ -233,7 +238,20 @@ button.qty-btn:disabled {
             bottom: 0;
             background: rgb(255, 255, 255); /* Semi-transparent background */
         }
-        
+        .delivery-message {
+    opacity: 0;
+    transform: translateY(20px); /* Move it slightly down */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Smooth transition for both opacity and position */
+    margin-bottom: 20px; /* Adjust the value as needed */
+    visibility: hidden; /* Use visibility for better control */
+}
+
+.delivery-message.visible {
+    opacity: 1;
+    transform: translateY(0); /* Reset position */
+    visibility: visible; /* Make it visible */
+}
+
     </style>
 </head>
 <body>
@@ -295,12 +313,14 @@ button.qty-btn:disabled {
                 <div class="mb-3">
                     <strong>You Save:</strong> <span id="totalSavings">0.00</span>
                 </div>
-                <div class="text-center mb-5"> <!-- Added mb-5 for bottom margin -->
-                    <button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button> <!-- Added btn-lg for larger button -->
+                <div id="deliveryMessage" class="delivery-message mb-2" style="display: none;">
+                    Your order will be delivered to your address by <span id="deliveryTime"></span>.
+                </div>
+                <div class="text-center mb-5">
+                    <button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button>
                 </div>
             </div>
         </div>
-        
     </div>
 </div>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -852,7 +872,40 @@ async function removeAllCartItems() {
         } catch (error) {
             console.error('Error removing cart items:', error);
         }
+    }document.addEventListener("DOMContentLoaded", function () {
+    const deliveryMessage = document.getElementById("deliveryMessage");
+    const deliveryTime = document.getElementById("deliveryTime");
+
+    function checkDeliveryTime() {
+        const now = new Date();
+        const hours = now.getHours();
+        let delivery;
+
+        if (hours >= 19) { // If time is 7 PM or later
+            delivery = "tomorrow by 6 PM";
+        } else {
+            delivery = "today";
+        }
+
+        deliveryTime.textContent = delivery;
     }
+
+    // Initial check for delivery time
+    checkDeliveryTime();
+
+    // Scroll effect
+    window.addEventListener('scroll', function () {
+        const rect = deliveryMessage.getBoundingClientRect();
+        // Check if the delivery message is in the viewport
+        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+            setTimeout(() => {
+                deliveryMessage.style.display = "block"; // Show message when in view
+                deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
+            }, 2000); // Delay of 2 seconds
+        }
+    });
+});
+
 function showSpinner() {
     const spinner = document.getElementById('spinner');
     spinner.style.display = 'block';
