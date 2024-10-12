@@ -268,14 +268,6 @@
 <!-- Mobile Navbar -->
 <nav class="navbar mobile-nav">
     <a class="navbar-brand" href="#">QuickBuy</a>
-    <form class="d-flex nav-search">
-        <div class="input-group">
-            <span class="input-group-text bg-white border-end-0">
-                <i class="fas fa-search"></i>
-            </span>
-            <input class="form-control border-start-0" type="search" placeholder="Search for apples..." aria-label="Search" id="searchInput">
-        </div>
-    </form>
 </nav>
 
 <!-- Desktop Navbar -->
@@ -334,8 +326,8 @@
             <input type="text" id="nameInput" class="form-control mb-2" placeholder="Enter Name" required>
             <input type="text" id="mobileInput" class="form-control mb-2" placeholder="Enter Mobile Number" required>
             <input type="email" id="emailInput" class="form-control mb-2" placeholder="Enter Email ID" required>
-            <input type="text" id="addressInput" class="form-control mb-2" placeholder="Enter Address">
-            <input type="file" id="photoInput" class="form-control mb-2" accept="image/*">
+            <input type="text" id="addressInput" class="form-control mb-2" placeholder="Enter Address" required>
+            <input type="file" id="photoInput" class="form-control mb-2" accept="image/*" required>
             <button id="saveProfileButton" class="btn btn-primary">Save Profile</button>
         </div>
     </div>
@@ -354,8 +346,9 @@
                 </div>
             </div>
             <div id="faqContent" class="faq-section">
-                <p>If you have any questions, feel free to contact us at support@example.com</p>
+                <p>If you have any questions, feel free to contact us at <a href="mailto:support@example.com">support@example.com</a></p>
             </div>
+    
             <div class="mb-3 btn-link-container d-flex justify-content-between align-items-center">
                 <button id="termsButton" class="btn btn-link flex-grow-1">
                     Terms and Conditions
@@ -365,8 +358,9 @@
                 </div>
             </div>
             <div id="termsContent" class="faq-section">
-                <p>Terms and Conditions apply. Please read carefully before using our services.</p>
+                <p><strong>Acceptance of Terms:</strong> By using our services, you agree to the terms outlined. <a href="policy.html">Read more.</a></p>
             </div>
+    
             <div class="mb-3 btn-link-container d-flex justify-content-between align-items-center">
                 <button id="privacyButton" class="btn btn-link flex-grow-1">
                     Privacy Policy
@@ -376,10 +370,11 @@
                 </div>
             </div>
             <div id="privacyContent" class="faq-section">
-                <p>Your privacy is important to us. We ensure that your data is protected.</p>
+                <p>Your privacy is important to us. We ensure that your data is protected. <a href="policy.html">Read more.</a></p>
             </div>
         </div>
     </div>
+    
     
     <!-- Logout Option -->
     <div class="text-center mb-4">
