@@ -613,7 +613,10 @@ async function renderCart(cart) {
             if (snapshot.exists()) {
                 const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
-
+                    // Update item available quantity
+                    item.availableQuantity = currentStock;
+                // Update quantity controls based on available stock
+                checkQuantityLimit();
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
                     col.style.textDecoration = 'line-through';
@@ -634,11 +637,20 @@ async function renderCart(cart) {
         function updateQtyDisplay() {
             qtyDisplay.textContent = item.quantity;
             finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
+            if (item.quantity > item.availableQuantity) {
+                col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
+            } else {
+                col.style.textDecoration = ''; // Remove strike through if quantity is valid
+                img.style.filter = ''; // Reset image color
+                img.style.opacity = '';
+            }
         }
-
         function checkQuantityLimit() {
             if (item.quantity >= item.availableQuantity) {
                 incrementBtn.disabled = true; // Disable increment button
+                if (item.quantity > item.availableQuantity) {
+                    col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
+                }
             } else {
                 incrementBtn.disabled = false; // Enable increment button
             }
