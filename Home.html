@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <title>QuickBuy - Products</title>
+    <title>DelightX-Home</title>
 </head>
 <body>
    
@@ -64,18 +64,18 @@
 <div class="category mt-1">
     <h2 class="text-center mb-4">Categories</h2>
     <div class="row g-1">
-        <!-- Snacks and Sweets -->
+        <!-- Snacks and Savories -->
         <div class="col-4 mb-2 custom-margin">
             <a href="#" class="category-link" onclick="toggleSubcategories(1); return false;">
-                <img src="https://www.foodinfotech.com/wp-content/uploads/2023/05/Savory-Snacks.jpg" class="img-fluid category-img" alt="Snacks and Sweets" />
+                <img src="https://www.foodinfotech.com/wp-content/uploads/2023/05/Savory-Snacks.jpg" class="img-fluid category-img" alt="Snacks and Savories" />
                 <div class="text-center category-name">Snacks and Sweets</div>
             </a>
         </div>
-        <!-- Bakery -->
+        <!-- Cooking Essentials -->
         <div class="col-4 mb-2 custom-margin">
             <a href="#" class="category-link" onclick="toggleSubcategories(2); return false;">
-                <img src="https://img.freepik.com/premium-photo/bakery-items-against-white-background_410516-39016.jpg" class="img-fluid category-img" alt="Bakery" />
-                <div class="text-center category-name">Bakery</div>
+                <img src="https://img.freepik.com/premium-photo/bakery-items-against-white-background_410516-39016.jpg" class="img-fluid category-img" alt="Cooking Essentials" />
+                <div class="text-center category-name">Cooking Essentials</div>
             </a>
         </div>
         <!-- Personal Care -->
@@ -86,7 +86,7 @@
             </a>
         </div>
     </div>
-
+    
     <div class="row g-1">
         <!-- Dairy Products -->
         <div class="col-4 mb-2 custom-margin">
@@ -102,55 +102,74 @@
                 <div class="text-center category-name">Beverages</div>
             </a>
         </div>
-        <!-- Household Essentials -->
+        <!-- Household Items -->
         <div class="col-4 mb-2 custom-margin">
             <a href="#" class="category-link" onclick="toggleSubcategories(6); return false;">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIYj3-N-ge5lRRjOhvec0z-BenB_BufU-Cbg&s" class="img-fluid category-img" alt="Household Essentials" />
-                <div class="text-center category-name">Household Essentials</div>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIYj3-N-ge5lRRjOhvec0z-BenB_BufU-Cbg&s" class="img-fluid category-img" alt="Household Items" />
+                <div class="text-center category-name">Household Items</div>
             </a>
         </div>
     </div>
-
+    
    <!-- Subcategories Rows -->
 <div class="subcategories-row" id="row-1" style="display: none;">
     <div class="subcategories">
         <a href="#Chips" onclick="scrollToSubcategory('Chips'); return false;">
-            <img src="https://w7.pngwing.com/pngs/672/613/png-transparent-lay-s-potato-chip-pretzel-uncle-ray-s-flavor-potato-thumbnail.png" class="img-fluid subcategory-img" alt="Chips" />
-            <div class="text-center">Chips</div>
+            <img src="https://m.media-amazon.com/images/I/71kOsITKSkL.jpg" class="img-fluid subcategory-img" alt="Chips" />
+            <div class="text-center">Crunchies</div>
+        </a>
+        <a href="#Namkeen" onclick="scrollToSubcategory('Namkeen'); return false;">
+            <img src="https://thumbs.dreamstime.com/b/close-up-spicy-ratlami-mixture-indian-namkeen-snacks-ceramic-black-bowl-close-up-spicy-ratlami-mixture-indian-namkeen-214356686.jpg" class="img-fluid subcategory-img" alt="Namkeen" />
+            <div class="text-center">Namkeen</div>
+        </a>
+        <a href="#Biscuits" onclick="scrollToSubcategory('Biscuits'); return false;">
+            <img src="https://m.media-amazon.com/images/I/71rXMzC4kYL.jpg" class="img-fluid subcategory-img" alt="Biscuits" />
+            <div class="text-center">Biscuits</div>
+        </a>
+        <a href="#Sweets" onclick="scrollToSubcategory('Sweets'); return false;">
+            <img src="https://international.haldiram.com/assets/images/products/kaju_katli.png" class="img-fluid subcategory-img" alt="Sweets" />
+            <div class="text-center">Sweets</div>
+        </a>
+        <a href="#Chocolate" onclick="scrollToSubcategory('Chocolate'); return false;">
+            <img src="https://m.media-amazon.com/images/I/71w7ppkACUL.jpg" class="img-fluid subcategory-img" alt="Chocolate" />
+            <div class="text-center">Chocolate</div>
         </a>
         <a href="#Cookies" onclick="scrollToSubcategory('Cookies'); return false;">
             <img src="https://www.quickpantry.in/cdn/shop/products/britannia-nutri-choice-hi-fibre-digestive-biscuits-100-g-quick-pantry_500x500.jpg?v=1710538222" class="img-fluid subcategory-img" alt="Cookies" />
             <div class="text-center">Cookies</div>
         </a>
-        <a href="#Chocolate" onclick="scrollToSubcategory('Chocolate'); return false;">
-            <img src="https://m.media-amazon.com/images/I/71w7ppkACUL.jpg" />
-            <div class="text-center">Chocolate</div>
+        <a href="#GranolaBars" onclick="scrollToSubcategory('GranolaBars'); return false;">
+            <img src="https://images.kglobalservices.com/www.kelloggs.in/en_in/product/product_896081/prod_img-940110_in_08901499010520_2202030336_p_1.png" class="img-fluid subcategory-img" alt="Granola Bars" />
+            <div class="text-center">Granola Bars</div>
         </a>
-        <a href="#Nuts" onclick="scrollToSubcategory('Nuts'); return false;">
-            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/873a41101105349.5f1757138ce06.png" class="img-fluid subcategory-img" alt="Nuts" />
-            <div class="text-center">Nuts</div>
-        </a>
-        <a href="#DriedFruits" onclick="scrollToSubcategory('DriedFruits'); return false;">
-            <img src="https://dryfruitlegacy.com/wp-content/uploads/2023/11/Pista-California-250g-Front.png" class="img-fluid subcategory-img" alt="Dried Fruits" />
-            <div class="text-center">Dried Fruits</div>
-        </a>
-        <a href="#Granola" onclick="scrollToSubcategory('Granola'); return false;">
-            <img src="https://images.kglobalservices.com/www.kelloggs.in/en_in/product/product_896081/prod_img-940110_in_08901499010520_2202030336_p_1.png" class="img-fluid subcategory-img" alt="Granola" />
-            <div class="text-center">Granola</div>
-        </a>
-    </div>
+    </div>    
 </div>
-
 
     <div class="subcategories-row" id="row-2" style="display: none;">
         <div class="subcategories">
-            <a href="#Bread" onclick="scrollToSubcategory('Bread'); return false;">
-                <img src="https://example.com/path/to/bread-image.jpg" class="img-fluid subcategory-img" alt="Bread" />
-                <div class="text-center">Bread</div>
+            <a href="#CookingOils" onclick="scrollToSubcategory('CookingOils'); return false;">
+                <img src="https://www.groocy.in/storage/app/public/product/2023-10-31-6540f465cb126.png" class="img-fluid subcategory-img" alt="Cooking Oils" />
+                <div class="text-center">Cooking Oils</div>
             </a>
-            <a href="#Pastries" onclick="scrollToSubcategory('Pastries'); return false;">
-                <img src="https://example.com/path/to/pastries-image.jpg" class="img-fluid subcategory-img" alt="Pastries" />
-                <div class="text-center">Pastries</div>
+            <a href="#Spices" onclick="scrollToSubcategory('Spices'); return false;">
+                <img src="https://5.imimg.com/data5/SELLER/Default/2022/4/GZ/CD/PZ/140245462/90000486-500x500.jpg" class="img-fluid subcategory-img" alt="Spices and Seasonings" />
+                <div class="text-center">Spices and Seasonings</div>
+            </a>
+            <a href="#Condiments" onclick="scrollToSubcategory('Condiments'); return false;">
+                <img src="https://www.maltaproducts.com/wp-content/uploads/2020/08/ketchup-mayo.jpg" class="img-fluid subcategory-img" alt="Condiments and Sauces" />
+                <div class="text-center">Sauces</div>
+            </a>
+            <a href="#Pasta" onclick="scrollToSubcategory('Pasta'); return false;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRHVWvZcNJpaVaIHVEU4vVF4VmS72OtkrBFA&s" class="img-fluid subcategory-img" alt="Pasta and Noodles" />
+                <div class="text-center">Pasta and Noodles</div>
+            </a>
+            <a href="#Rice" onclick="scrollToSubcategory('Rice'); return false;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1Bov-Act8X2_4r07TqOqXyeCRvm-sjGBrlg&s" class="img-fluid subcategory-img" alt="Rice and Grains" />
+                <div class="text-center">Rice and Grains</div>
+            </a>
+            <a href="#CannedGoods" onclick="scrollToSubcategory('CannedGoods'); return false;">
+                <img src="https://desitreat.in/cdn/shop/files/masalaandsoya_533x.png?v=1695121069" class="img-fluid subcategory-img" alt="Canned Goods" />
+                <div class="text-center">Canned Goods</div>
             </a>
         </div>
     </div>
@@ -158,51 +177,85 @@
     <div class="subcategories-row" id="row-3" style="display: none;">
         <div class="subcategories">
             <a href="#Skincare" onclick="scrollToSubcategory('Skincare'); return false;">
-                <img src="https://example.com/path/to/skincare-image.jpg" class="img-fluid subcategory-img" alt="Skincare" />
+                <img src="https://assets.ajio.com/medias/sys_master/root/20231220/fQ02/6582db7bafa4cf41f5ddad23/-473Wx593H-4900526950-multi-MODEL.jpg" class="img-fluid subcategory-img" alt="Skincare" />
                 <div class="text-center">Skincare</div>
             </a>
             <a href="#HairCare" onclick="scrollToSubcategory('HairCare'); return false;">
-                <img src="https://example.com/path/to/haircare-image.jpg" class="img-fluid subcategory-img" alt="Hair Care" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ1QNkwKmmKbTydS5PBeHjjnCdjhKlSqw6Aw&s" class="img-fluid subcategory-img" alt="Hair Care" />
                 <div class="text-center">Hair Care</div>
+            </a>
+            <a href="#OralCare" onclick="scrollToSubcategory('OralCare'); return false;">
+                <img src="https://homedelivery.ramachandran.in/media/catalog/product/cache/04c5c5c4276fe9dba74400abc896c29c/4/2/421420A001152.png" class="img-fluid subcategory-img" alt="Oral Care" />
+                <div class="text-center">Oral Care</div>
+            </a>
+            <a href="#BathBody" onclick="scrollToSubcategory('BathBody'); return false;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRahVb2z5gktd3qWzQ9QJ3AAhOMofb62moTPw&s" class="img-fluid subcategory-img" alt="Bath and Body" />
+                <div class="text-center">Bath and Body</div>
+            </a>
+            <a href="#Fragrances" onclick="scrollToSubcategory('Fragrances'); return false;">
+                <img src="https://d91ztqmtx7u1k.cloudfront.net/ClientContent/Images/Catalogue/unisex-fogg-perfumes-for-perso-20240607093212914.jpg" class="img-fluid subcategory-img" alt="Fragrances" />
+                <div class="text-center">Fragrances</div>
+            </a>
+            <a href="#FeminineHygiene" onclick="scrollToSubcategory('FeminineHygiene'); return false;">
+                <img src="https://5.imimg.com/data5/SELLER/Default/2022/3/AS/UX/PD/8901635/feminine-hygiene-products-500x500.jpg" class="img-fluid subcategory-img" alt="Feminine Hygiene" />
+                <div class="text-center">Feminine Hygiene</div>
             </a>
         </div>
     </div>
 
     <div class="subcategories-row" id="row-4" style="display: none;">
         <div class="subcategories">
-            <a href="#Milk" onclick="scrollToSubcategory('Milk'); return false;">
-                <img src="https://example.com/path/to/milk-image.jpg" class="img-fluid subcategory-img" alt="Milk" />
-                <div class="text-center">Milk</div>
-            </a>
             <a href="#Cheese" onclick="scrollToSubcategory('Cheese'); return false;">
-                <img src="https://example.com/path/to/cheese-image.jpg" class="img-fluid subcategory-img" alt="Cheese" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVfhJ9exuRHRsWWu7lsx2IpylUXxqAoGUk7w&s" class="img-fluid subcategory-img" alt="Cheese" />
                 <div class="text-center">Cheese</div>
+            </a>
+            <a href="#Butter" onclick="scrollToSubcategory('Butter'); return false;">
+                <img src="https://5.imimg.com/data5/SELLER/Default/2023/5/312285703/EM/NO/LE/24906100/salted-hatsun-pasteurised-table-butter-500x500.png" class="img-fluid subcategory-img" alt="Butter and Margarine" />
+                <div class="text-center">Butter and Margarine</div>
+            </a>
+            <a href="#DairyAlternatives" onclick="scrollToSubcategory('DairyAlternatives'); return false;">
+                <img src="https://www.foodnavigator-usa.com/var/wrbm_gb_food_pharma/storage/images/publications/food-beverage-nutrition/foodnavigator-usa.com/article/2018/02/08/significant-percentage-of-consumers-buy-plant-based-dairy-alternatives-because-they-think-they-are-healthier-reveals-comax-study/7835123-1-eng-GB/Significant-percentage-of-consumers-buy-plant-based-dairy-alternatives-because-they-think-they-are-healthier-reveals-Comax-study.jpg" class="img-fluid subcategory-img" alt="Dairy Alternatives" />
+                <div class="text-center">Dairy Alternatives</div>
             </a>
         </div>
     </div>
+    
 
     <div class="subcategories-row" id="row-5" style="display: none;">
         <div class="subcategories">
-            <a href="#Juices" onclick="scrollToSubcategory('Juices'); return false;">
-                <img src="https://example.com/path/to/juices-image.jpg" class="img-fluid subcategory-img" alt="Juices" />
-                <div class="text-center">Juices</div>
+            <a href="#SoftDrinks" onclick="scrollToSubcategory('SoftDrinks'); return false;">
+                <img src="https://backoffice.hipersuper.pt/app/uploads/2023/01/coca-cola.jpg" class="img-fluid subcategory-img" alt="Soft Drinks" />
+                <div class="text-center">Soft Drinks</div>
             </a>
-            <a href="#Soda" onclick="scrollToSubcategory('Soda'); return false;">
-                <img src="https://example.com/path/to/soda-image.jpg" class="img-fluid subcategory-img" alt="Soda" />
-                <div class="text-center">Soda</div>
+            <a href="#EnergyDrinks" onclick="scrollToSubcategory('EnergyDrinks'); return false;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRigtYbsn15fW8XIMsaW42VaMC0Vr8Yb9YPdg&s" class="img-fluid subcategory-img" alt="Energy Drinks" />
+                <div class="text-center">Energy Drinks</div>
+            </a>
+            <a href="#TeaCoffee" onclick="scrollToSubcategory('TeaCoffee'); return false;">
+                <img src="https://www.bigbasket.com/media/uploads/p/xl/40054356-2_2-tata-coffee-grand-instant-coffee.jpg" class="img-fluid subcategory-img" alt="Tea and Coffee" />
+                <div class="text-center">Tea and Coffee</div>
+            </a>
+            <a href="#HealthDrinks" onclick="scrollToSubcategory('HealthDrinks'); return false;">
+                <img src="https://m.media-amazon.com/images/I/71es8Fc+XyL.jpg" class="img-fluid subcategory-img" alt="Health Drinks" />
+                <div class="text-center">Health Drinks</div>
             </a>
         </div>
     </div>
+    
 
     <div class="subcategories-row" id="row-6" style="display: none;">
         <div class="subcategories">
-            <a href="#Cleaning" onclick="scrollToSubcategory('Cleaning'); return false;">
-                <img src="https://example.com/path/to/cleaning-image.jpg" class="img-fluid subcategory-img" alt="Cleaning" />
-                <div class="text-center">Cleaning</div>
+            <a href="#CleaningSupplies" onclick="scrollToSubcategory('CleaningSupplies'); return false;">
+                <img src="https://m.media-amazon.com/images/I/71MXA1DlSkL.jpg" class="img-fluid subcategory-img" alt="Cleaning Supplies" />
+                <div class="text-center">Cleaning Supplies</div>
             </a>
-            <a href="#Organizers" onclick="scrollToSubcategory('Organizers'); return false;">
-                <img src="https://example.com/path/to/organizers-image.jpg" class="img-fluid subcategory-img" alt="Organizers" />
-                <div class="text-center">Organizers</div>
+            <a href="#Kitchenware" onclick="scrollToSubcategory('Kitchenware'); return false;">
+                <img src="https://m.media-amazon.com/images/I/61BLaDOomiL.jpg" class="img-fluid subcategory-img" alt="Kitchenware" />
+                <div class="text-center">Kitchenware</div>
+            </a>
+            <a href="#LaundryEssentials" onclick="scrollToSubcategory('LaundryEssentials'); return false;">
+                <img src="https://m.media-amazon.com/images/I/41ynMRBlm6L._AC_.jpg" class="img-fluid subcategory-img" alt="Laundry Essentials" />
+                <div class="text-center">Laundry Essentials</div>
             </a>
         </div>
     </div>
