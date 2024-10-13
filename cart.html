@@ -19,7 +19,6 @@
         }
         .navbar-brand {
     font-family: "Righteous", sans-serif !important;
-    font-size: 1.4rem;
 }
     button.qty-btn {
     width: 30px; /* Fixed width for buttons */
@@ -621,7 +620,8 @@ async function renderCart(cart) {
                 const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
 
-                // Update item available quantity item.availableQuantity = currentStock;
+                // Update item available quantity
+                item.availableQuantity = currentStock;
 
                 // Update quantity controls based on available stock
                 checkQuantityLimit();
@@ -661,6 +661,11 @@ async function renderCart(cart) {
                 }
             } else {
                 incrementBtn.disabled = false; // Enable increment button
+                if (item.quantity <= item.availableQuantity) {
+                    col.style.textDecoration = ''; // Remove strike-through if quantity is valid
+                    img.style.filter = ''; // Reset image color
+                    img.style.opacity = '';
+                }
             }
         }
     });
@@ -669,16 +674,15 @@ async function renderCart(cart) {
     const deliveryCharge = 49; // Delivery charge of 49
 
     // Update total amounts in the UI
-    totalAmountElement.innerHTML = `<span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span></span> <span class="amount-value">₹${totalAmount.toFixed(2)} `;
-    
+    totalAmountElement.innerHTML = `<span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> <span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
 
-    
     // Animate delivery charge display
-deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
-setTimeout(() => {
-    deliveryChargeElement.classList.add('show-free-delivery');
-}, 1000); // Delay the animation
+    deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
+    setTimeout(() => {
+        deliveryChargeElement.classList.add('show-free-delivery');
+    }, 1000); // Delay the animation
+
     // CSS for the animation and button styling
     const style = document.createElement('style');
     style.innerHTML = `
@@ -699,7 +703,6 @@ setTimeout(() => {
         .show-free-delivery {
             animation: fadeIn 1.5s forwards; /* Adjust duration as needed */
             color: green; /* Set text color to green */
-        
         }
 
         @keyframes fadeIn {
@@ -754,7 +757,7 @@ setTimeout(() => {
             const itemOriginalPrice = parseFloat(item.originalPrice);
 
             totalAmount += itemFinalPrice * itemQuantity;
- totalMRP += itemOriginalPrice * itemQuantity;
+            totalMRP += itemOriginalPrice * itemQuantity;
             totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
         });
 
@@ -764,6 +767,7 @@ setTimeout(() => {
         totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
     }
 }
+
 async function removeCartItem(productId) {
     const cartRef = ref(database, `carts/${currentUserId}`);
     try {
