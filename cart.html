@@ -493,6 +493,134 @@ function storeCartInLocalStorage(cart) {
     localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
     console.log("Stored cart in local storage.");
 }
+document.getElementById('payButton').addEventListener('click', async () => {
+    const uid = auth.currentUser.uid;
+    const userRef = ref(database, `users/${uid}`);
+    const userSnapshot = await get(userRef);
+
+    // Check if user data exists
+    if (!userSnapshot.exists()) {
+        alert('Your profile is incomplete. Please update your address and mobile number.');
+        window.location.href = 'User    - Profile.html'; 
+        return;
+    }
+
+    const userData = userSnapshot.val();
+    console.log('User    data:', userData); 
+
+    // Check if user details are complete
+    if (!userData.fullName || !userData.address || !userData.mobile) {
+        alert('Please update your profile with your name, address, and mobile number.');
+        window.location.href = 'profile.html'; 
+        return;
+    }
+
+    const cartRef = ref(database, `carts/${uid}`);
+    const snapshot = await get(cartRef);
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+
+        // Check stock availability for each product in the cart
+        const stockAvailability = await checkStockAvailability(cart);
+        if (!stockAvailability) {
+            alert(stockAvailability);
+            return;
+        }
+
+        // Check if user selected quantity is greater than stock available
+        const quantityCheck = await checkQuantity(cart);
+        if (!quantityCheck) {
+            alert('Sorry, the quantity you selected is greater than the stock available. Please try again later.');
+            return;
+        }
+
+        // Calculate total amount including delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
+
+        // Prepare Razorpay payment options
+        const options = {
+            key: "rzp_test_XxEv4eXXqaPM4o", 
+            amount: (totalAmount * 100).toFixed(0), 
+            currency: "INR",
+            name: "QuickBuy",
+            description: "Your Order Description",
+            handler: async function(response) {
+                // Create order after successful payment
+                await createOrder(cart);
+                await removeAllCartItems();
+                alert('Payment successful! Your cart has been cleared.');
+            },
+            prefill: {
+                name: userData.fullName || "Customer Name",
+                email: userData.email || "customer@example.com",
+                contact: userData.mobile || "9999999999"
+            },
+            theme: {
+                color: "#F37254"
+            }
+        };
+
+        const razorpay = new Razorpay(options);
+        razorpay.open();
+    } else {
+        alert('Your cart is empty.');
+    }
+});
+
+async function removeAllCartItems() {
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    try {
+        await remove(cartRef);
+        console.log('All items removed from cart.');
+        localStorage.removeItem(`cart_${currentUserId}`);
+        fetchCart();
+    } catch (error) {
+        console.error('Error removing cart items:', error);
+    }
+}
+
+async function checkStockAvailability(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
+
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+
+            if (currentStock < quantityOrdered) {
+                return `Sorry, the product ${productId} is out of stock. Please try again later.`; 
+            }
+        } else {
+            return `Sorry, the product ${productId} does not exist. Please try again later.`; 
+        }
+    }
+
+    return true; 
+}
+
+async function checkQuantity(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
+
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+
+            if (quantityOrdered > currentStock) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 async function renderCart(cart) {
     const cartItemsContainer = document.getElementById('cartItems');
     const totalAmountElement = document.getElementById('totalAmount');
@@ -508,7 +636,7 @@ async function renderCart(cart) {
     if (!cart || Object.keys(cart).length === 0) {
         illustratorImage.style.display = 'block'; // Show the image
         totalAmountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
-        totalDiscountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
+       
         deliveryChargeElement.innerHTML = 'Free Delivery'; // Set delivery charge to "Free Delivery"
         return; // Exit the function if the cart is empty
     } else {
@@ -611,12 +739,8 @@ async function renderCart(cart) {
         const stockCheckInterval = setInterval(async () => {
             const snapshot = await get(productRef);
             if (snapshot.exists()) {
-                const productData = snapshot.val();
+                const productData = snapshot.val(); // Assign snapshot data to productData
                 const currentStock = productData.stockAvailable;
-                    // Update item available quantity
-                    item.availableQuantity = currentStock;
-                // Update quantity controls based on available stock
-                checkQuantityLimit();
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
                     col.style.textDecoration = 'line-through';
@@ -828,109 +952,12 @@ async function updateStockAvailability(cart) {
     }
 }
 
-
 function calculateTotalAmount(cart) {
     let total = 0;
     Object.values(cart).forEach(item => {
         total += item.originalPrice * item.quantity;
     });
     return total;
-}document.getElementById('payButton').addEventListener('click', async () => {
-    const uid = auth.currentUser.uid;
-    const userRef = ref(database, `users/${uid}`);
-    const userSnapshot = await get(userRef);
-
-    // Check if user data exists
-    if (!userSnapshot.exists()) {
-        alert('Your profile is incomplete. Please update your address and mobile number.');
-        window.location.href = 'User  - Profile.html'; 
-        return;
-    }
-
-    const userData = userSnapshot.val();
-    console.log('User  data:', userData); 
-
-    // Check if user details are complete
-    if (!userData.fullName || !userData.address || !userData.mobile) {
-        alert('Please update your profile with your name, address, and mobile number.');
-        window.location.href = 'User  - Profile.html'; 
-        return;
-    }
-
-    const cartRef = ref(database, `carts/${uid}`);
-    const snapshot = await get(cartRef);
-    if (snapshot.exists()) {
-        const cart = snapshot.val();
-
-        // Check stock availability for each product in the cart
-        const stockAvailability = await checkStockAvailability(cart);
-        if (!stockAvailability) {
-            alert('Sorry, some items in your cart are out of stock. Please try again later.');
-            return;
-        }
-
-        // Calculate total amount including delivery charge
-        const totalAmount = calculateFinalAmountWithDelivery(cart);
-
-        // Prepare Razorpay payment options
-        const options = {
-            key: "rzp_test_XxEv4eXXqaPM4o", 
-            amount: (totalAmount * 100).toFixed(0), 
-            currency: "INR",
-            name: "QuickBuy",
-            description: "Your Order Description",
-            handler: async function(response) {
-                // Create order after successful payment
-                await createOrder(cart);
-                await removeAllCartItems();
-                alert('Payment successful! Your cart has been cleared.');
-            },
-            prefill: {
-                name: userData.fullName || "Customer Name",
-                email: userData.email || "customer@example.com",
-                contact: userData.mobile || "9999999999"
-            },
-            theme: {
-                color: "#F37254"
-            }
-        };
-
-        const razorpay = new Razorpay(options);
-        razorpay.open();
-    } else {
-        alert('Your cart is empty.');
-    }
-});
-async function removeAllCartItems() {
-    const cartRef = ref(database, `carts/${currentUserId}`);
-    try {
-        await remove(cartRef);
-        console.log('All items removed from cart.');
-        localStorage.removeItem(`cart_${currentUserId}`);
-        fetchCart();
-    } catch (error) {
-        console.error('Error removing cart items:', error);
-    }
-}
-async function checkStockAvailability(cart) {
-    for (const productId in cart) {
-        const productRef = ref(database, `products/${productId}`);
-        const snapshot = await get(productRef);
-
-        if (snapshot.exists()) {
-            const productData = snapshot.val();
-            const currentStock = productData.stockAvailable;
-            const quantityOrdered = cart[productId].quantity;
-
-            if (currentStock < quantityOrdered) {
-                return false; 
-            }
-        } else {
-            return false; 
-        }
-    }
-
-    return true; 
 }
 
 document.getElementById('scrollUpButton').addEventListener('click', function() {
