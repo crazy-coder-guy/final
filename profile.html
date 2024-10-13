@@ -328,7 +328,7 @@
 }
 .form-control {
     background: rgba(255, 255, 255, 0.3); /* Transparent white background */
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Light border for better visibility */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Light border */
     border-radius: 5px; /* Rounded corners */
     color: #333; /* Text color */
     backdrop-filter: blur(10px); /* Glass effect */
@@ -338,10 +338,12 @@
 .form-control:focus {
     border-color: #1A5319; /* Change border color on focus */
     outline: none; /* Remove default outline */
-    background: rgba(255, 255, 255, 0.5); /* Slightly less transparent on focus */
+    background: rgba(26, 83, 25, 0.5); /* Green background on focus */
+    backdrop-filter: blur(5px); /* Keep glass effect */
+    color: white; /* Change text color for better contrast */
 }
 
-/* Other existing styles for labels and buttons can remain unchanged */
+/* Additional styles for labels and buttons can remain unchanged */
 
     </style>
 </head>
