@@ -4,7 +4,7 @@ body {
 }
 .navbar-brand{
     font-family: "Righteous", sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.2 rem;
 }
 @keyframes slideDown {
     0% {
@@ -19,7 +19,7 @@ body {
 
 .navbar-brand {
     font-family: "Righteous", sans-serif;
-    font-size: 1.5rem; /* Corrected spacing */
+    font-size: 1.4rem; /* Corrected spacing */
     animation: slideDown 0.5s ease forwards; /* Apply animation */
 }
 
@@ -613,4 +613,74 @@ img {
     justify-content: center;
     align-items: center;
     min-width: 15px; /* Minimum width for the badge */
+}
+.nav-search {
+    position: relative; /* To position the suggestions container */
+}
+
+.input-group {
+    width: 100%; /* Full width */
+}
+
+.search-icon {
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove border */
+    color: #1A5319; /* Icon color */
+}
+
+.search-icon i {
+    font-size: 1.2rem; /* Adjust icon size */
+}
+
+.modern-search {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly less transparent for better visibility */
+    border: 2px solid rgba(214, 239, 216, 0.5) !important; /* Default creamy green border */
+    border-radius: 4px !important; /* Slightly curved corners */
+    padding: 10px 15px; /* Padding */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition effects */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.modern-search:focus {
+    border-color: #1A5319 !important; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(26, 83, 25, 0.5); /* Shadow on focus */
+}
+
+.close-icon {
+    position: absolute; /* Position the close icon */
+    right: 10px; /* Positioning from the right */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust to center */
+    cursor: pointer; /* Pointer cursor */
+    color: #1A5319; /* Close icon color */
+    font-size: 1.5rem; /* Icon size */
+    display: none; /* Initially hidden */
+}
+
+.suggestions-container {
+    position: absolute; /* Position suggestions below the input */
+    background-color: white; /* Background for suggestions */
+    border: 1px solid #1A5319 !important; /* Border for suggestions */
+    border-radius: 4px !important; /* Slightly curved corners for suggestions */
+    z-index: 1000; /* Ensure it appears above other content */
+    width: 100%; /* Full width */
+    max-height: 200px; /* Max height for suggestions */
+    overflow-y: auto; /* Scroll if overflow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for suggestions */
+    display: none; /* Hide by default */
+}
+
+.suggestions-container.visible {
+    display: block; /* Show suggestions when needed */
+}
+
+.suggestions-container div {
+    padding: 10px; /* Padding for suggestion items */
+    cursor: pointer; /* Pointer cursor on items */
+    transition: background-color 0.2s; /* Smooth background transition */
+}
+
+.suggestions-container div:hover {
+    background-color: rgba(26, 83, 25, 0.1); /* Highlight on hover */
 }
