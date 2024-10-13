@@ -964,7 +964,7 @@ function scrollToCategory(category) {
     const categoryElement = document.getElementById(category);
     if (categoryElement) {
         const elementPosition = categoryElement.getBoundingClientRect().top; // Position of the element relative to the viewport
-        const offsetPosition = window.scrollY + elementPosition - (window.innerHeight / 2) + (categoryElement.clientHeight / 2); // Calculate the position to scroll to
+        const offsetPosition = window.scrollY + elementPosition - (window.innerHeight / 3) + (categoryElement.clientHeight / 2); // Calculate the position to scroll to
         
         window.scrollTo({
             top: offsetPosition,
