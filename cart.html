@@ -391,6 +391,7 @@ onAuthStateChanged(auth, async (user) => {
         alert('You need to log in to view your cart.');
     }
 });
+
 async function fetchCart() {
     showSpinner();
     if (!currentUserId) return;
@@ -402,11 +403,52 @@ async function fetchCart() {
     if (snapshot.exists()) {
         const cart = snapshot.val();
         storeCartInLocalStorage(cart);
-        renderCart(cart);
+        
+        // Calculate total amount with delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
+        renderCart(cart, totalAmount);
     } else {
         console.log("No data available");
-        renderCart({}); // Render empty cart
+        renderCart({}, 0); // Render empty cart
     }
+}
+
+function calculateFinalAmountWithDelivery(cart) {
+    async function fetchCart() {
+    showSpinner();
+    if (!currentUserId) return;
+
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    const snapshot = await get(cartRef);
+    hideSpinner();
+
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+        storeCartInLocalStorage(cart);
+        
+        // Calculate total amount with delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
+        renderCart(cart, totalAmount);
+    } else {
+        console.log("No data available");
+        renderCart({}, 0); // Render empty cart
+    }
+}
+
+function calculateFinalAmountWithDelivery(cart) {
+    const deliveryCharge = 49;
+    let total = 0;
+    Object.values(cart).forEach(item => {
+        total += parseFloat(item.finalPrice) * item.quantity;
+    });
+    return total + deliveryCharge; // Add delivery charge
+}
+
+    let total = 0;
+    Object.values(cart).forEach(item => {
+        total += parseFloat(item.finalPrice) * item.quantity;
+    });
+    return total; // Add delivery charge
 }
 
 function loadCartFromLocalStorage() {
@@ -774,50 +816,35 @@ function calculateTotalAmount(cart) {
         total += item.originalPrice * item.quantity;
     });
     return total;
-}
-document.getElementById('payButton').addEventListener('click', async () => {
+}document.getElementById('payButton').addEventListener('click', async () => {
     const uid = auth.currentUser.uid;
     const userRef = ref(database, `users/${uid}`);
     const userSnapshot = await get(userRef);
 
-    // Check if user data exists
     if (!userSnapshot.exists()) {
         alert('Your profile is incomplete. Please update your address and mobile number.');
-        window.location.href = 'User -Profile.html'; 
+        window.location.href = 'User - Profile.html'; 
         return;
     }
 
     const userData = userSnapshot.val();
-    console.log('User  data:', userData); 
-
-    // Check if user details are complete
-    if (!userData.fullName || !userData.address || !userData.mobile) {
-        alert('Please update your profile with your name, address, and mobile number.');
-        window.location.href = 'User -Profile.html'; 
-        return;
-    }
 
     const cartRef = ref(database, `carts/${uid}`);
     const snapshot = await get(cartRef);
     if (snapshot.exists()) {
         const cart = snapshot.val();
 
-        // Check stock availability for each product in the cart
-        const stockAvailability = await checkStockAvailability(cart);
-        if (!stockAvailability) {
-            alert('Sorry, some items in your cart are out of stock. Please try again later.');
-            return;
-        }
+        // Calculate total amount including delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
 
         // Prepare Razorpay payment options
         const options = {
             key: "rzp_test_XxEv4eXXqaPM4o", 
-            amount: (calculateTotalAmount(cart) * 100).toFixed(0), 
+            amount: (totalAmount * 100).toFixed(0), 
             currency: "INR",
             name: "QuickBuy",
             description: "Your Order Description",
             handler: async function(response) {
-                // Create order after successful payment
                 await createOrder(cart);
                 await removeAllCartItems();
                 alert('Payment successful! Your cart has been cleared.');
