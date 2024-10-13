@@ -636,7 +636,7 @@ img {
     background-color: rgba(255, 255, 255, 0.9); /* Slightly less transparent for better visibility */
     border: 2px solid rgba(214, 239, 216, 0.5) !important; /* Default creamy green border */
     border-radius: 4px !important; /* Slightly curved corners */
-    padding: 10px 15px; /* Padding */
+    padding: 5px 10px; /* Padding */
     transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition effects */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
