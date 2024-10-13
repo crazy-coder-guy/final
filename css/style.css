@@ -4,6 +4,23 @@ body {
 }
 .navbar-brand{
     font-family: "Righteous", sans-serif;
+    font-size: 1.2 rem;
+}
+@keyframes slideDown {
+    0% {
+        transform: translateY(-20px); /* Start 20px above */
+        opacity: 0; /* Start invisible */
+    }
+    100% {
+        transform: translateY(0); /* End at original position */
+        opacity: 1; /* Fully visible */
+    }
+}
+
+.navbar-brand {
+    font-family: "Righteous", sans-serif;
+    font-size: 1.2rem; /* Corrected spacing */
+    animation: slideDown 0.5s ease forwards; /* Apply animation */
 }
 
 .alert {
@@ -362,7 +379,7 @@ body {
 .offer-card img {
     width: 100%;
     height: 250px; /* Adjust as needed for height */
-    object-fit: contain;
+    object-fit: inherit;
 }
 
 /* Optional: Add media queries for responsiveness */
@@ -576,4 +593,24 @@ img {
     right: 10px; /* Distance from the right */
     top: 50%; /* Center it vertically */
     transform: translateY(-50%); /* Adjust for vertical alignment */
+}
+.cart-link {
+    position: relative;
+    text-decoration: none; /* Remove underline from the link */
+    color: black; /* Change color as needed */
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px; /* Adjust vertical position */
+    right: 20px; /* Adjust horizontal position */
+    background-color:transparent; /* Badge color */
+    color: rgb(0, 0, 0); /* Text color */
+    border-radius: 50%; /* Make it circular */
+    padding: 3px 9px; /* Add some padding */
+    font-size: 0.8em; /* Adjust font size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 15px; /* Minimum width for the badge */
 }
