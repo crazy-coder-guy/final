@@ -684,3 +684,46 @@ img {
 .suggestions-container div:hover {
     background-color: rgba(26, 83, 25, 0.1); /* Highlight on hover */
 }
+.subcategories-row {
+    display: flex;
+    overflow-x: auto; 
+    padding: 10px 2px; 
+    white-space: nowrap; 
+    margin-left: -8%;
+    margin-right: -8%;
+}
+.subcategories a {
+    display: block; /* Ensure the link covers the entire area */
+    margin-right: 20px; /* Adjust the gap as needed */
+    margin-left: 10%;
+    text-decoration: none; /* Remove underline */
+    color: black; /* Change text color to black */
+    text-align: center; /* Center text under images */
+}
+
+.subcategories a:hover {
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Drop shadow effect on hover */
+}
+.subcategories {
+    display: flex; /* Ensure subcategories are in a row */
+}
+
+.subcategories {
+    display: flex; /* Ensure subcategories are in a row */
+}
+
+.subcategory-img {
+    width: 80px; /* Adjust width for better visibility */
+    height: 80px; /* Ensure images have a uniform height */
+    object-fit: cover; /* Maintain aspect ratio */
+    margin-right: 15px; /* Space between images */
+}
+
+.subcategory.visible {
+    opacity: 1; /* Fully visible */
+}
+
+/* To remove the margin on the last item */
+.subcategories a:last-child .subcategory-img {
+    margin-right: 0; /* Remove margin on the last item */
+}
