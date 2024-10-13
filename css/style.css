@@ -1,5 +1,5 @@
 body {
-    background-color: #ffffff;
+    background-color: #f8f9fa;
     font-family:  "Montserrat", sans-serif;
 }
 .navbar-brand{
@@ -429,7 +429,6 @@ body {
         min-width: 100%; /* Show 1 card at a time */
     }
 }
-
 .category-img {
     height: 120px; /* Fixed height for both mobile and desktop */
     width: 100%; /* Full width */
@@ -437,7 +436,9 @@ body {
     border-radius: 6px; /* Optional: rounded corners */
     display: block; /* Ensures no extra space below the image */
     margin: 0 auto; /* Center the image horizontally */
+    box-shadow: 0 4px 8px rgba(204, 255, 204, 0.5); /* Creamy green drop shadow */
 }
+
 
 @media (min-width: 577px) { /* For desktop and larger screens */
     .category-img {
@@ -690,6 +691,7 @@ img {
     white-space: nowrap; 
     width: 100%;
     padding: 10px px;
+    
 
 }
 .subcategories a {
