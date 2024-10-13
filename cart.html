@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-    <title>QuickBuy - Cart</title>
+    <title>DelightX-Cart</title>
     <style>
          body {
             background-color: #ffffff;
@@ -258,13 +258,13 @@ button.qty-btn:disabled {
 
 <!-- Mobile Navbar -->
 <nav class="navbar mobile-nav">
-    <a class="navbar-brand" href="#">QuickBuy</a>
+    <a class="navbar-brand" href="#">DelightX.</a>
 </nav>
 
 <!-- Desktop Navbar -->
 <nav class="navbar desktop-nav">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">QuickBuy</a>
+        <a class="navbar-brand" href="#">DelightX.</a>
         <form class="d-flex nav-search">
             <div class="input-group">
                 <span class="input-group-text bg-white border-end-0">
@@ -300,6 +300,9 @@ button.qty-btn:disabled {
         
         <div class="col-lg-4 col-md-12">
             <div class="price-details">
+                <h5 class="text-center">
+                    <i class="fa-solid fa-angle-up fa-bounce" id="scrollUpButton" style="cursor: pointer;"></i>
+                </h5>                
                 <h5 class="text-center">Price Details</h5>
                 <div class="mb-3">
                     <strong>Total Amount:</strong> <span id="totalAmount" class="amount-value">0.00</span>
@@ -903,6 +906,13 @@ async function removeAllCartItems() {
                 deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
             }, 2000); // Delay of 2 seconds
         }
+    });
+});
+document.getElementById('scrollUpButton').addEventListener('click', function() {
+    // Scroll up by 100 pixels (adjust the value as needed)
+    window.scrollBy({
+        top: 1000, // Scroll up
+        behavior: 'smooth' // Smooth scrolling
     });
 });
 
