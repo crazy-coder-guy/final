@@ -687,18 +687,18 @@ img {
 .subcategories-row {
     display: flex;
     overflow-x: auto; 
-    padding: 10px 2px; 
     white-space: nowrap; 
-    margin-left: -8%;
-    margin-right: -8%;
+    width: 100%;
+    padding: 10px px;
+
 }
 .subcategories a {
     display: block; /* Ensure the link covers the entire area */
-    margin-right: 20px; /* Adjust the gap as needed */
-    margin-left: 10%;
+    margin-right: 30px; /* Adjust the gap as needed */
     text-decoration: none; /* Remove underline */
     color: black; /* Change text color to black */
     text-align: center; /* Center text under images */
+    width: 100%;
 }
 
 .subcategories a:hover {
@@ -713,9 +713,9 @@ img {
 }
 
 .subcategory-img {
-    width: 80px; /* Adjust width for better visibility */
+    width: 100px; /* Adjust width for better visibility */
     height: 80px; /* Ensure images have a uniform height */
-    object-fit: cover; /* Maintain aspect ratio */
+    object-fit: contain; /* Maintain aspect ratio */
     margin-right: 15px; /* Space between images */
 }
 
