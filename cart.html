@@ -821,18 +821,34 @@ function calculateTotalAmount(cart) {
     const userRef = ref(database, `users/${uid}`);
     const userSnapshot = await get(userRef);
 
+    // Check if user data exists
     if (!userSnapshot.exists()) {
         alert('Your profile is incomplete. Please update your address and mobile number.');
-        window.location.href = 'User - Profile.html'; 
+        window.location.href = 'User  - Profile.html'; 
         return;
     }
 
     const userData = userSnapshot.val();
+    console.log('User  data:', userData); 
+
+    // Check if user details are complete
+    if (!userData.fullName || !userData.address || !userData.mobile) {
+        alert('Please update your profile with your name, address, and mobile number.');
+        window.location.href = 'User  - Profile.html'; 
+        return;
+    }
 
     const cartRef = ref(database, `carts/${uid}`);
     const snapshot = await get(cartRef);
     if (snapshot.exists()) {
         const cart = snapshot.val();
+
+        // Check stock availability for each product in the cart
+        const stockAvailability = await checkStockAvailability(cart);
+        if (!stockAvailability) {
+            alert('Sorry, some items in your cart are out of stock. Please try again later.');
+            return;
+        }
 
         // Calculate total amount including delivery charge
         const totalAmount = calculateFinalAmountWithDelivery(cart);
@@ -845,6 +861,7 @@ function calculateTotalAmount(cart) {
             name: "QuickBuy",
             description: "Your Order Description",
             handler: async function(response) {
+                // Create order after successful payment
                 await createOrder(cart);
                 await removeAllCartItems();
                 alert('Payment successful! Your cart has been cleared.');
@@ -865,7 +882,17 @@ function calculateTotalAmount(cart) {
         alert('Your cart is empty.');
     }
 });
-
+async function removeAllCartItems() {
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    try {
+        await remove(cartRef);
+        console.log('All items removed from cart.');
+        localStorage.removeItem(`cart_${currentUserId}`);
+        fetchCart();
+    } catch (error) {
+        console.error('Error removing cart items:', error);
+    }
+}
 async function checkStockAvailability(cart) {
     for (const productId in cart) {
         const productRef = ref(database, `products/${productId}`);
@@ -886,57 +913,6 @@ async function checkStockAvailability(cart) {
 
     return true; 
 }
-async function removeAllCartItems() {
-        const cartRef = ref(database, `carts/${currentUserId}`);
-        try {
-            await remove(cartRef);
-            console.log('All items removed from cart.');
-            localStorage.removeItem(`cart_${currentUserId}`);
-            fetchCart();
-        } catch (error) {
-            console.error('Error removing cart items:', error);
-        }
-    }document.addEventListener("DOMContentLoaded", function () {
-    const deliveryMessage = document.getElementById("deliveryMessage");
-    const deliveryTime = document.getElementById("deliveryTime");
-
-    function checkDeliveryTime() {
-        const now = new Date();
-        const hours = now.getHours();
-        let delivery;
-
-        if (hours >= 19) { // If time is 7 PM or later
-            delivery = "tomorrow by 6 PM";
-        } else {
-            delivery = "today";
-        }
-
-        deliveryTime.textContent = delivery;
-    }
-
-    // Initial check for delivery time
-    checkDeliveryTime();
-
-    // Scroll effect
-    window.addEventListener('scroll', function () {
-        const rect = deliveryMessage.getBoundingClientRect();
-        // Check if the delivery message is in the viewport
-        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-            setTimeout(() => {
-                deliveryMessage.style.display = "block"; // Show message when in view
-                deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
-            }, 2000); // Delay of 2 seconds
-        }
-    });
-});
-document.getElementById('scrollUpButton').addEventListener('click', function() {
-    // Scroll up by 100 pixels (adjust the value as needed)
-    window.scrollBy({
-        top: 1000, // Scroll up
-        behavior: 'smooth' // Smooth scrolling
-    });
-});
-
 function showSpinner() {
     const spinner = document.getElementById('spinner');
     spinner.style.display = 'block';
@@ -947,6 +923,6 @@ function hideSpinner() {
     spinner.style.display = 'none';
 }
 </script>
-</script>
+
 </body>
 </html>
