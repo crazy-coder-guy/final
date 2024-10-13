@@ -493,7 +493,6 @@ function storeCartInLocalStorage(cart) {
     localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
     console.log("Stored cart in local storage.");
 }
-
 async function renderCart(cart) {
     const cartItemsContainer = document.getElementById('cartItems');
     const totalAmountElement = document.getElementById('totalAmount');
@@ -513,8 +512,7 @@ async function renderCart(cart) {
         deliveryChargeElement.innerHTML = 'Free Delivery'; // Set delivery charge to "Free Delivery"
         return; // Exit the function if the cart is empty
     } else {
-        // Hide the illustrator image if the cart is not empty
-        illustratorImage.style.display = 'none';
+        illustratorImage.style.display = 'none'; // Hide the illustrator image if not empty
     }
 
     let totalAmount = 0;
@@ -546,7 +544,6 @@ async function renderCart(cart) {
         // Create quantity controls
         const qtyCol = document.createElement('div');
         qtyCol.className = 'qty-controls';
-
         const decrementBtn = document.createElement('button');
         decrementBtn.textContent = '-';
         decrementBtn.className = 'qty-btn';
@@ -557,11 +554,9 @@ async function renderCart(cart) {
                 updateCart();
             }
         });
-
         const qtyDisplay = document.createElement('span');
         qtyDisplay.className = 'qty-display';
         qtyDisplay.textContent = item.quantity;
-
         const incrementBtn = document.createElement('button');
         incrementBtn.textContent = '+';
         incrementBtn.className = 'qty-btn';
@@ -573,7 +568,6 @@ async function renderCart(cart) {
             }
             checkQuantityLimit();
         });
-
         qtyCol.appendChild(decrementBtn);
         qtyCol.appendChild(qtyDisplay);
         qtyCol.appendChild(incrementBtn);
@@ -620,12 +614,6 @@ async function renderCart(cart) {
                 const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
 
-                // Update item available quantity
-                item.availableQuantity = currentStock;
-
-                // Update quantity controls based on available stock
-                checkQuantityLimit();
-
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
                     col.style.textDecoration = 'line-through';
@@ -637,39 +625,25 @@ async function renderCart(cart) {
                     img.style.filter = '';
                     img.style.opacity = '';
                 }
+
+                // Check quantity limit
+                checkQuantityLimit();
             }
         }, 1000); // Check every second
 
         function updateQtyDisplay() {
             qtyDisplay.textContent = item.quantity;
             finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
-
-            if (item.quantity > item.availableQuantity) {
-                col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
-            } else {
-                col.style.textDecoration = ''; // Remove strike through if quantity is valid
-                img.style.filter = ''; // Reset image color
-                img.style.opacity = '';
-            }
         }
 
         function checkQuantityLimit() {
             if (item.quantity >= item.availableQuantity) {
                 incrementBtn.disabled = true; // Disable increment button
-                if (item.quantity > item.availableQuantity) {
-                    col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
-                }
             } else {
                 incrementBtn.disabled = false; // Enable increment button
-                if (item.quantity <= item.availableQuantity) {
-                    col.style.textDecoration = ''; // Remove strike-through if quantity is valid
-                    img.style.filter = ''; // Reset image color
-                    img.style.opacity = '';
-                }
             }
         }
     });
-
     // Delivery charge logic
     const deliveryCharge = 49; // Delivery charge of 49
 
