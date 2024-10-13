@@ -83,7 +83,7 @@ body {
 
 .card-img-top {
     height: 150px !important; /* Force the height to 80px */
-    object-fit: contain;
+    object-fit: inherit;
     border-top-left-radius: 6px; /* Smaller radius */
     border-top-right-radius: 6px; /* Smaller radius */
     border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Reduced border thickness */
@@ -543,7 +543,8 @@ footer {
 
 img {
     width: 100%;
-    height: auto;
+    height: 119px;
+    object-fit: cover;
 }
 .dot {
     width: 10px;
