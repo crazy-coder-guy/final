@@ -308,9 +308,6 @@ button.qty-btn:disabled {
                     <strong>Total Amount:</strong> <span id="totalAmount" class="amount-value">0.00</span>
                 </div>
                 <div class="mb-3">
-                    <strong>Total Discount:</strong> <span id="totalDiscount" class="amount-value">0.00</span>
-                </div>
-                <div class="mb-3">
                     <strong>Delivery Charge:</strong> <span id="deliveryCharge">0.00</span>
                 </div>
                 <div class="mb-3">
@@ -456,7 +453,7 @@ async function renderCart(cart) {
 
     Object.entries(cart).forEach(([key, item]) => {
         const col = document.createElement('div');
-        col.className = 'col-11 mb-3 bg-light-gray';
+        col.className = 'col-12 mb-3 bg-light-gray';
 
         const row = document.createElement('div');
         row.className = 'row align-items-center';
@@ -515,7 +512,7 @@ async function renderCart(cart) {
         row.appendChild(nameQtyCol);
 
         const priceCol = document.createElement('div');
-        priceCol.className = 'col-3';
+        priceCol.className = 'col-2';
         const finalPrice = document.createElement('p');
         finalPrice.className = 'price-text';
         finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
@@ -523,7 +520,7 @@ async function renderCart(cart) {
         row.appendChild(priceCol);
 
         const deleteCol = document.createElement('div');
-        deleteCol.className = 'col-1 text-center';
+        deleteCol.className = 'col-2 text-center';
         const deleteBtn = document.createElement('span');
         deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
         deleteBtn.className = 'delete-btn';
@@ -553,8 +550,7 @@ async function renderCart(cart) {
                 const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
 
-                // Update item available quantity
-                item.availableQuantity = currentStock;
+                // Update item available quantity item.availableQuantity = currentStock;
 
                 // Update quantity controls based on available stock
                 checkQuantityLimit();
@@ -602,8 +598,8 @@ async function renderCart(cart) {
     const deliveryCharge = 49; // Delivery charge of 49
 
     // Update total amounts in the UI
-    totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
-    totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
+    totalAmountElement.innerHTML = `<span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span></span> <span class="amount-value">₹${totalAmount.toFixed(2)} `;
+    
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
 
     // Animate delivery charge display
@@ -687,17 +683,16 @@ async function renderCart(cart) {
             const itemOriginalPrice = parseFloat(item.originalPrice);
 
             totalAmount += itemFinalPrice * itemQuantity;
-            totalMRP += itemOriginalPrice * itemQuantity;
+ totalMRP += itemOriginalPrice * itemQuantity;
             totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
         });
 
         // Update total amounts in the UI
-        totalAmountElement.innerHTML = `<span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
+        totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
         totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
         totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
     }
 }
-
 async function removeCartItem(productId) {
     const cartRef = ref(database, `carts/${currentUserId}`);
     try {
@@ -772,14 +767,13 @@ async function updateStockAvailability(cart) {
     }
 }
 
+
 function calculateTotalAmount(cart) {
     let total = 0;
     Object.values(cart).forEach(item => {
-        total += item.finalPrice * item.quantity;
+        total += item.originalPrice * item.quantity;
     });
-    
-    // No delivery charges included in the total for payment
-    return total.toFixed(2);
+    return total;
 }
 document.getElementById('payButton').addEventListener('click', async () => {
     const uid = auth.currentUser.uid;
