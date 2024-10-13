@@ -412,6 +412,34 @@ async function fetchCart() {
         renderCart({}, 0); // Render empty cart
     }
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const deliveryMessage = document.getElementById("deliveryMessage");
+    const deliveryTime = document.getElementById("deliveryTime");
+    function checkDeliveryTime() {
+        const now = new Date();
+        const hours = now.getHours();
+        let delivery;
+        if (hours >= 19) { // If time is 7 PM or later
+            delivery = "tomorrow by 6 PM";
+        } else {
+            delivery = "today";
+        }
+        deliveryTime.textContent = delivery;
+    }
+    // Initial check for delivery time
+    checkDeliveryTime();
+    // Scroll effect
+    window.addEventListener('scroll', function () {
+        const rect = deliveryMessage.getBoundingClientRect();
+        // Check if the delivery message is in the viewport
+        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+            setTimeout(() => {
+                deliveryMessage.style.display = "block"; // Show message when in view
+                deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
+            }, 2000); // Delay of 2 seconds
+        }
+    });
+});
 
 function calculateFinalAmountWithDelivery(cart) {
     async function fetchCart() {
@@ -644,12 +672,12 @@ async function renderCart(cart) {
     
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
 
+    
     // Animate delivery charge display
-    deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
-    setTimeout(() => {
-        deliveryChargeElement.classList.add('show-free-delivery');
-    }, 1000); // Delay the animation
-
+deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
+setTimeout(() => {
+    deliveryChargeElement.classList.add('show-free-delivery');
+}, 1000); // Delay the animation
     // CSS for the animation and button styling
     const style = document.createElement('style');
     style.innerHTML = `
@@ -913,6 +941,14 @@ async function checkStockAvailability(cart) {
 
     return true; 
 }
+
+document.getElementById('scrollUpButton').addEventListener('click', function() {
+    // Scroll up by 100 pixels (adjust the value as needed)
+    window.scrollBy({
+        top: 1000, // Scroll up
+        behavior: 'smooth' // Smooth scrolling
+    });
+});
 function showSpinner() {
     const spinner = document.getElementById('spinner');
     spinner.style.display = 'block';
