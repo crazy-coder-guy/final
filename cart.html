@@ -13,6 +13,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <title>DelightX-Cart</title>
     <style>
+        .fade-in {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+
+.fade-in.show {
+    opacity: 1;
+}
+
          body {
             background-color: #ffffff;
             font-family:  "Montserrat", sans-serif;
@@ -788,10 +797,33 @@ async function renderCart(cart) {
         }
     });
     // Delivery charge logic
-    const deliveryCharge = 49; // Delivery charge of 49
+const deliveryCharge = 49; // Delivery charge of 49
+const originalTotal = calculateTotalAmount(cart);
 
-    // Update total amounts in the UI
-    totalAmountElement.innerHTML = `<span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> <span class="amount-value">₹${totalAmount.toFixed(2)}</span>`;
+
+// Update total amounts in the UI
+totalAmountElement.innerHTML = `<span id="original-amount" class="strike-through">₹${originalTotal.toFixed(2)}</span>`;
+
+// Create a new span for the amount value
+const amountValueSpan = document.createElement('span');
+amountValueSpan.className = 'amount-value fade-in';
+amountValueSpan.innerHTML = `₹${totalAmount.toFixed(2)}`;
+
+// Append the span but keep it hidden initially
+amountValueSpan.style.opacity = 0; // Initially hidden
+totalAmountElement.appendChild(amountValueSpan);
+
+// Use setTimeout to strike out the original amount and show the new total after 2 seconds
+setTimeout(() => {
+    // Fade out the original amount
+    document.getElementById('original-amount').style.opacity = 0;
+    
+    // Show the new total after the original fades out
+    setTimeout(() => {
+        amountValueSpan.style.opacity = 1; // Fade in the new total
+    }, 500); // Adjust time for fade-out
+}, 1000); // Time before the original fades out
+
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
 
     // Animate delivery charge display
