@@ -251,6 +251,10 @@ button.qty-btn:disabled {
     transform: translateY(0); /* Reset position */
     visibility: visible; /* Make it visible */
 }
+#totalDiscount {
+    display: none; /* This hides the element */
+}
+
 
     </style>
 </head>
@@ -310,6 +314,9 @@ button.qty-btn:disabled {
                 <div class="mb-3">
                     <strong>Delivery Charge:</strong> <span id="deliveryCharge">0.00</span>
                 </div>
+                <div class="mb-3">
+                <span id="totalDiscount">0.00</span>
+                </div>                
                 <div class="mb-3">
                     <strong>You Save:</strong> <span id="totalSavings">0.00</span>
                 </div>
@@ -419,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const now = new Date();
         const hours = now.getHours();
         let delivery;
-        if (hours >= 19) { // If time is 7 PM or later
+        if (hours >= 16) { // If time is 4 PM or later
             delivery = "tomorrow by 6 PM";
         } else {
             delivery = "today";
@@ -873,7 +880,8 @@ async function renderCart(cart) {
 
         // Update total amounts in the UI
         totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
-        totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
+// Update the total discount element in the HTML
+totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
         totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
     }
 }
@@ -959,7 +967,17 @@ function calculateTotalAmount(cart) {
     });
     return total;
 }
+// Hide the total discount element
+document.getElementById('totalDiscount').style.display = 'none';
 
+// You can still calculate and use totalDiscount in your logic
+function calculateTotalDiscount(cart) {
+    let totalDiscount = 0;
+    Object.values(cart).forEach(item => {
+        totalDiscount += item.discount * item.quantity; // Assuming `item.discount` is the discount per item
+    });
+    return totalDiscount;
+}
 document.getElementById('scrollUpButton').addEventListener('click', function() {
     // Scroll up by 100 pixels (adjust the value as needed)
     window.scrollBy({
