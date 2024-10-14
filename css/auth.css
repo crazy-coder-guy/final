@@ -1,11 +1,11 @@
 body {
-    font-family: "Rubik", sans-serif;
+    font-family: "Montserrat", sans-serif;
     height: 100vh;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff; /* Light background */
+    background-color: #f0f0f0; /* Light background for better contrast */
 }
 
 .container {
@@ -13,9 +13,10 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-    background: #ffffff; /* White background for the form */
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
     border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px); /* Glass effect */
     overflow: hidden;
     transition: transform 0.3s ease;
 }
@@ -26,7 +27,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: #6c63ff; /* Modern purple color */
+    background-color: rgba(76, 175, 80, 0.8); /* Green color with transparency */
 }
 
 .left-col img {
@@ -51,12 +52,12 @@ body {
     border-radius: 8px;
     border: 1px solid #ced4da;
     padding: 15px;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition for shadow */
 }
 
 .form-control:focus {
-    border-color: #6c63ff; /* Focus color matches left column */
-    box-shadow: none;
+    border-color: #4CAF50; /* Focus color matches green theme */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Subtle shadow on focus */
 }
 
 .btn-primary, .btn-google {
@@ -68,13 +69,14 @@ body {
 }
 
 .btn-primary {
-    background-color: #6c63ff; /* Modern purple button */
-    border-color: #6c63ff;
+    background-color: #4CAF50; /* Green button */
+    border: none; /* Remove border */
     width: 100%; /* Full width */
 }
 
 .btn-primary:hover {
-    background-color: #5a54d0; /* Darker shade on hover */
+    background-color: #43A047; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
 }
 
 .btn-google {
@@ -90,6 +92,7 @@ body {
 
 .btn-google:hover {
     background-color: #f1f3f5; /* Slightly darker on hover */
+    transform: translateY(-2px); /* Slight lift effect */
 }
 
 .alert {
@@ -97,12 +100,12 @@ body {
 }
 
 .text-center a {
-    color: #6c63ff; /* Link color matches button */
+    color: #4CAF50; /* Link color matches green theme */
     transition: color 0.3s ease;
 }
 
 .text-center a:hover {
-    color: #5a54d0; /* Darker shade on hover */
+    color: #43A047; /* Darker shade on hover */
 }
 
 .form-label {
@@ -122,4 +125,46 @@ body {
     .right-col {
         padding: 20px;
     }
+}
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* White background */
+    border: none; /* No border */
+    border-radius: 5px; /* Slight border radius for buttons */
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%; /* Full width */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.btn-google:hover {
+    background-color: #f1f3f5; /* Slightly darker on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.btn-google .google-icon {
+    width: 20px; /* Adjust icon size */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 8px; /* Space between icon and text */
+}
+
+/* Google colors for the logo */
+.google-icon-red {
+    color: #DB4437; /* Red */
+}
+
+.google-icon-blue {
+    color: #4285F4; /* Blue */
+}
+
+.google-icon-yellow {
+    color: #F4B400; /* Yellow */
+}
+
+.google-icon-green {
+    color: #0F9D58; /* Green */
 }
