@@ -678,7 +678,6 @@ async function renderCart(cart) {
     if (!cart || Object.keys(cart).length === 0) {
         illustratorImage.style.display = 'block'; // Show the image
         totalAmountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
-       
         deliveryChargeElement.innerHTML = 'Free Delivery'; // Set delivery charge to "Free Delivery"
         return; // Exit the function if the cart is empty
     } else {
@@ -721,12 +720,14 @@ async function renderCart(cart) {
             if (item.quantity > 1) {
                 item.quantity--;
                 updateQtyDisplay();
-                updateCart();
+                updateCart(item, key); // Pass the current item and its key
             }
         });
+
         const qtyDisplay = document.createElement('span');
         qtyDisplay.className = 'qty-display';
         qtyDisplay.textContent = item.quantity;
+
         const incrementBtn = document.createElement('button');
         incrementBtn.textContent = '+';
         incrementBtn.className = 'qty-btn';
@@ -734,10 +735,10 @@ async function renderCart(cart) {
             if (item.quantity < Math.min(item.availableQuantity, 5)) {
                 item.quantity++;
                 updateQtyDisplay();
-                updateCart();
+                updateCart(item, key); // Pass the current item and its key
             }
-            checkQuantityLimit();
         });
+
         qtyCol.appendChild(decrementBtn);
         qtyCol.appendChild(qtyDisplay);
         qtyCol.appendChild(incrementBtn);
@@ -783,9 +784,9 @@ async function renderCart(cart) {
             if (snapshot.exists()) {
                 const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
-                    // Update item available quantity
-                    item.availableQuantity = currentStock;
-                // Update quantity controls based on available stock
+                item.availableQuantity = currentStock; // Update item available quantity
+
+                // Update visual elements based on available stock
                 checkQuantityLimit();
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
@@ -815,6 +816,7 @@ async function renderCart(cart) {
                 img.style.opacity = '';
             }
         }
+
         function checkQuantityLimit() {
             if (item.quantity >= item.availableQuantity) {
                 incrementBtn.disabled = true; // Disable increment button
@@ -826,34 +828,13 @@ async function renderCart(cart) {
             }
         }
     });
+
     // Delivery charge logic
-const deliveryCharge = 49; // Delivery charge of 49
-const originalTotal = calculateTotalAmount(cart);
+    const deliveryCharge = 49; // Delivery charge of 49
+    const originalTotal = calculateTotalAmount(cart);
 
-
-// Update total amounts in the UI
-totalAmountElement.innerHTML = `<span id="original-amount" class="strike-through">₹${originalTotal.toFixed(2)}</span>`;
-
-// Create a new span for the amount value
-const amountValueSpan = document.createElement('span');
-amountValueSpan.className = 'amount-value fade-in';
-amountValueSpan.innerHTML = ` ₹${totalAmount.toFixed(2)}`;
-
-// Append the span but keep it hidden initially
-amountValueSpan.style.opacity = 0; // Initially hidden
-totalAmountElement.appendChild(amountValueSpan);
-
-// Use setTimeout to strike out the original amount and show the new total after 2 seconds
-setTimeout(() => {
-    // Fade out the original amount
-    document.getElementById('original-amount').style.opacity = 0;
-    
-    // Show the new total after the original fades out
-    setTimeout(() => {
-        amountValueSpan.style.opacity = 1; // Fade in the new total
-    }, 500); // Adjust time for fade-out
-}, 1000); // Time before the original fades out
-
+    // Update total amounts in the UI
+    totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${originalTotal.toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
     totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
 
     // Animate delivery charge display
@@ -920,32 +901,39 @@ setTimeout(() => {
     `;
     document.head.appendChild(style);
 
-    function updateCart() {
-        // Update Firebase with the current cart
-        const cartRef = ref(database, `carts/${currentUserId}`);
-        set(cartRef, cart); // Update the entire cart in Firebase
+    function updateCart(item, key) {
+    // Update Firebase with the current cart item
+    const cartRef = ref(database, `carts/${currentUserId}/${key}`);
+    const updatedItem = { quantity: item.quantity }; // Create an object with only the updated quantity
 
-        // Recalculate totals
-        totalAmount = 0;
-        totalMRP = 0;
-        totalDiscount = 0;
-
-        Object.values(cart).forEach(item => {
-            const itemQuantity = parseInt(item.quantity);
-            const itemFinalPrice = parseFloat(item.finalPrice);
-            const itemOriginalPrice = parseFloat(item.originalPrice);
-
-            totalAmount += itemFinalPrice * itemQuantity;
-            totalMRP += itemOriginalPrice * itemQuantity;
-            totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+    // Use update to only modify the quantity field
+    update(cartRef, updatedItem)
+        .then(() => {
+            console.log('Quantity updated successfully');
+        })
+        .catch((error) => {
+            console.error('Error updating quantity:', error);
         });
 
-        // Update total amounts in the UI
-        totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
-// Update the total discount element in the HTML
-totalDiscountElement.innerHTML = `<span class="amount-value">₹${totalDiscount.toFixed(2)}</span>`;
-        totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
-    }
+    // Recalculate totals
+    totalAmount = 0;
+    totalMRP = 0;
+    totalDiscount = 0;
+
+    Object.values(cart).forEach(cartItem => {
+        const itemQuantity = parseInt(cartItem.quantity);
+        const itemFinalPrice = parseFloat(cartItem.finalPrice);
+        const itemOriginalPrice = parseFloat(cartItem.originalPrice);
+
+        totalAmount += itemFinalPrice * itemQuantity;
+        totalMRP += itemOriginalPrice * itemQuantity;
+        totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+    });
+
+    // Update total amounts in the UI
+    totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
+    totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
+}
 }
 
 async function removeCartItem(productId) {
