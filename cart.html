@@ -13,21 +13,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <title>DelightX-Cart</title>
     <style>
-        .fade-in {
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
-}
-
-.fade-in.show {
-    opacity: 1;
-}
-
-         body {
-            background-color: #ffffff;
-            font-family:  "Montserrat", sans-serif;
-        }
-        .navbar-brand {
-    font-family: "Righteous", sans-serif !important;
+        
+        body {
+        background-color: #ffffff;
+        font-family:  "Montserrat", sans-serif;
+    }
+    .navbar-brand {
+font-family: "Righteous", sans-serif !important;
 }
     button.qty-btn {
     width: 30px; /* Fixed width for buttons */
@@ -263,7 +255,23 @@ button.qty-btn:disabled {
 #totalDiscount {
     display: none; /* This hides the element */
 }
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
 
+.fade-in.show {
+    opacity: 1;
+}
+.delivery-message {
+    display: none; /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.10s ease-in;
+}
+
+.delivery-message.visible {
+    opacity: 1; /* Fade in */
+}
 
     </style>
 </head>
@@ -444,17 +452,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // Initial check for delivery time
     checkDeliveryTime();
-    // Scroll effect
-    window.addEventListener('scroll', function () {
-        const rect = deliveryMessage.getBoundingClientRect();
-        // Check if the delivery message is in the viewport
-        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-            setTimeout(() => {
-                deliveryMessage.style.display = "block"; // Show message when in view
-                deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
-            }, 2000); // Delay of 2 seconds
-        }
-    });
+    // Function to show the delivery message
+function showDeliveryMessage() {
+    setTimeout(() => {
+        deliveryMessage.style.display = "block"; // Show message
+        deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
+    }, 2000); // Delay of 2 seconds
+}
+
+// Scroll effect
+window.addEventListener('scroll', function () {
+    const rect = deliveryMessage.getBoundingClientRect();
+    const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
+
+    // Check if the delivery message is not yet displayed
+    if (!isVisible && (rect.top <= window.innerHeight)) {
+        showDeliveryMessage(); // Show message when user scrolls
+    }
+});
+
+// Check if the delivery message is visible on page load
+window.addEventListener('load', function () {
+    const rect = deliveryMessage.getBoundingClientRect();
+    // If it's already in the viewport
+    if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+        showDeliveryMessage();
+    }
+});
+
 });
 
 function calculateFinalAmountWithDelivery(cart) {
