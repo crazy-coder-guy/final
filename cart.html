@@ -509,6 +509,7 @@ function storeCartInLocalStorage(cart) {
     localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
     console.log("Stored cart in local storage.");
 }
+
 document.getElementById('payButton').addEventListener('click', async () => {
     const uid = auth.currentUser.uid;
     const userRef = ref(database, `users/${uid}`);
@@ -749,14 +750,18 @@ async function renderCart(cart) {
         totalMRP += itemOriginalPrice * itemQuantity;
         totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
 
-        // Check stock availability every second
+        /// Check stock availability every second
         const productId = key;
         const productRef = ref(database, `products/${productId}`);
         const stockCheckInterval = setInterval(async () => {
             const snapshot = await get(productRef);
             if (snapshot.exists()) {
-                const productData = snapshot.val(); // Assign snapshot data to productData
+                const productData = snapshot.val();
                 const currentStock = productData.stockAvailable;
+                    // Update item available quantity
+                    item.availableQuantity = currentStock;
+                // Update quantity controls based on available stock
+                checkQuantityLimit();
                 if (currentStock <= 0) {
                     // Update image to black and white if stock is 0
                     col.style.textDecoration = 'line-through';
@@ -1010,6 +1015,8 @@ function calculateTotalDiscount(cart) {
     });
     return totalDiscount;
 }
+
+
 document.getElementById('scrollUpButton').addEventListener('click', function() {
     // Scroll up by 100 pixels (adjust the value as needed)
     window.scrollBy({
