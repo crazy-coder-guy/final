@@ -807,7 +807,7 @@ totalAmountElement.innerHTML = `<span id="original-amount" class="strike-through
 // Create a new span for the amount value
 const amountValueSpan = document.createElement('span');
 amountValueSpan.className = 'amount-value fade-in';
-amountValueSpan.innerHTML = `₹${totalAmount.toFixed(2)}`;
+amountValueSpan.innerHTML = ` ₹${totalAmount.toFixed(2)}`;
 
 // Append the span but keep it hidden initially
 amountValueSpan.style.opacity = 0; // Initially hidden
