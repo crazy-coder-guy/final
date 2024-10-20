@@ -12,10 +12,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <title>QuickBuy - Products</title>
+    <title>DlightX Home</title>
 </head>
 <body>
-   
+   <div class="mobile-view"></div>
     <nav class="navbar mobile-nav">
         <a class="navbar-brand" href="#">DelightX.</a>
         <div class="nav-search-container">
@@ -205,24 +205,38 @@
 
     <div class="subcategories-row" id="row-4" style="display: none;">
         <div class="subcategories">
+            <a href="#Ghee" onclick="scrollToSubcategory('Ghee'); return false;">
+                <img src="https://m.media-amazon.com/images/I/61mPZ+NiXXL.jpg" class="img-fluid subcategory-img" alt="Dairy Alternatives" />
+                <div class="text-center">Ghee</div>
+            </a>
             <a href="#Cheese" onclick="scrollToSubcategory('Cheese'); return false;">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVfhJ9exuRHRsWWu7lsx2IpylUXxqAoGUk7w&s" class="img-fluid subcategory-img" alt="Cheese" />
                 <div class="text-center">Cheese</div>
             </a>
+            
             <a href="#Butter" onclick="scrollToSubcategory('Butter'); return false;">
                 <img src="https://5.imimg.com/data5/SELLER/Default/2023/5/312285703/EM/NO/LE/24906100/salted-hatsun-pasteurised-table-butter-500x500.png" class="img-fluid subcategory-img" alt="Butter and Margarine" />
-                <div class="text-center">Butter and Margarine</div>
+                <div class="text-center">Butter</div>
             </a>
             <a href="#DairyAlternatives" onclick="scrollToSubcategory('DairyAlternatives'); return false;">
                 <img src="https://www.foodnavigator-usa.com/var/wrbm_gb_food_pharma/storage/images/publications/food-beverage-nutrition/foodnavigator-usa.com/article/2018/02/08/significant-percentage-of-consumers-buy-plant-based-dairy-alternatives-because-they-think-they-are-healthier-reveals-comax-study/7835123-1-eng-GB/Significant-percentage-of-consumers-buy-plant-based-dairy-alternatives-because-they-think-they-are-healthier-reveals-Comax-study.jpg" class="img-fluid subcategory-img" alt="Dairy Alternatives" />
                 <div class="text-center">Dairy Alternatives</div>
             </a>
+          
         </div>
     </div>
     
 
     <div class="subcategories-row" id="row-5" style="display: none;">
         <div class="subcategories">
+            <a href="#Tea and Coffee" onclick="scrollToSubcategory('TeaandCoffee'); return false;">
+                <img src="https://m.media-amazon.com/images/I/51QF8woKr5S._AC_UF894,1000_QL80_.jpg" class="img-fluid subcategory-img" alt="Tea and Coffee" />
+                <div class="text-center">Tea and Coffee</div>
+            </a>
+            <a href="#HealthDrinks" onclick="scrollToSubcategory('HealthDrinks'); return false;">
+                <img src="https://m.media-amazon.com/images/I/71es8Fc+XyL.jpg" class="img-fluid subcategory-img" alt="Health Drinks" />
+                <div class="text-center">Health Drinks</div>
+            </a>
             <a href="#SoftDrinks" onclick="scrollToSubcategory('SoftDrinks'); return false;">
                 <img src="https://backoffice.hipersuper.pt/app/uploads/2023/01/coca-cola.jpg" class="img-fluid subcategory-img" alt="Soft Drinks" />
                 <div class="text-center">Soft Drinks</div>
@@ -230,14 +244,6 @@
             <a href="#EnergyDrinks" onclick="scrollToSubcategory('EnergyDrinks'); return false;">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRigtYbsn15fW8XIMsaW42VaMC0Vr8Yb9YPdg&s" class="img-fluid subcategory-img" alt="Energy Drinks" />
                 <div class="text-center">Energy Drinks</div>
-            </a>
-            <a href="#TeaCoffee" onclick="scrollToSubcategory('TeaCoffee'); return false;">
-                <img src="https://www.bigbasket.com/media/uploads/p/xl/40054356-2_2-tata-coffee-grand-instant-coffee.jpg" class="img-fluid subcategory-img" alt="Tea and Coffee" />
-                <div class="text-center">Tea and Coffee</div>
-            </a>
-            <a href="#HealthDrinks" onclick="scrollToSubcategory('HealthDrinks'); return false;">
-                <img src="https://m.media-amazon.com/images/I/71es8Fc+XyL.jpg" class="img-fluid subcategory-img" alt="Health Drinks" />
-                <div class="text-center">Health Drinks</div>
             </a>
         </div>
     </div>
@@ -297,6 +303,7 @@
             <p>© 2024 DelightX. | All Rights Reserved</p>
         </div>
     </footer>
+</div>
 <!-- FontAwesome CDN for Icons -->
   <!-- Owl Carousel CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -1012,40 +1019,52 @@ setInterval(changePlaceholder, 2000);
 
 // Set the initial placeholder
 changePlaceholder();
-
 function scrollToCategory(category) {
-    const categoryElement = document.getElementById(category);
-    if (categoryElement) {
-        const elementPosition = categoryElement.getBoundingClientRect().top; // Position of the element relative to the viewport
-        const offsetPosition = window.scrollY + elementPosition - (window.innerHeight / 3) + (categoryElement.clientHeight / 2); // Calculate the position to scroll to
-        
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-    } else {
-        console.error(`Category section "${category}" not found.`);
-    }
+  const categoryElement = document.getElementById(category);
+  if (categoryElement) {
+    const offsetLeft =
+      categoryElement.getBoundingClientRect().left +
+      window.pageXOffset -
+      window.innerWidth / 4 + // Adjust this value for horizontal positioning
+      categoryElement.clientWidth / 2;
+
+    // Calculate top offset, considering fixed headers if any
+    const headerHeight = document.querySelector('header')?.offsetHeight || 10; // Adjust 'header' selector if needed
+    const topOffset = headerHeight + 0; // 10px padding 
+
+    window.scrollTo({
+      top: topOffset, 
+      left: offsetLeft,
+      behavior: "smooth",
+    });
+  } else {
+    console.error(`Category section "${category}" not found.`);
+  }
 }
-function toggleSubcategories(category) {
-            const subcategories = document.querySelectorAll('.subcategories');
-            subcategories.forEach(sub => {
-                if (sub.classList.contains(category)) {
-                    sub.style.display = sub.style.display === 'none' ? 'block' : 'none';
-                } else {
-                    sub.style.display = 'none'; // Hide other subcategories
-                }
-            });
-        }
 
-        function scrollToSubcategory(subcategoryId) {
-            const element = document.getElementById(subcategoryId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
+function toggleSubcategories(rowNumber) {
+  // Hide the currently opened row if it's different from the clicked one
+  if (currentlyOpenRow && currentlyOpenRow !== rowNumber) {
+    document.getElementById(`row-${currentlyOpenRow}`).style.display = "none";
+  }
 
-        let currentlyOpenRow = null;
+  // Toggle the clicked row
+  const targetRow = document.getElementById(`row-${rowNumber}`);
+  if (targetRow) {
+    targetRow.style.display = targetRow.style.display === "none" ? "block" : "none";
+    currentlyOpenRow = targetRow.style.display === "none" ? null : rowNumber;
+  }
+}
+
+function scrollToSubcategory(subcategoryId) {
+  const element = document.getElementById(subcategoryId);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "center" }); // Center subcategory
+  }
+}
+
+let currentlyOpenRow = null; 
+    
 
 function toggleSubcategories(rowNumber) {
     // Hide the currently opened row if it's different from the clicked one
