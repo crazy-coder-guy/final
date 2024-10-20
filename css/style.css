@@ -236,6 +236,7 @@ body {
     white-space: wrap; /* Prevent text wrapping */
     overflow: hidden; /* Hide overflow */
     text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+    width: calc(0.55em*25);
 }
 
 @media (max-width: 768px) {
