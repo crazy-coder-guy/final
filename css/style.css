@@ -106,7 +106,7 @@ body {
 .card-body h5 {
     text-align: left; /* Align product title to left */
     text-transform: uppercase; /* Make title lowercase */
-    font-size: 1rem;
+    font-size: 0.875rem;
 }
 
 .qty-container {
@@ -232,8 +232,8 @@ body {
 }
 
 .card-title {
-    font-size: 1.5em; /* Default font size */
-    white-space: nowrap; /* Prevent text wrapping */
+    font-size: 0.875em; /* Default font size */
+    white-space: wrap; /* Prevent text wrapping */
     overflow: hidden; /* Hide overflow */
     text-overflow: ellipsis; /* Add ellipsis for overflowing text */
 }
