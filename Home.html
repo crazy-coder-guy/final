@@ -123,7 +123,7 @@
             <div class="text-center">Namkeen</div>
         </a>
         <a href="#Biscuits" onclick="scrollToSubcategory('Biscuits'); return false;">
-            <img src="https://m.media-amazon.com/images/I/71rXMzC4kYL.jpg" class="img-fluid subcategory-img" alt="Biscuits" />
+            <img src="https://www.bigbasket.com/media/uploads/p/xl/40025066_11-britannia-milk-bikis-biscuits.jpg" class="img-fluid subcategory-img" alt="Biscuits" />
             <div class="text-center">Biscuits</div>
         </a>
         <a href="#Sweets" onclick="scrollToSubcategory('Sweets'); return false;">
@@ -694,7 +694,8 @@ function groupProductsByCategory(products) {
             productLabel.textContent = product.productType;
 
             const productTimestamp = new Date(product.timestamp).getTime();
-            const oneMinuteInMillis = 10 * 60 * 1000; 
+            let hours = 3;
+            const oneMinuteInMillis = hours * 60 * 1000; 
 
             const timeDiff = currentTime - productTimestamp;
 
