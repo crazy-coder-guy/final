@@ -1019,28 +1019,26 @@ setInterval(changePlaceholder, 2000);
 
 // Set the initial placeholder
 changePlaceholder();
+
 function scrollToCategory(category) {
   const categoryElement = document.getElementById(category);
   if (categoryElement) {
-    const offsetLeft =
-      categoryElement.getBoundingClientRect().left +
-      window.pageXOffset -
-      window.innerWidth / 4 + // Adjust this value for horizontal positioning
-      categoryElement.clientWidth / 2;
+    // Calculate the top offset, considering fixed headers if any
+    const headerHeight = document.querySelector('header')?.offsetHeight || 10; // Get header height
+    const elementPosition = categoryElement.getBoundingClientRect().top + window.pageYOffset; // Get element position relative to the document
 
-    // Calculate top offset, considering fixed headers if any
-    const headerHeight = document.querySelector('header')?.offsetHeight || 10; // Adjust 'header' selector if needed
-    const topOffset = headerHeight + 0; // 10px padding 
+    // Calculate the final scroll position
+    const scrollToPosition = elementPosition - headerHeight; // Adjust for header height
 
     window.scrollTo({
-      top: topOffset, 
-      left: offsetLeft,
+      top: scrollToPosition,
       behavior: "smooth",
     });
   } else {
     console.error(`Category section "${category}" not found.`);
   }
 }
+
 
 function toggleSubcategories(rowNumber) {
   // Hide the currently opened row if it's different from the clicked one
