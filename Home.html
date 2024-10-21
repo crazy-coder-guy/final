@@ -147,15 +147,15 @@
 
     <div class="subcategories-row" id="row-2" style="display: none;">
         <div class="subcategories">
-            <a href="#Oils" onclick="scrollToSubcategory('Oils'); return false;">
+            <a href="#Essentials Oils" onclick="scrollToSubcategory('EssentialsOils'); return false;">
                 <img src="https://www.groocy.in/storage/app/public/product/2023-10-31-6540f465cb126.png" class="img-fluid subcategory-img" alt="Cooking Oils" />
-                <div class="text-center">Oils</div>
+                <div class="text-center">Essentials Oils</div>
             </a>
             <a href="#Spices" onclick="scrollToSubcategory('Spices'); return false;">
                 <img src="https://5.imimg.com/data5/SELLER/Default/2022/4/GZ/CD/PZ/140245462/90000486-500x500.jpg" class="img-fluid subcategory-img" alt="Spices and Seasonings" />
                 <div class="text-center">Spices and Seasonings</div>
             </a>
-            <a href="#Condiments" onclick="scrollToSubcategory('Condiments'); return false;">
+            <a href="#Sauces" onclick="scrollToSubcategory('Sauces'); return false;">
                 <img src="https://www.maltaproducts.com/wp-content/uploads/2020/08/ketchup-mayo.jpg" class="img-fluid subcategory-img" alt="Condiments and Sauces" />
                 <div class="text-center">Sauces</div>
             </a>
@@ -694,8 +694,7 @@ function groupProductsByCategory(products) {
             productLabel.textContent = product.productType;
 
             const productTimestamp = new Date(product.timestamp).getTime();
-            let hours = 3;
-            const oneMinuteInMillis = hours * 60 * 1000; 
+            const oneMinuteInMillis = 10 * 60 * 1000; 
 
             const timeDiff = currentTime - productTimestamp;
 
