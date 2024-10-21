@@ -855,10 +855,29 @@ async function removeCartItem(productId) {
         console.error('Error deleting item:', error);
     }
 }
+
+function getStoredLocation() {
+    const storedData = localStorage.getItem("userLocation");
+    if (storedData) {
+        const locationData = JSON.parse(storedData);
+        const currentTime = Date.now();
+
+        if (currentTime - locationData.timestamp < 3600000) {
+            return {
+                latitude: locationData.latitude,
+                longitude: locationData.longitude,
+            };
+        } else {
+            localStorage.removeItem("userLocation");
+        }
+    }
+    return null;
+}
+
 async function createOrder(cart) {
     const uid = auth.currentUser.uid;
     
-    // Fetch user data to get the email and location
+    // Fetch user data to get the email and other details
     const userSnapshot = await get(ref(database, `users/${uid}`));
     const userData = userSnapshot.val();
     const userEmail = userData.email; 
@@ -866,12 +885,12 @@ async function createOrder(cart) {
     const userMobilenumber = userData.mobile;
     const userAddress = userData.address;  
 
-    // Get user's location from user data
-    const userLocation = userData.location || {};
-    const userLat = userLocation.latitude || null;
-    const userLng = userLocation.longitude || null;
+    // Fetch user's location using the getStoredLocation function
+    const userLocation = getStoredLocation();
+    const userLat = userLocation ? userLocation.latitude : null;
+    const userLng = userLocation ? userLocation.longitude : null;
 
-    const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`; 
     const orderData = {
         userName: userfullname,
         usermobilenumber: userMobilenumber,
@@ -894,6 +913,7 @@ async function createOrder(cart) {
     // Update stock availability for each product in the cart
     await updateStockAvailability(cart);
 }
+
 async function updateUserLocation(uid, latitude, longitude) {
     const userRef = ref(database, `users/${uid}`);
     await update(userRef, {
