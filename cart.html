@@ -1,4 +1,961 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet"><title>DelightX-Cart</title><style>body{background-color:#fff;font-family:Montserrat,sans-serif}.navbar-brand{font-family:Righteous,sans-serif!important;font-size:1.4rem}button.qty-btn{width:30px;margin:5px;background-color:green;color:#fff;border:none;border-radius:4px;transition:background-color .2s}button.qty-btn:hover{background-color:#006400}button.qty-btn:active{background-color:#006400}button.qty-btn:disabled{background-color:#4a4848;cursor:not-allowed}.card{border:none;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.1);transition:transform .3s}.card:hover{transform:translateY(-5px)}.card-img-top{border-radius:12px;object-fit:contain;height:80px}.total-price{font-size:1rem;font-weight:700;color:#007bff}.delete-btn{cursor:pointer;color:red;font-size:.9rem}.price-text{font-size:.9rem}.bg-light-gray{background-color:#fff}.section-title{font-weight:600;color:#343a40}.price-details{background-color:#fff;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,.1);padding:15px}.discount-price,.total-amount{color:green;font-weight:700}.amount-value{color:#000;font-weight:600}@media (max-width:576px){h2{font-size:1.5rem;text-align:center}.total-price{font-size:1rem}.delete-btn{font-size:1rem}.card-img-top{height:60px}.price-details{padding:10px}.scrollable-column{padding:5px}.bottom-nav a{font-size:14px}}@media (max-width:768px){.bottom-nav{display:flex;justify-content:space-around;align-items:center;position:fixed;bottom:0;left:0;width:100%;background-color:#fff;box-shadow:0 -2px 10px rgba(0,0,0,.1);padding:10px 0;z-index:1000}.bottom-nav a{font-size:18px;color:#000;text-align:center;flex-grow:1;text-decoration:none}.desktop-nav{display:none}.mobile-nav{display:flex;justify-content:space-between;align-items:center;padding:10px;background-color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1)}.nav-search{max-width:60%}}@media (min-width:769px){.bottom-nav{display:none}.desktop-nav{display:flex;justify-content:space-between;align-items:center;padding:10px;background-color:#fff}.nav-search{max-width:500px}.mobile-nav{display:none}}.profile-img{width:35px;height:35px;border-radius:50%;object-fit:cover}.desktop-nav,.mobile-nav{position:sticky;top:0;z-index:1000;background-color:#fff}.scrollable-column{max-height:60vh;overflow-y:auto;overflow-x:hidden;padding:10px}.price-details{position:sticky;top:0;background-color:#fff;padding:15px;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,.1)}.pay-button{margin-bottom:5%;font-size:1rem;transition:background-color .3s}.pay-button:hover{background-color:#0056b3}.loader{width:20px;aspect-ratio:1;background:#25b09b;box-shadow:0 0 60px 15px #25b09b;transform:translate(-80px);clip-path:inset(0);animation:l4-1 .5s ease-in-out infinite alternate,l4-2 1s ease-in-out infinite}@keyframes l4-1{100%{transform:translateX(80px)}}@keyframes l4-2{33%{clip-path:inset(0 0 0 -100px)}50%{clip-path:inset(0 0 0 0)}83%{clip-path:inset(0 -100px 0 0)}}#spinner{display:none;justify-content:center;align-items:center;position:fixed;top:0;left:0;right:0;bottom:0;background:#fff}.delivery-message{opacity:0;transform:translateY(20px);transition:opacity .5s ease-in-out,transform .5s ease-in-out;margin-bottom:20px;visibility:hidden}.delivery-message.visible{opacity:1;transform:translateY(0);visibility:visible}#totalDiscount{display:none}.fade-in{opacity:0;transition:opacity .2s ease-in}.fade-in.show{opacity:1}.delivery-message{display:none;opacity:0;transition:opacity .1s ease-in}.delivery-message.visible{opacity:1}</style></head><body><nav class="navbar mobile-nav"><a class="navbar-brand" href="#">DelightX.</a></nav><nav class="navbar desktop-nav"><div class="container-fluid"><a class="navbar-brand" href="#">DelightX.</a><form class="d-flex nav-search"><div class="input-group"><span class="input-group-text bg-white border-end-0"><i class="fas fa-search"></i></span><input type="search" class="form-control border-start-0" placeholder="Search for apples..." aria-label="Search" id="searchInputDesktop"></div></form><div class="d-flex align-items-center"><a href="cart.html" class="me-3"><i class="fas fa-shopping-cart fa-2"></i></a><img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" id="profileImage"></div></div></nav><div id="spinner"><div class="loader"></div></div><nav class="bottom-nav"><a href="Home.html"><i class="fas fa-home"></i><br>Home</a><a href="profile.html" id="profileLink"><img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" style="width:24px;height:24px"><br>You</a><a href="#"><i class="fas fa-ellipsis-h"></i><br>More</a><a href="cart.html"><i class="fas fa-shopping-cart fa-2"></i><br>Cart</a></nav><div class="container mt-3"><h2 class="text-left mb-4 section-title">Shopping Cart</h2><div class="row"><div class="col-lg-8 col-md-12 scrollable-column" id="cartItemsContainer"><div id="cartItems" class="row"></div><img id="illustratorImage" src="src/undraw_empty_cart_co35.svg" alt="No items in cart" style="display:none;width:100%;max-width:400px;margin:auto"></div><div class="col-lg-4 col-md-12"><div class="price-details"><h5 class="text-center"><i class="fa-solid fa-angle-up fa-bounce" id="scrollUpButton" style="cursor:pointer"></i></h5><h5 class="text-center">Price Details</h5><div class="mb-3"><strong>Total Amount:</strong><span id="totalAmount" class="amount-value">0.00</span></div><div class="mb-3"><strong>Delivery Charge:</strong><span id="deliveryCharge">0.00</span></div><div class="mb-3"><span id="totalDiscount">0.00</span></div><div class="mb-3"><strong>You Save:</strong><span id="totalSavings">0.00</span></div><div id="deliveryMessage" class="delivery-message mb-2" style="display:none">Your order will be delivered to your address by<span id="deliveryTime"></span>.</div><div class="text-center mb-5"><button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button></div></div></div></div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <title>DelightX-Cart</title>
+    <style>
+        
+        body {
+        background-color: #ffffff;
+        font-family:  "Montserrat", sans-serif;
+    }
+    .navbar-brand {
+font-family: "Righteous", sans-serif !important;
+}
+    button.qty-btn {
+    width: 30px; /* Fixed width for buttons */
+    margin: 5px; /* No margin between buttons */
+    background-color: green; /* Green background for buttons */
+    color: white; /* White text for buttons */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Optional: rounded corners */
+    transition: background-color 0.2s; /* Smooth transition */
+}
+button.qty-btn:hover {
+    background-color: darkgreen; /* Darker green on hover */
+}
+button.qty-btn:active {
+    background-color: darkgreen; /* Keep darker green on click */
+}
+button.qty-btn:disabled {
+    background-color: #4a4848; /* Disabled button color */
+    cursor: not-allowed; /* Change cursor style */
+}
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-img-top {
+            border-radius: 12px;
+            object-fit: contain;
+            height: 80px;
+        }
+        .total-price {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .delete-btn {
+            cursor: pointer;
+            color: red;
+            font-size: 0.9rem;
+        }
+        .price-text {
+            font-size: 0.9rem;
+        }
+        .bg-light-gray {
+            background-color: #ffffff;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+        }
+        .price-details {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+        .discount-price, .total-amount {
+            color: green;
+            font-weight: bold;
+        }
+        .amount-value {
+            color: rgb(0, 0, 0);
+            font-weight: 600;
+        }
+        @media (max-width: 576px) {
+            h2 {
+                font-size: 1.5rem;
+                text-align: center; /* Center title on mobile */
+            }
+            .total-price {
+                font-size: 1rem;
+            }
+            .delete-btn {
+                font-size: 1rem;
+            }
+            .card-img-top {
+                height: 60px;
+            }
+            .price-details {
+                padding: 10px; /* Adjust padding for mobile */
+            }
+            .scrollable-column {
+                padding: 5px; /* Less padding for mobile */
+            }
+            .bottom-nav a {
+                font-size: 14px; /* Smaller font size for mobile */
+            }
+        }
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #ffffff;
+                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+                padding: 10px 0;
+                z-index: 1000; /* Ensure the bottom nav appears above other content */
+            }
+            .bottom-nav a {
+                font-size: 18px;
+                color: #000;
+                text-align: center;
+                flex-grow: 1;
+                text-decoration: none;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                background-color: #ffffff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            .nav-search {
+                max-width: 60%;
+            }
+        }
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+            .desktop-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                background-color: #ffffff;
+            }
+            .nav-search {
+                max-width: 500px;
+            }
+            .mobile-nav {
+                display: none;
+            }
+        }
+        .profile-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .desktop-nav, .mobile-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #ffffff;
+        }
+        .scrollable-column {
+            max-height: 60vh; /* Adjust height as needed */
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px; /* Add some padding for better spacing */
+        }
+        .price-details {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff; /* Ensure background color for sticky */
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .pay-button {
+            margin-bottom: 5%;
+            font-size: 1rem; /* Larger font size */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+        .pay-button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+     /* Spinner Styles */
+     .loader {
+            width: 20px;
+            aspect-ratio: 1;
+            background: #25b09b;
+            box-shadow: 0 0 60px 15px #25b09b;
+            transform: translate(-80px);
+            clip-path: inset(0);
+            animation:
+                l4-1 0.5s ease-in-out infinite alternate,
+                l4-2 1s ease-in-out infinite;
+        }
+        @keyframes l4-1 {
+            100% {transform: translateX(80px)}
+        }
+        @keyframes l4-2 {
+            33% {clip-path: inset(0 0 0 -100px)}
+            50% {clip-path: inset(0 0 0 0)}
+            83% {clip-path: inset(0 -100px 0 0)}
+        }
+        #spinner {
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgb(255, 255, 255); /* Semi-transparent background */
+        }
+        .delivery-message {
+    opacity: 0;
+    transform: translateY(20px); /* Move it slightly down */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Smooth transition for both opacity and position */
+    margin-bottom: 20px; /* Adjust the value as needed */
+    visibility: hidden; /* Use visibility for better control */
+}
+.delivery-message.visible {
+    opacity: 1;
+    transform: translateY(0); /* Reset position */
+    visibility: visible; /* Make it visible */
+}
+#totalDiscount {
+    display: none; /* This hides the element */
+}
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+.fade-in.show {
+    opacity: 1;
+}
+.delivery-message {
+    display: none; /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.10s ease-in;
+}
+.delivery-message.visible {
+    opacity: 1; /* Fade in */
+}
+    </style>
+</head>
+<body>
+<!-- Mobile Navbar -->
+<nav class="navbar mobile-nav">
+    <a class="navbar-brand" href="#">DelightX.</a>
+</nav>
+<!-- Desktop Navbar -->
+<nav class="navbar desktop-nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">DelightX.</a>
+        <form class="d-flex nav-search">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="search" class="form-control border-start-0" placeholder="Search for apples..." aria-label="Search" id="searchInputDesktop">
+            </div>
+        </form>
+        <div class="d-flex align-items-center">
+            <a href="cart.html" class="me-3"><i class="fas fa-shopping-cart fa-2"></i></a>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" id="profileImage">
+        </div>
+    </div>
+</nav>
+<div id="spinner">
+    <div class="loader"></div>
+</div>
+<!-- Bottom Navbar for Mobile View -->
+<nav class="bottom-nav">
+    <a href="Home.html"><i class="fas fa-home"></i><br>Home</a>
+    <a href="profile.html" id="profileLink"><img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Profile" class="profile-img" style="width: 24px; height: 24px;"><br>You</a>
+    <a href="#"><i class="fas fa-ellipsis-h"></i><br>More</a>
+    <a href="cart.html"><i class="fas fa-shopping-cart fa-2"></i><br>Cart</a>
+</nav>
+<div class="container mt-3">
+    <h2 class="text-left mb-4 section-title">Shopping Cart</h2>
+    <div class="row">
+        <div class="col-lg-8 col-md-12 scrollable-column" id="cartItemsContainer">
+            <div id="cartItems" class="row"></div>
+            <img id="illustratorImage" src="src/undraw_empty_cart_co35.svg" alt="No items in cart" style="display: none; width: 100%; max-width: 400px; margin: auto;">
+        </div>
+        
+        <div class="col-lg-4 col-md-12">
+            <div class="price-details">
+                <h5 class="text-center">
+                    <i class="fa-solid fa-angle-up fa-bounce" id="scrollUpButton" style="cursor: pointer;"></i>
+                </h5>                
+                <h5 class="text-center">Price Details</h5>
+                <div class="mb-3">
+                    <strong>Total Amount:</strong> <span id="totalAmount" class="amount-value">0.00</span>
+                </div>
+                <div class="mb-3">
+                    <strong>Delivery Charge:</strong> <span id="deliveryCharge">0.00</span>
+                </div>
+                <div class="mb-3">
+                <span id="totalDiscount">0.00</span>
+                </div>                
+                <div class="mb-3">
+                    <strong>You Save:</strong> <span id="totalSavings">0.00</span>
+                </div>
+                <div id="deliveryMessage" class="delivery-message mb-2" style="display: none;">
+                    Your order will be delivered to your address by <span id="deliveryTime"></span>.
+                </div>
+                <div class="text-center mb-5">
+                    <button id="payButton" class="btn btn-success btn-lg pay-button">Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script type="module">const _0x39de0e=_0x5a91;(function(_0xfbdea2,_0x205e64){const _0x2a310e=_0x5a91,_0x44ac98=_0xfbdea2();while(!![]){try{const _0x4a777b=parseInt(_0x2a310e(0x7e))/0x1+-parseInt(_0x2a310e(0x82))/0x2*(parseInt(_0x2a310e(0x101))/0x3)+parseInt(_0x2a310e(0xbb))/0x4*(-parseInt(_0x2a310e(0xbc))/0x5)+parseInt(_0x2a310e(0xfc))/0x6*(-parseInt(_0x2a310e(0x77))/0x7)+parseInt(_0x2a310e(0xc7))/0x8+parseInt(_0x2a310e(0x91))/0x9+parseInt(_0x2a310e(0x109))/0xa;if(_0x4a777b===_0x205e64)break;else _0x44ac98['push'](_0x44ac98['shift']());}catch(_0x224f60){_0x44ac98['push'](_0x44ac98['shift']());}}}(_0x3813,0xd7adb));import{initializeApp}from'https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js';import{getDatabase,ref,get,remove,set,update}from'https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js';import{getAuth,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js';function _0x5a91(_0x2faf9f,_0x18b5c6){const _0x3813c2=_0x3813();return _0x5a91=function(_0x5a9189,_0x801a5f){_0x5a9189=_0x5a9189-0x75;let _0x62ca98=_0x3813c2[_0x5a9189];return _0x62ca98;},_0x5a91(_0x2faf9f,_0x18b5c6);}const firebaseConfig={'apiKey':_0x39de0e(0xf9),'authDomain':'quickbuy-29329.firebaseapp.com','projectId':'quickbuy-29329','storageBucket':_0x39de0e(0x76),'messagingSenderId':_0x39de0e(0x9f),'appId':'1:956510631625:web:678411a2530ef065b97f18'},app=initializeApp(firebaseConfig),database=getDatabase(app),auth=getAuth(app);function _0x3813(){const _0x234fae=['User\x20\x20\x20\x20data:','Insufficient\x20stock\x20for\x20product\x20','AIzaSyBjZDiWXkOclw7RmmU31822nPuj9px1hSA','filter','userData','2082vjDOkL','div','User\x20\x20\x20\x20-\x20Profile.html','spinner','currentUser','6vKFKeG','smooth','load','error','qty-controls','<i\x20class=\x22fas\x20fa-trash\x22></i>','Updated\x20stock\x20for\x20product\x20','innerHTML','1937640plkfWT','#F37254','col-5','catch','fullName','display','min','quickbuy-29329.appspot.com','29162YpuvhO','scroll','length','appendChild','getElementById','then','opacity','1507307xfDDzX','toISOString','DOMContentLoaded','show-free-delivery','1151014lgMMvA','createTextNode','none','address','col-2','entries','\x20is\x20out\x20of\x20stock.\x20Please\x20try\x20again\x20later.','users/','illustratorImage','floor','innerHeight','tomorrow\x20by\x206\x20PM','span','profile.html','card-img-top','9914544lXUJXt','email','Your\x20cart\x20is\x20empty.','0.5','scrollBy','uid','exists','createElement','forEach','totalSavings','<span\x20class=\x22amount-value\x22><span\x20class=\x22strike-through\x22>₹','Quantity\x20updated\x20successfully','No\x20data\x20available','originalPrice','956510631625','src','values','profileImage','getBoundingClientRect','</span>\x20₹','className','add','now','products/','</span>\x20Free\x20Delivery!','productName','href','stockAvailable','today','orders/','block','All\x20items\x20removed\x20from\x20cart.','Stored\x20cart\x20in\x20local\x20storage.','Your\x20profile\x20is\x20incomplete.\x20Please\x20update\x20your\x20address\x20and\x20mobile\x20number.','availableQuantity','delete-btn','<span\x20class=\x22amount-value\x22>₹0.00</span>','click','card-title\x20mb-0','addEventListener','stringify','User\x20\x20Profile\x20Picture','4eTyZkL','2902310OsOofo','Your\x20Order\x20Description','head','getHours','textContent','carts/','qty-display','9999999999','Sorry,\x20the\x20quantity\x20you\x20selected\x20is\x20greater\x20than\x20the\x20stock\x20available.\x20Please\x20try\x20again\x20later.','\x20not\x20found','deliveryTime','10062480dLKssn','order_','button','payButton','querySelector','alt','Item\x20removed:','<span\x20class=\x22strike-through\x22\x20style=\x22text-decoration:\x20line-through;\x22>₹','removeItem','cart_','imageURL','totalMRP','row\x20align-items-center','open','toFixed','random','</span>','Payment\x20successful!\x20Your\x20cart\x20has\x20been\x20cleared.','getItem','line-through','col-3','Error\x20updating\x20quantity:','Sorry,\x20the\x20product\x20','log','Please\x20update\x20your\x20profile\x20with\x20your\x20name,\x20address,\x20and\x20mobile\x20number.','QuickBuy','parse','val','photo','mobile','qtyUnit','totalDiscount','Customer\x20Name','discount','Loaded\x20cart\x20from\x20local\x20storage:','style','textDecoration','setItem','disabled','finalPrice','col-2\x20text-center','Product\x20','top','rzp_test_XxEv4eXXqaPM4o','location','scrollUpButton','No\x20cart\x20found\x20in\x20local\x20storage.','quantity'];_0x3813=function(){return _0x234fae;};return _0x3813();}let currentUserId=null;onAuthStateChanged(auth,async _0x84d976=>{const _0x4b581c=_0x39de0e;if(_0x84d976){currentUserId=_0x84d976['uid'],loadCartFromLocalStorage(),fetchCart();const _0xc174d='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',_0x40c55b=localStorage[_0x4b581c(0xd9)]('userData');let _0x15637d;if(_0x40c55b){const _0x481b83=JSON[_0x4b581c(0xe1)](_0x40c55b);_0x15637d=_0x481b83['photo']||_0xc174d;}else{const _0x4d900b=await get(ref(database,'users/'+currentUserId));if(_0x4d900b[_0x4b581c(0x97)]()){const _0x1436b5=_0x4d900b[_0x4b581c(0xe2)]();_0x15637d=_0x1436b5[_0x4b581c(0xe3)]||_0xc174d,localStorage['setItem'](_0x4b581c(0xfb),JSON['stringify'](_0x1436b5));}else _0x15637d=_0xc174d;}const _0x1365db=document['getElementById'](_0x4b581c(0xa2)),_0xb0a1a7=document[_0x4b581c(0xcb)]('#profileLink\x20img');_0x1365db&&(_0x1365db[_0x4b581c(0xa0)]=_0x15637d,_0x1365db['alt']=_0x4b581c(0xba)),_0xb0a1a7&&(_0xb0a1a7['src']=_0x15637d,_0xb0a1a7[_0x4b581c(0xcc)]=_0x4b581c(0xba));}else alert('You\x20need\x20to\x20log\x20in\x20to\x20view\x20your\x20cart.');});async function fetchCart(){const _0x18ceeb=_0x39de0e;showSpinner();if(!currentUserId)return;const _0xfcc1d2=ref(database,_0x18ceeb(0xc1)+currentUserId),_0x39ee61=await get(_0xfcc1d2);hideSpinner();if(_0x39ee61['exists']()){const _0x572196=_0x39ee61['val']();storeCartInLocalStorage(_0x572196);const _0x3ed105=calculateFinalAmountWithDelivery(_0x572196);renderCart(_0x572196,_0x3ed105);}else console[_0x18ceeb(0xde)](_0x18ceeb(0x9d)),renderCart({},0x0);}document[_0x39de0e(0xb8)](_0x39de0e(0x80),function(){const _0x1462a4=_0x39de0e,_0x11e280=document['getElementById']('deliveryMessage'),_0x57deff=document['getElementById'](_0x1462a4(0xc6));function _0x44156c(){const _0x58fdda=_0x1462a4,_0x2fb34c=new Date(),_0x17eae1=_0x2fb34c[_0x58fdda(0xbf)]();let _0x2d52b0;_0x17eae1>=0x10?_0x2d52b0=_0x58fdda(0x8d):_0x2d52b0=_0x58fdda(0xad),_0x57deff[_0x58fdda(0xc0)]=_0x2d52b0;}_0x44156c();function _0x2ef892(){setTimeout(()=>{const _0x524a48=_0x5a91;_0x11e280[_0x524a48(0xea)][_0x524a48(0x10e)]='block',_0x11e280['classList'][_0x524a48(0xa6)]('visible');},0x7d0);}window[_0x1462a4(0xb8)](_0x1462a4(0x78),function(){const _0x4678e7=_0x1462a4,_0x4e020b=_0x11e280['getBoundingClientRect'](),_0x3e1b24=_0x4e020b[_0x4678e7(0xf1)]<=window[_0x4678e7(0x8c)]&&_0x4e020b['bottom']>=0x0;!_0x3e1b24&&_0x4e020b[_0x4678e7(0xf1)]<=window[_0x4678e7(0x8c)]&&_0x2ef892();}),window[_0x1462a4(0xb8)](_0x1462a4(0x103),function(){const _0x11996c=_0x1462a4,_0x49e2b9=_0x11e280[_0x11996c(0xa3)]();_0x49e2b9[_0x11996c(0xf1)]<=window[_0x11996c(0x8c)]&&_0x49e2b9['bottom']>=0x0&&_0x2ef892();});});function calculateFinalAmountWithDelivery(_0x1a7dff){const _0x282098=_0x39de0e;async function _0x3d2c54(){const _0x4b9200=_0x5a91;showSpinner();if(!currentUserId)return;const _0x37c097=ref(database,'carts/'+currentUserId),_0x3df19f=await get(_0x37c097);hideSpinner();if(_0x3df19f[_0x4b9200(0x97)]()){const _0x465045=_0x3df19f[_0x4b9200(0xe2)]();storeCartInLocalStorage(_0x465045);const _0x1420da=_0x461a4e(_0x465045);renderCart(_0x465045,_0x1420da);}else console[_0x4b9200(0xde)]('No\x20data\x20available'),renderCart({},0x0);}function _0x461a4e(_0x4daf9d){const _0x4b9b67=_0x5a91,_0x5f3389=0x31;let _0x490c48=0x0;return Object[_0x4b9b67(0xa1)](_0x4daf9d)[_0x4b9b67(0x99)](_0x584161=>{const _0x572d12=_0x4b9b67;_0x490c48+=parseFloat(_0x584161['finalPrice'])*_0x584161[_0x572d12(0xf6)];}),_0x490c48+_0x5f3389;}let _0x3392d0=0x0;return Object[_0x282098(0xa1)](_0x1a7dff)['forEach'](_0x3b56ea=>{const _0x4ba8a3=_0x282098;_0x3392d0+=parseFloat(_0x3b56ea[_0x4ba8a3(0xee)])*_0x3b56ea['quantity'];}),_0x3392d0;}function loadCartFromLocalStorage(){const _0x38e7f4=_0x39de0e,_0x33f90e=JSON[_0x38e7f4(0xe1)](localStorage[_0x38e7f4(0xd9)](_0x38e7f4(0xd0)+currentUserId));_0x33f90e?(console['log'](_0x38e7f4(0xe9),_0x33f90e),renderCart(_0x33f90e)):console[_0x38e7f4(0xde)](_0x38e7f4(0xf5));}function storeCartInLocalStorage(_0x151d69){const _0xe1df6b=_0x39de0e;localStorage[_0xe1df6b(0xec)](_0xe1df6b(0xd0)+currentUserId,JSON[_0xe1df6b(0xb9)](_0x151d69)),console['log'](_0xe1df6b(0xb1));}document[_0x39de0e(0x7b)](_0x39de0e(0xca))[_0x39de0e(0xb8)](_0x39de0e(0xb6),async()=>{const _0x290e52=_0x39de0e,_0xd2ee6b=auth[_0x290e52(0x100)][_0x290e52(0x96)],_0x5657a0=ref(database,_0x290e52(0x89)+_0xd2ee6b),_0xe23e83=await get(_0x5657a0);if(!_0xe23e83[_0x290e52(0x97)]()){alert(_0x290e52(0xb2)),window[_0x290e52(0xf3)][_0x290e52(0xab)]=_0x290e52(0xfe);return;}const _0x4fdeae=_0xe23e83['val']();console[_0x290e52(0xde)](_0x290e52(0xf7),_0x4fdeae);if(!_0x4fdeae[_0x290e52(0x10d)]||!_0x4fdeae[_0x290e52(0x85)]||!_0x4fdeae[_0x290e52(0xe4)]){alert(_0x290e52(0xdf)),window[_0x290e52(0xf3)][_0x290e52(0xab)]=_0x290e52(0x8f);return;}const _0x1d6393=ref(database,_0x290e52(0xc1)+_0xd2ee6b),_0x40f3b6=await get(_0x1d6393);if(_0x40f3b6[_0x290e52(0x97)]()){const _0x273d5c=_0x40f3b6[_0x290e52(0xe2)](),_0x479d20=await checkStockAvailability(_0x273d5c);if(!_0x479d20){alert(_0x479d20);return;}const _0x22c824=await checkQuantity(_0x273d5c);if(!_0x22c824){alert(_0x290e52(0xc4));return;}const _0x1eaa11=calculateFinalAmountWithDelivery(_0x273d5c),_0x6eae22={'key':_0x290e52(0xf2),'amount':(_0x1eaa11*0x64)[_0x290e52(0xd5)](0x0),'currency':'INR','name':_0x290e52(0xe0),'description':_0x290e52(0xbd),'handler':async function(_0x988c7d){const _0x3c1aec=_0x290e52;await createOrder(_0x273d5c),await removeAllCartItems(),alert(_0x3c1aec(0xd8));},'prefill':{'name':_0x4fdeae[_0x290e52(0x10d)]||_0x290e52(0xe7),'email':_0x4fdeae[_0x290e52(0x92)]||'customer@example.com','contact':_0x4fdeae[_0x290e52(0xe4)]||_0x290e52(0xc3)},'theme':{'color':_0x290e52(0x10a)}},_0x30addc=new Razorpay(_0x6eae22);_0x30addc[_0x290e52(0xd4)]();}else alert(_0x290e52(0x93));});async function removeAllCartItems(){const _0x50f13=_0x39de0e,_0x3a794=ref(database,_0x50f13(0xc1)+currentUserId);try{await remove(_0x3a794),console[_0x50f13(0xde)](_0x50f13(0xb0)),localStorage[_0x50f13(0xcf)](_0x50f13(0xd0)+currentUserId),fetchCart();}catch(_0x43a072){console[_0x50f13(0x104)]('Error\x20removing\x20cart\x20items:',_0x43a072);}}async function checkStockAvailability(_0x4bc597){const _0x3c2135=_0x39de0e;for(const _0xe79e87 in _0x4bc597){const _0x456ecf=ref(database,_0x3c2135(0xa8)+_0xe79e87),_0x2f8fac=await get(_0x456ecf);if(_0x2f8fac[_0x3c2135(0x97)]()){const _0xee22ee=_0x2f8fac['val'](),_0x305707=_0xee22ee[_0x3c2135(0xac)],_0x1cb7fa=_0x4bc597[_0xe79e87]['quantity'];if(_0x305707<_0x1cb7fa)return _0x3c2135(0xdd)+_0xe79e87+_0x3c2135(0x88);}else return _0x3c2135(0xdd)+_0xe79e87+'\x20does\x20not\x20exist.\x20Please\x20try\x20again\x20later.';}return!![];}async function checkQuantity(_0x3a9ebd){const _0x5ba31a=_0x39de0e;for(const _0xf4faaa in _0x3a9ebd){const _0x3f1f5b=ref(database,_0x5ba31a(0xa8)+_0xf4faaa),_0x127976=await get(_0x3f1f5b);if(_0x127976[_0x5ba31a(0x97)]()){const _0x2ec5da=_0x127976[_0x5ba31a(0xe2)](),_0x2ccda9=_0x2ec5da[_0x5ba31a(0xac)],_0x18caf6=_0x3a9ebd[_0xf4faaa]['quantity'];if(_0x18caf6>_0x2ccda9)return![];}else return![];}return!![];}async function renderCart(_0x30620a){const _0x446b02=_0x39de0e,_0x55e4b8=document[_0x446b02(0x7b)]('cartItems'),_0x27db6c=document[_0x446b02(0x7b)]('totalAmount'),_0x5e2d8e=document[_0x446b02(0x7b)](_0x446b02(0xd2)),_0x1f6ba1=document[_0x446b02(0x7b)](_0x446b02(0xe6)),_0x2304e1=document[_0x446b02(0x7b)](_0x446b02(0x9a)),_0x48066c=document[_0x446b02(0x7b)]('deliveryCharge'),_0x5b66e1=document[_0x446b02(0x7b)](_0x446b02(0x8a));_0x55e4b8[_0x446b02(0x108)]='';if(!_0x30620a||Object['keys'](_0x30620a)[_0x446b02(0x79)]===0x0){_0x5b66e1[_0x446b02(0xea)][_0x446b02(0x10e)]=_0x446b02(0xaf),_0x27db6c['innerHTML']=_0x446b02(0xb5),_0x48066c[_0x446b02(0x108)]='Free\x20Delivery';return;}else _0x5b66e1[_0x446b02(0xea)][_0x446b02(0x10e)]=_0x446b02(0x84);let _0x237cd2=0x0,_0x3a2768=0x0,_0x310b6f=0x0;Object[_0x446b02(0x87)](_0x30620a)[_0x446b02(0x99)](([_0x167324,_0x5e64d3])=>{const _0x5af5de=_0x446b02,_0x1bd4ce=document[_0x5af5de(0x98)](_0x5af5de(0xfd));_0x1bd4ce[_0x5af5de(0xa5)]='col-12\x20mb-3\x20bg-light-gray';const _0x14430c=document['createElement'](_0x5af5de(0xfd));_0x14430c['className']=_0x5af5de(0xd3);const _0x435208=document[_0x5af5de(0x98)](_0x5af5de(0xfd));_0x435208['className']=_0x5af5de(0xdb);const _0x518c11=document['createElement']('img');_0x518c11[_0x5af5de(0xa0)]=_0x5e64d3[_0x5af5de(0xd1)],_0x518c11[_0x5af5de(0xa5)]=_0x5af5de(0x90),_0x435208['appendChild'](_0x518c11),_0x14430c[_0x5af5de(0x7a)](_0x435208);const _0x2f7cb6=document[_0x5af5de(0x98)](_0x5af5de(0xfd));_0x2f7cb6['className']=_0x5af5de(0x10b);const _0x1c9385=document[_0x5af5de(0x98)]('h6');_0x1c9385['className']=_0x5af5de(0xb7),_0x1c9385['textContent']=_0x5e64d3[_0x5af5de(0xaa)],_0x2f7cb6[_0x5af5de(0x7a)](_0x1c9385);const _0x38117a=document['createElement']('div');_0x38117a[_0x5af5de(0xa5)]=_0x5af5de(0x105);const _0x408c59=document[_0x5af5de(0x98)]('button');_0x408c59[_0x5af5de(0xc0)]='-',_0x408c59[_0x5af5de(0xa5)]='qty-btn',_0x408c59[_0x5af5de(0xb8)](_0x5af5de(0xb6),()=>{_0x5e64d3['quantity']>0x1&&(_0x5e64d3['quantity']--,_0x25b44c(),_0x3e576f(_0x5e64d3,_0x167324));});const _0x3112ef=document['createElement'](_0x5af5de(0x8e));_0x3112ef[_0x5af5de(0xa5)]=_0x5af5de(0xc2),_0x3112ef['textContent']=_0x5e64d3['quantity'];const _0x739590=document[_0x5af5de(0x98)](_0x5af5de(0xc9));_0x739590[_0x5af5de(0xc0)]='+',_0x739590['className']='qty-btn',_0x739590[_0x5af5de(0xb8)](_0x5af5de(0xb6),()=>{const _0x1492b3=_0x5af5de;_0x5e64d3[_0x1492b3(0xf6)]<Math[_0x1492b3(0x75)](_0x5e64d3[_0x1492b3(0xb3)],0x5)&&(_0x5e64d3[_0x1492b3(0xf6)]++,_0x25b44c(),_0x3e576f(_0x5e64d3,_0x167324));}),_0x38117a[_0x5af5de(0x7a)](_0x408c59),_0x38117a[_0x5af5de(0x7a)](_0x3112ef),_0x38117a[_0x5af5de(0x7a)](_0x739590),_0x38117a[_0x5af5de(0x7a)](document[_0x5af5de(0x83)]('\x20'+_0x5e64d3[_0x5af5de(0xb3)]+'\x20'+_0x5e64d3[_0x5af5de(0xe5)])),_0x2f7cb6['appendChild'](_0x38117a),_0x14430c['appendChild'](_0x2f7cb6);const _0x1b36d3=document[_0x5af5de(0x98)](_0x5af5de(0xfd));_0x1b36d3[_0x5af5de(0xa5)]=_0x5af5de(0x86);const _0x1cfd81=document['createElement']('p');_0x1cfd81[_0x5af5de(0xa5)]='price-text',_0x1cfd81[_0x5af5de(0x108)]='₹'+(_0x5e64d3[_0x5af5de(0xee)]*_0x5e64d3[_0x5af5de(0xf6)])[_0x5af5de(0xd5)](0x2),_0x1b36d3[_0x5af5de(0x7a)](_0x1cfd81),_0x14430c['appendChild'](_0x1b36d3);const _0x5311d8=document[_0x5af5de(0x98)](_0x5af5de(0xfd));_0x5311d8['className']=_0x5af5de(0xef);const _0x4209a3=document[_0x5af5de(0x98)](_0x5af5de(0x8e));_0x4209a3[_0x5af5de(0x108)]=_0x5af5de(0x106),_0x4209a3['className']=_0x5af5de(0xb4),_0x4209a3[_0x5af5de(0xb8)]('click',()=>{removeCartItem(_0x167324);}),_0x5311d8[_0x5af5de(0x7a)](_0x4209a3),_0x14430c['appendChild'](_0x5311d8),_0x1bd4ce[_0x5af5de(0x7a)](_0x14430c),_0x55e4b8[_0x5af5de(0x7a)](_0x1bd4ce);const _0x2c1314=parseInt(_0x5e64d3[_0x5af5de(0xf6)]),_0x347737=parseFloat(_0x5e64d3['finalPrice']),_0x386c11=parseFloat(_0x5e64d3[_0x5af5de(0x9e)]);_0x237cd2+=_0x347737*_0x2c1314,_0x3a2768+=_0x386c11*_0x2c1314,_0x310b6f+=(_0x386c11-_0x347737)*_0x2c1314;const _0x19d61b=_0x167324,_0x25bf3f=ref(database,_0x5af5de(0xa8)+_0x19d61b),_0x3e11e1=setInterval(async()=>{const _0x2d9b57=_0x5af5de,_0x3e080f=await get(_0x25bf3f);if(_0x3e080f['exists']()){const _0x1239b0=_0x3e080f[_0x2d9b57(0xe2)](),_0x29be27=_0x1239b0['stockAvailable'];_0x5e64d3['availableQuantity']=_0x29be27,_0x20e963(),_0x29be27<=0x0?(_0x1bd4ce[_0x2d9b57(0xea)][_0x2d9b57(0xeb)]=_0x2d9b57(0xda),_0x518c11[_0x2d9b57(0xea)][_0x2d9b57(0xfa)]='grayscale(100%)',_0x518c11[_0x2d9b57(0xea)][_0x2d9b57(0x7d)]=_0x2d9b57(0x94),_0x739590[_0x2d9b57(0xed)]=!![]):(_0x518c11[_0x2d9b57(0xea)][_0x2d9b57(0xfa)]='',_0x518c11[_0x2d9b57(0xea)]['opacity']=''),_0x20e963();}},0x3e8);function _0x25b44c(){const _0x3cc8e4=_0x5af5de;_0x3112ef[_0x3cc8e4(0xc0)]=_0x5e64d3['quantity'],_0x1cfd81[_0x3cc8e4(0x108)]='₹'+(_0x5e64d3['finalPrice']*_0x5e64d3[_0x3cc8e4(0xf6)])[_0x3cc8e4(0xd5)](0x2),_0x5e64d3[_0x3cc8e4(0xf6)]>_0x5e64d3['availableQuantity']?_0x1bd4ce['style'][_0x3cc8e4(0xeb)]=_0x3cc8e4(0xda):(_0x1bd4ce[_0x3cc8e4(0xea)]['textDecoration']='',_0x518c11[_0x3cc8e4(0xea)][_0x3cc8e4(0xfa)]='',_0x518c11['style'][_0x3cc8e4(0x7d)]='');}function _0x20e963(){const _0x3d9969=_0x5af5de;_0x5e64d3['quantity']>=_0x5e64d3[_0x3d9969(0xb3)]?(_0x739590[_0x3d9969(0xed)]=!![],_0x5e64d3[_0x3d9969(0xf6)]>_0x5e64d3[_0x3d9969(0xb3)]&&(_0x1bd4ce[_0x3d9969(0xea)][_0x3d9969(0xeb)]=_0x3d9969(0xda))):_0x739590[_0x3d9969(0xed)]=![];}});const _0x39b179=0x31,_0x3869b9=calculateTotalAmount(_0x30620a);_0x27db6c[_0x446b02(0x108)]=_0x446b02(0x9b)+_0x3869b9[_0x446b02(0xd5)](0x2)+_0x446b02(0xa4)+_0x237cd2[_0x446b02(0xd5)](0x2)+_0x446b02(0xd7),_0x2304e1['innerHTML']='₹'+_0x310b6f['toFixed'](0x2),_0x48066c[_0x446b02(0x108)]=_0x446b02(0xce)+_0x39b179+_0x446b02(0xa9),setTimeout(()=>{const _0x10e998=_0x446b02;_0x48066c['classList'][_0x10e998(0xa6)](_0x10e998(0x81));},0x3e8);const _0x575260=document[_0x446b02(0x98)](_0x446b02(0xea));_0x575260[_0x446b02(0x108)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20.strike-through\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20animation:\x20strikeThrough\x201s\x20forwards;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20@keyframes\x20strikeThrough\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20from\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20opacity:\x201;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20to\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20opacity:\x200.5;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20text-decoration:\x20line-through;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.show-free-delivery\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20animation:\x20fadeIn\x201.5s\x20forwards;\x20/*\x20Adjust\x20duration\x20as\x20needed\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20color:\x20green;\x20/*\x20Set\x20text\x20color\x20to\x20green\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20@keyframes\x20fadeIn\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x200%\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20opacity:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transform:\x20translateX(-100%);\x20/*\x20Start\x20from\x20the\x20left\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2070%\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20opacity:\x201;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transform:\x20translateX(0);\x20/*\x20Reach\x20original\x20position\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20100%\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20opacity:\x201;\x20/*\x20Keep\x20it\x20fully\x20visible\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.qty-btn\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20margin:\x200\x205px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20padding:\x202px\x205px;\x20/*\x20Reduced\x20padding\x20for\x20smaller\x20size\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20cursor:\x20pointer;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20font-size:\x2016px;\x20/*\x20Adjust\x20font\x20size\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border:\x201px\x20solid\x20#ccc;\x20/*\x20Add\x20border\x20for\x20better\x20visibility\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border-radius:\x204px;\x20/*\x20Rounded\x20corners\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20background-color:\x20#f0f0f0;\x20/*\x20Background\x20color\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transition:\x20background-color\x200.2s;\x20/*\x20Smooth\x20transition\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.qty-btn:hover\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20background-color:\x20#e0e0e0;\x20/*\x20Change\x20color\x20on\x20hover\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.qty-btn:disabled\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20background-color:\x20#ddd;\x20/*\x20Disabled\x20button\x20color\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20cursor:\x20not-allowed;\x20/*\x20Change\x20cursor\x20style\x20*/\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20',document[_0x446b02(0xbe)][_0x446b02(0x7a)](_0x575260);function _0x3e576f(_0x954dda,_0x35637f){const _0x10b554=_0x446b02,_0x24aee4=ref(database,_0x10b554(0xc1)+currentUserId+'/'+_0x35637f),_0xf7ed12={'quantity':_0x954dda['quantity']};update(_0x24aee4,_0xf7ed12)[_0x10b554(0x7c)](()=>{const _0x4641dd=_0x10b554;console[_0x4641dd(0xde)](_0x4641dd(0x9c));})[_0x10b554(0x10c)](_0x50d587=>{const _0x383668=_0x10b554;console['error'](_0x383668(0xdc),_0x50d587);}),_0x237cd2=0x0,_0x3a2768=0x0,_0x310b6f=0x0,Object[_0x10b554(0xa1)](_0x30620a)[_0x10b554(0x99)](_0x5737ee=>{const _0x13f8c6=_0x10b554,_0xbe2a47=parseInt(_0x5737ee[_0x13f8c6(0xf6)]),_0x2913d6=parseFloat(_0x5737ee[_0x13f8c6(0xee)]),_0x51b130=parseFloat(_0x5737ee[_0x13f8c6(0x9e)]);_0x237cd2+=_0x2913d6*_0xbe2a47,_0x3a2768+=_0x51b130*_0xbe2a47,_0x310b6f+=(_0x51b130-_0x2913d6)*_0xbe2a47;}),_0x27db6c[_0x10b554(0x108)]=_0x10b554(0x9b)+calculateTotalAmount(_0x30620a)['toFixed'](0x2)+'</span>\x20₹'+_0x237cd2[_0x10b554(0xd5)](0x2)+_0x10b554(0xd7),_0x2304e1[_0x10b554(0x108)]='₹'+_0x310b6f['toFixed'](0x2);}}async function removeCartItem(_0x124951){const _0x27a588=_0x39de0e,_0x4287f3=ref(database,_0x27a588(0xc1)+currentUserId);try{const _0xf2896a=await get(_0x4287f3);if(_0xf2896a[_0x27a588(0x97)]()){const _0x41a349=_0xf2896a[_0x27a588(0xe2)]();delete _0x41a349[_0x124951],await set(_0x4287f3,_0x41a349),console['log'](_0x27a588(0xcd),_0x124951),storeCartInLocalStorage(_0x41a349),fetchCart();}}catch(_0x268606){console[_0x27a588(0x104)]('Error\x20deleting\x20item:',_0x268606);}}async function createOrder(_0x4a55c0){const _0x4dc17f=_0x39de0e,_0x53424f=auth[_0x4dc17f(0x100)]['uid'],_0x30a508=await get(ref(database,_0x4dc17f(0x89)+_0x53424f)),_0x190a9a=_0x30a508[_0x4dc17f(0xe2)](),_0x48ceff=_0x190a9a[_0x4dc17f(0x92)],_0x537fb0=_0x190a9a['fullName'],_0x2e5571=_0x190a9a[_0x4dc17f(0xe4)],_0x56da95=_0x190a9a['address'],_0x56e481=_0x4dc17f(0xc8)+_0x53424f+'_'+Date[_0x4dc17f(0xa7)]()+'_'+Math[_0x4dc17f(0x8b)](Math[_0x4dc17f(0xd6)]()*0x2710),_0x2f3386={'userName':_0x537fb0,'usermobilenumber':_0x2e5571,'useraddress':_0x56da95,'orderId':_0x56e481,'userId':_0x53424f,'userEmail':_0x48ceff,'items':_0x4a55c0,'totalAmount':calculateTotalAmount(_0x4a55c0),'orderDate':new Date()[_0x4dc17f(0x7f)](),'isNew':!![]},_0x32d01b=ref(database,_0x4dc17f(0xae)+_0x53424f+'/'+_0x56e481);await set(_0x32d01b,_0x2f3386),console['log']('Order\x20created:',_0x2f3386),await updateStockAvailability(_0x4a55c0);}async function updateStockAvailability(_0x2a1f02){const _0x4cbc53=_0x39de0e;for(const _0x1ae1b8 in _0x2a1f02){const _0x5e027f=ref(database,_0x4cbc53(0xa8)+_0x1ae1b8),_0x5b9d15=await get(_0x5e027f);if(_0x5b9d15[_0x4cbc53(0x97)]()){const _0x3a3d8e=_0x5b9d15[_0x4cbc53(0xe2)](),_0x3240fc=_0x3a3d8e[_0x4cbc53(0xac)],_0x5d8d58=_0x2a1f02[_0x1ae1b8][_0x4cbc53(0xf6)];if(_0x3240fc>=_0x5d8d58){const _0x28fdb9=_0x3240fc-_0x5d8d58;await update(_0x5e027f,{'stockAvailable':_0x28fdb9}),console[_0x4cbc53(0xde)](_0x4cbc53(0x107)+_0x1ae1b8+':\x20'+_0x28fdb9);}else console[_0x4cbc53(0x104)](_0x4cbc53(0xf8)+_0x1ae1b8);}else console[_0x4cbc53(0x104)](_0x4cbc53(0xf0)+_0x1ae1b8+_0x4cbc53(0xc5));}}function calculateTotalAmount(_0x2f117e){const _0x55b6f0=_0x39de0e;let _0x2dd7af=0x0;return Object[_0x55b6f0(0xa1)](_0x2f117e)[_0x55b6f0(0x99)](_0x2cc5ac=>{const _0x54cba6=_0x55b6f0;_0x2dd7af+=_0x2cc5ac['originalPrice']*_0x2cc5ac[_0x54cba6(0xf6)];}),_0x2dd7af;}document[_0x39de0e(0x7b)]('totalDiscount')[_0x39de0e(0xea)]['display']='none';function calculateTotalDiscount(_0x5c9791){const _0x2bd361=_0x39de0e;let _0x2c56d1=0x0;return Object[_0x2bd361(0xa1)](_0x5c9791)[_0x2bd361(0x99)](_0x4e4e6f=>{const _0x22c0c8=_0x2bd361;_0x2c56d1+=_0x4e4e6f[_0x22c0c8(0xe8)]*_0x4e4e6f[_0x22c0c8(0xf6)];}),_0x2c56d1;}document[_0x39de0e(0x7b)](_0x39de0e(0xf4))[_0x39de0e(0xb8)]('click',function(){const _0x5a41ef=_0x39de0e;window[_0x5a41ef(0x95)]({'top':0x3e8,'behavior':_0x5a41ef(0x102)});});function showSpinner(){const _0x41ecb1=_0x39de0e,_0x47c0ee=document[_0x41ecb1(0x7b)](_0x41ecb1(0xff));_0x47c0ee[_0x41ecb1(0xea)][_0x41ecb1(0x10e)]=_0x41ecb1(0xaf);}function hideSpinner(){const _0x4f326b=_0x39de0e,_0x478a6a=document[_0x4f326b(0x7b)](_0x4f326b(0xff));_0x478a6a['style'][_0x4f326b(0x10e)]=_0x4f326b(0x84);}</script></body>
+<script type="module">
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+import { getDatabase, ref, get, remove, set, update } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+const firebaseConfig = {
+    apiKey: "AIzaSyBjZDiWXkOclw7RmmU31822nPuj9px1hSA",
+    authDomain: "quickbuy-29329.firebaseapp.com",
+    projectId: "quickbuy-29329",
+    storageBucket: "quickbuy-29329.appspot.com",
+    messagingSenderId: "956510631625",
+    appId: "1:956510631625:web:678411a2530ef065b97f18"
+};
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+let currentUserId = null;
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUserId = user.uid;
+        loadCartFromLocalStorage();
+        fetchCart();
+        // Default Gmail profile icon URL
+        const gmailProfilePic = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'; 
+        // Check local storage for user data
+        const localStorageUserData = localStorage.getItem('userData');
+        let userProfilePic;
+        if (localStorageUserData) {
+            const userData = JSON.parse(localStorageUserData);
+            userProfilePic = userData.photo || gmailProfilePic; // Use local data if available
+        } else {
+            // Fetch user data from Firebase
+            const userSnapshot = await get(ref(database, `users/${currentUserId}`));
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.val();
+                userProfilePic = userData.photo || gmailProfilePic; // Fallback to Gmail logo if photo is not available
+                
+                // Store the fetched data in local storage
+                localStorage.setItem('userData', JSON.stringify(userData));
+            } else {
+                // If user data doesn't exist, use Gmail logo
+                userProfilePic = gmailProfilePic;
+            }
+        }
+        const profileIconDesktop = document.getElementById('profileImage');
+        const profileIconMobile = document.querySelector('#profileLink img');
+        if (profileIconDesktop) {
+            profileIconDesktop.src = userProfilePic;
+            profileIconDesktop.alt = 'User  Profile Picture';
+        }
+        if (profileIconMobile) {
+            profileIconMobile.src = userProfilePic;
+            profileIconMobile.alt = 'User  Profile Picture';
+        }
+    } else {
+        alert('You need to log in to view your cart.');
+    }
+});
+async function fetchCart() {
+    showSpinner();
+    if (!currentUserId) return;
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    const snapshot = await get(cartRef);
+    hideSpinner();
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+        storeCartInLocalStorage(cart);
+        
+        // Calculate total amount with delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
+        renderCart(cart, totalAmount);
+    } else {
+        console.log("No data available");
+        renderCart({}, 0); // Render empty cart
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const deliveryMessage = document.getElementById("deliveryMessage");
+    const deliveryTime = document.getElementById("deliveryTime");
+    function checkDeliveryTime() {
+        const now = new Date();
+        const hours = now.getHours();
+        let delivery;
+        if (hours >= 16) { // If time is 4 PM or later
+            delivery = "tomorrow by 6 PM";
+        } else {
+            delivery = "today";
+        }
+        deliveryTime.textContent = delivery;
+    }
+    // Initial check for delivery time
+    checkDeliveryTime();
+    // Function to show the delivery message
+function showDeliveryMessage() {
+    setTimeout(() => {
+        deliveryMessage.style.display = "block"; // Show message
+        deliveryMessage.classList.add('visible'); // Add visible class for fade-in effect
+    }, 2000); // Delay of 2 seconds
+}
+// Scroll effect
+window.addEventListener('scroll', function () {
+    const rect = deliveryMessage.getBoundingClientRect();
+    const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
+    // Check if the delivery message is not yet displayed
+    if (!isVisible && (rect.top <= window.innerHeight)) {
+        showDeliveryMessage(); // Show message when user scrolls
+    }
+});
+// Check if the delivery message is visible on page load
+window.addEventListener('load', function () {
+    const rect = deliveryMessage.getBoundingClientRect();
+    // If it's already in the viewport
+    if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+        showDeliveryMessage();
+    }
+});
+});
+function calculateFinalAmountWithDelivery(cart) {
+    async function fetchCart() {
+    showSpinner();
+    if (!currentUserId) return;
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    const snapshot = await get(cartRef);
+    hideSpinner();
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+        storeCartInLocalStorage(cart);
+        
+        // Calculate total amount with delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
+        renderCart(cart, totalAmount);
+    } else {
+        console.log("No data available");
+        renderCart({}, 0); // Render empty cart
+    }
+}
+function calculateFinalAmountWithDelivery(cart) {
+    const deliveryCharge = 49;
+    let total = 0;
+    Object.values(cart).forEach(item => {
+        total += parseFloat(item.finalPrice) * item.quantity;
+    });
+    return total + deliveryCharge; // Add delivery charge
+}
+    let total = 0;
+    Object.values(cart).forEach(item => {
+        total += parseFloat(item.finalPrice) * item.quantity;
+    });
+    return total; // Add delivery charge
+}
+function loadCartFromLocalStorage() {
+    const cart = JSON.parse(localStorage.getItem(`cart_${currentUserId}`));
+    if (cart) {
+        console.log("Loaded cart from local storage:", cart);
+        renderCart(cart);
+    } else {
+        console.log("No cart found in local storage.");
+    }
+}
+function storeCartInLocalStorage(cart) {
+    localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
+    console.log("Stored cart in local storage.");
+}
+document.getElementById('payButton').addEventListener('click', async () => {
+    const uid = auth.currentUser.uid;
+    const userRef = ref(database, `users/${uid}`);
+    const userSnapshot = await get(userRef);
+    // Check if user data exists
+    if (!userSnapshot.exists()) {
+        alert('Your profile is incomplete. Please update your address and mobile number.');
+        window.location.href = 'User    - Profile.html'; 
+        return;
+    }
+    const userData = userSnapshot.val();
+    console.log('User    data:', userData); 
+    // Check if user details are complete
+    if (!userData.fullName || !userData.address || !userData.mobile) {
+        alert('Please update your profile with your name, address, and mobile number.');
+        window.location.href = 'profile.html'; 
+        return;
+    }
+    const cartRef = ref(database, `carts/${uid}`);
+    const snapshot = await get(cartRef);
+    if (snapshot.exists()) {
+        const cart = snapshot.val();
+        // Check stock availability for each product in the cart
+        const stockAvailability = await checkStockAvailability(cart);
+        if (!stockAvailability) {
+            alert(stockAvailability);
+            return;
+        }
+        // Check if user selected quantity is greater than stock available
+        const quantityCheck = await checkQuantity(cart);
+        if (!quantityCheck) {
+            alert('Sorry, the quantity you selected is greater than the stock available. Please try again later.');
+            return;
+        }
+        // Calculate total amount including delivery charge
+        const totalAmount = calculateFinalAmountWithDelivery(cart);
+        // Prepare Razorpay payment options
+        const options = {
+            key: "rzp_test_XxEv4eXXqaPM4o", 
+            amount: (totalAmount * 100).toFixed(0), 
+            currency: "INR",
+            name: "QuickBuy",
+            description: "Your Order Description",
+            handler: async function(response) {
+                // Create order after successful payment
+                await createOrder(cart);
+                await removeAllCartItems();
+                alert('Payment successful! Your cart has been cleared.');
+            },
+            prefill: {
+                name: userData.fullName || "Customer Name",
+                email: userData.email || "customer@example.com",
+                contact: userData.mobile || "9999999999"
+            },
+            theme: {
+                color: "#F37254"
+            }
+        };
+        const razorpay = new Razorpay(options);
+        razorpay.open();
+    } else {
+        alert('Your cart is empty.');
+    }
+});
+async function removeAllCartItems() {
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    try {
+        await remove(cartRef);
+        console.log('All items removed from cart.');
+        localStorage.removeItem(`cart_${currentUserId}`);
+        fetchCart();
+    } catch (error) {
+        console.error('Error removing cart items:', error);
+    }
+}
+async function checkStockAvailability(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+            if (currentStock < quantityOrdered) {
+                return `Sorry, the product ${productId} is out of stock. Please try again later.`; 
+            }
+        } else {
+            return `Sorry, the product ${productId} does not exist. Please try again later.`; 
+        }
+    }
+    return true; 
+}
+async function checkQuantity(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+            if (quantityOrdered > currentStock) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+async function renderCart(cart) {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const totalAmountElement = document.getElementById('totalAmount');
+    const totalMRPElement = document.getElementById('totalMRP');
+    const totalDiscountElement = document.getElementById('totalDiscount');
+    const totalSavingsElement = document.getElementById('totalSavings');
+    const deliveryChargeElement = document.getElementById('deliveryCharge');
+    const illustratorImage = document.getElementById('illustratorImage');
+    cartItemsContainer.innerHTML = '';
+    // Check if the cart is empty
+    if (!cart || Object.keys(cart).length === 0) {
+        illustratorImage.style.display = 'block'; // Show the image
+        totalAmountElement.innerHTML = '<span class="amount-value">₹0.00</span>';
+        deliveryChargeElement.innerHTML = 'Free Delivery'; // Set delivery charge to "Free Delivery"
+        return; // Exit the function if the cart is empty
+    } else {
+        illustratorImage.style.display = 'none'; // Hide the illustrator image if not empty
+    }
+    let totalAmount = 0;
+    let totalMRP = 0;
+    let totalDiscount = 0;
+    Object.entries(cart).forEach(([key, item]) => {
+        const col = document.createElement('div');
+        col.className = 'col-12 mb-3 bg-light-gray';
+        const row = document.createElement('div');
+        row.className = 'row align-items-center';
+        const imgCol = document.createElement('div');
+        imgCol.className = 'col-3';
+        const img = document.createElement('img');
+        img.src = item.imageURL;
+        img.className = 'card-img-top';
+        imgCol.appendChild(img);
+        row.appendChild(imgCol);
+        const nameQtyCol = document.createElement('div');
+        nameQtyCol.className = 'col-5';
+        const title = document.createElement('h6');
+        title.className = 'card-title mb-0';
+        title.textContent = item.productName;
+        nameQtyCol.appendChild(title);
+        // Create quantity controls
+        const qtyCol = document.createElement('div');
+        qtyCol.className = 'qty-controls';
+        const decrementBtn = document.createElement('button');
+        decrementBtn.textContent = '-';
+        decrementBtn.className = 'qty-btn';
+        decrementBtn.addEventListener('click', () => {
+            if (item.quantity > 1) {
+                item.quantity--;
+                updateQtyDisplay();
+                updateCart(item, key); // Pass the current item and its key
+            }
+        });
+        const qtyDisplay = document.createElement('span');
+        qtyDisplay.className = 'qty-display';
+        qtyDisplay.textContent = item.quantity;
+        const incrementBtn = document.createElement('button');
+        incrementBtn.textContent = '+';
+        incrementBtn.className = 'qty-btn';
+        incrementBtn.addEventListener('click', () => {
+            if (item.quantity < Math.min(item.availableQuantity, 5)) {
+                item.quantity++;
+                updateQtyDisplay();
+                updateCart(item, key); // Pass the current item and its key
+            }
+        });
+        qtyCol.appendChild(decrementBtn);
+        qtyCol.appendChild(qtyDisplay);
+        qtyCol.appendChild(incrementBtn);
+        qtyCol.appendChild(document.createTextNode(` ${item.availableQuantity} ${item.qtyUnit}`));
+        nameQtyCol.appendChild(qtyCol);
+        row.appendChild(nameQtyCol);
+        const priceCol = document.createElement('div');
+        priceCol.className = 'col-2';
+        const finalPrice = document.createElement('p');
+        finalPrice.className = 'price-text';
+        finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
+        priceCol.appendChild(finalPrice);
+        row.appendChild(priceCol);
+        const deleteCol = document.createElement('div');
+        deleteCol.className = 'col-2 text-center';
+        const deleteBtn = document.createElement('span');
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.addEventListener('click', () => {
+            removeCartItem(key);
+        });
+        deleteCol.appendChild(deleteBtn);
+        row.appendChild(deleteCol);
+        col.appendChild(row);
+        cartItemsContainer.appendChild(col);
+        const itemQuantity = parseInt(item.quantity);
+        const itemFinalPrice = parseFloat(item.finalPrice);
+        const itemOriginalPrice = parseFloat(item.originalPrice);
+        totalAmount += itemFinalPrice * itemQuantity;
+        totalMRP += itemOriginalPrice * itemQuantity;
+        totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+        /// Check stock availability every second
+        const productId = key;
+        const productRef = ref(database, `products/${productId}`);
+        const stockCheckInterval = setInterval(async () => {
+            const snapshot = await get(productRef);
+            if (snapshot.exists()) {
+                const productData = snapshot.val();
+                const currentStock = productData.stockAvailable;
+                item.availableQuantity = currentStock; // Update item available quantity
+                // Update visual elements based on available stock
+                checkQuantityLimit();
+                if (currentStock <= 0) {
+                    // Update image to black and white if stock is 0
+                    col.style.textDecoration = 'line-through';
+                    img.style.filter = 'grayscale(100%)';
+                    img.style.opacity = '0.5';
+                    incrementBtn.disabled = true; // Disable increment if out of stock
+                } else {
+                    // Reset image if stock is available
+                    img.style.filter = '';
+                    img.style.opacity = '';
+                }
+                // Check quantity limit
+                checkQuantityLimit();
+            }
+        }, 1000); // Check every second
+        function updateQtyDisplay() {
+            qtyDisplay.textContent = item.quantity;
+            finalPrice.innerHTML = `₹${(item.finalPrice * item.quantity).toFixed(2)}`;
+            if (item.quantity > item.availableQuantity) {
+                col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
+            } else {
+                col.style.textDecoration = ''; // Remove strike through if quantity is valid
+                img.style.filter = ''; // Reset image color
+                img.style.opacity = '';
+            }
+        }
+        function checkQuantityLimit() {
+            if (item.quantity >= item.availableQuantity) {
+                incrementBtn.disabled = true; // Disable increment button
+                if (item.quantity > item.availableQuantity) {
+                    col.style.textDecoration = 'line-through'; // Strike through if quantity exceeds stock
+                }
+            } else {
+                incrementBtn.disabled = false; // Enable increment button
+            }
+        }
+    });
+    // Delivery charge logic
+    const deliveryCharge = 49; // Delivery charge of 49
+    const originalTotal = calculateTotalAmount(cart);
+    // Update total amounts in the UI
+    totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${originalTotal.toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
+    totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
+    // Animate delivery charge display
+    deliveryChargeElement.innerHTML = `<span class="strike-through" style="text-decoration: line-through;">₹${deliveryCharge}</span> Free Delivery!`;
+    setTimeout(() => {
+        deliveryChargeElement.classList.add('show-free-delivery');
+    }, 1000); // Delay the animation
+    // CSS for the animation and button styling
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .strike-through {
+            animation: strikeThrough 1s forwards;
+        }
+        @keyframes strikeThrough {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0.5;
+                text-decoration: line-through;
+            }
+        }
+        .show-free-delivery {
+            animation: fadeIn 1.5s forwards; /* Adjust duration as needed */
+            color: green; /* Set text color to green */
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%); /* Start from the left */
+            }
+            70% {
+                opacity: 1;
+                transform: translateX(0); /* Reach original position */
+            }
+            100% {
+                opacity: 1; /* Keep it fully visible */
+            }
+        }
+        .qty-btn {
+            margin: 0 5px;
+            padding: 2px 5px; /* Reduced padding for smaller size */
+            cursor: pointer;
+            font-size: 16px; /* Adjust font size */
+            border: 1px solid #ccc; /* Add border for better visibility */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #f0f0f0; /* Background color */
+            transition: background-color 0.2s; /* Smooth transition */
+        }
+        .qty-btn:hover {
+            background-color: #e0e0e0; /* Change color on hover */
+        }
+        .qty-btn:disabled {
+            background-color: #ddd; /* Disabled button color */
+            cursor: not-allowed; /* Change cursor style */
+        }
+    `;
+    document.head.appendChild(style);
+    function updateCart(item, key) {
+    // Update Firebase with the current cart item
+    const cartRef = ref(database, `carts/${currentUserId}/${key}`);
+    const updatedItem = { quantity: item.quantity }; // Create an object with only the updated quantity
+    // Use update to only modify the quantity field
+    update(cartRef, updatedItem)
+        .then(() => {
+            console.log('Quantity updated successfully');
+        })
+        .catch((error) => {
+            console.error('Error updating quantity:', error);
+        });
+    // Recalculate totals
+    totalAmount = 0;
+    totalMRP = 0;
+    totalDiscount = 0;
+    Object.values(cart).forEach(cartItem => {
+        const itemQuantity = parseInt(cartItem.quantity);
+        const itemFinalPrice = parseFloat(cartItem.finalPrice);
+        const itemOriginalPrice = parseFloat(cartItem.originalPrice);
+        totalAmount += itemFinalPrice * itemQuantity;
+        totalMRP += itemOriginalPrice * itemQuantity;
+        totalDiscount += (itemOriginalPrice - itemFinalPrice) * itemQuantity;
+    });
+    // Update total amounts in the UI
+    totalAmountElement.innerHTML = `<span class="amount-value"><span class="strike-through">₹${calculateTotalAmount(cart).toFixed(2)}</span> ₹${totalAmount.toFixed(2)}</span>`;
+    totalSavingsElement.innerHTML = `₹${totalDiscount.toFixed(2)}`;
+}
+}
+async function removeCartItem(productId) {
+    const cartRef = ref(database, `carts/${currentUserId}`);
+    try {
+        const snapshot = await get(cartRef);
+        if (snapshot.exists()) {
+            const cart = snapshot.val();
+            delete cart[productId];
+            await set(cartRef, cart);
+            console.log('Item removed:', productId);
+            storeCartInLocalStorage(cart);
+            fetchCart();
+        }
+    } catch (error) {
+        console.error('Error deleting item:', error);
+    }
+}
+async function createOrder(cart) {
+    const uid = auth.currentUser.uid;
+    
+    // Fetch user data to get the email and location
+    const userSnapshot = await get(ref(database, `users/${uid}`));
+    const userData = userSnapshot.val();
+    const userEmail = userData.email; 
+    const userfullname = userData.fullName; 
+    const userMobilenumber = userData.mobile;
+    const userAddress = userData.address;  
+
+    // Get user's location from user data
+    const userLocation = userData.location || {};
+    const userLat = userLocation.latitude || null;
+    const userLng = userLocation.longitude || null;
+
+    const orderId = `order_${uid}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const orderData = {
+        userName: userfullname,
+        usermobilenumber: userMobilenumber,
+        useraddress: userAddress,
+        orderId: orderId,
+        userId: uid,
+        userEmail: userEmail, 
+        items: cart,
+        totalAmount: calculateTotalAmount(cart),
+        orderDate: new Date().toISOString(),
+        isNew: true, // Set isNew property to true
+        latitude: userLat, // Store user's latitude
+        longitude: userLng  // Store user's longitude
+    };
+    
+    const ordersRef = ref(database, `orders/${uid}/${orderId}`);
+    await set(ordersRef, orderData);
+    console.log('Order created:', orderData);
+    
+    // Update stock availability for each product in the cart
+    await updateStockAvailability(cart);
+}
+async function updateUserLocation(uid, latitude, longitude) {
+    const userRef = ref(database, `users/${uid}`);
+    await update(userRef, {
+        location: {
+            latitude: latitude,
+            longitude: longitude
+        }
+    });
+}
+
+async function updateStockAvailability(cart) {
+    for (const productId in cart) {
+        const productRef = ref(database, `products/${productId}`);
+        const snapshot = await get(productRef);
+        if (snapshot.exists()) {
+            const productData = snapshot.val();
+            const currentStock = productData.stockAvailable;
+            const quantityOrdered = cart[productId].quantity;
+            if (currentStock >= quantityOrdered) {
+                const newStock = currentStock - quantityOrdered;
+                await update(productRef, { stockAvailable: newStock });
+                console.log(`Updated stock for product ${productId}: ${newStock}`);
+            } else {
+                console.error(`Insufficient stock for product ${productId}`);
+            }
+        } else {
+            console.error(`Product ${productId} not found`);
+        }
+    }
+}
+function calculateTotalAmount(cart) {
+    let total = 0;
+    Object.values(cart).forEach(item => {
+        total += item.originalPrice * item.quantity;
+    });
+    return total;
+}
+// Hide the total discount element
+document.getElementById('totalDiscount').style.display = 'none';
+// You can still calculate and use totalDiscount in your logic
+function calculateTotalDiscount(cart) {
+    let totalDiscount = 0;
+    Object.values(cart).forEach(item => {
+        totalDiscount += item.discount * item.quantity; // Assuming `item.discount` is the discount per item
+    });
+    return totalDiscount;
+}
+document.getElementById('scrollUpButton').addEventListener('click', function() {
+    // Scroll up by 100 pixels (adjust the value as needed)
+    window.scrollBy({
+        top: 1000, // Scroll up
+        behavior: 'smooth' // Smooth scrolling
+    });
+});
+function showSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
+}
+function hideSpinner() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'none';
+}
+</script>
+</body>
 </html>
