@@ -73,7 +73,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-    margin-bottom: 1px;
+    margin-bottom: 10px;
 }
 
 .product-card:hover {
@@ -82,8 +82,8 @@ body {
 }
 
 .card-img-top {
-    height: 150px !important; /* Force the height to 80px */
-    object-fit: contain;
+    height: 100px !important; /* Force the height to 80px */
+    object-fit:contain;
     border-top-left-radius: 6px; /* Smaller radius */
     border-top-right-radius: 6px; /* Smaller radius */
     border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Reduced border thickness */
@@ -239,7 +239,7 @@ body {
 }
 .qty-info
 {
-    margin-bottom: 1px;
+    margin-bottom: -10px;
 }
 
 @media (max-width: 768px) {
