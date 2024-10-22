@@ -502,7 +502,7 @@ document.getElementById('payButton').addEventListener('click', async () => {
     // Check if user data exists
     if (!userSnapshot.exists()) {
         alert('Your profile is incomplete. Please update your address and mobile number.');
-        window.location.href = 'User    - Profile.html'; 
+        window.location.href = 'profile.html'; 
         return;
     }
     const userData = userSnapshot.val();
