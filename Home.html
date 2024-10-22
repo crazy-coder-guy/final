@@ -562,7 +562,7 @@ async function fetchProductsForLocation(lat, lon) {
             const productLat = parseFloat(products[key].latitude); // Ensure latitude is a number
             const productLon = parseFloat(products[key].longitude); // Ensure longitude is a number
             const distance = calculateDistance(lat, lon, productLat, productLon);
-            if (distance <= 10) { // Only show products within 10 km
+            if (distance <= 80) { // Only show products within 10 km
                 const product = {
                     id: key,
                     availability: products[key].availability,
