@@ -147,9 +147,9 @@
 
     <div class="subcategories-row" id="row-2" style="display: none;">
         <div class="subcategories">
-            <a href="#Essential Oils" onclick="scrollToSubcategory('EssentialOils'); return false;">
+            <a href="#Essentials Oils" onclick="scrollToSubcategory('EssentialsOils'); return false;">
                 <img src="https://www.groocy.in/storage/app/public/product/2023-10-31-6540f465cb126.png" class="img-fluid subcategory-img" alt="Cooking Oils" />
-                <div class="text-center">Essential Oils</div>
+                <div class="text-center">Essentials Oils</div>
             </a>
             <a href="#Spices" onclick="scrollToSubcategory('Spices'); return false;">
                 <img src="https://5.imimg.com/data5/SELLER/Default/2022/4/GZ/CD/PZ/140245462/90000486-500x500.jpg" class="img-fluid subcategory-img" alt="Spices and Seasonings" />
@@ -163,17 +163,13 @@
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRHVWvZcNJpaVaIHVEU4vVF4VmS72OtkrBFA&s" class="img-fluid subcategory-img" alt="Pasta and Noodles" />
                 <div class="text-center">Pasta and Noodles</div>
             </a>
-             <a href="#Honey" onclick="scrollToSubcategory('Honey'); return false;">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoC6vgPyEHXL7f_gpPTxOW_wWYxz-mVCuJgQ&s" class="img-fluid subcategory-img" alt="Honey" />
-                <div class="text-center">Pure Honey</div>
-            </a>
             <a href="#Rice" onclick="scrollToSubcategory('Rice'); return false;">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1Bov-Act8X2_4r07TqOqXyeCRvm-sjGBrlg&s" class="img-fluid subcategory-img" alt="Rice and Grains" />
-                <div class="text-center">Ponn Rice </div>
+                <div class="text-center">Rice and Grains</div>
             </a>
-            <a href="#Spreads" onclick="scrollToSubcategory('Spreads'); return false;">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa4vBow5SfJM0mJjttWzezWxOa3RpeXuGTUA&s" class="img-fluid subcategory-img" alt="Spreads" />
-                <div class="text-center">Spreads</div>
+            <a href="#CannedGoods" onclick="scrollToSubcategory('CannedGoods'); return false;">
+                <img src="https://desitreat.in/cdn/shop/files/masalaandsoya_533x.png?v=1695121069" class="img-fluid subcategory-img" alt="Canned Goods" />
+                <div class="text-center">Canned Goods</div>
             </a>
         </div>
     </div>
@@ -441,7 +437,9 @@
             }); // Remove location from Firebase
         }
     });
+    
     function getUserLocation() {
+  let hasShownError = false; // Flag to track if the error message has been shown
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -463,20 +461,22 @@
             resolve(storedLocation);
           } else {
             if (error.code === error.PERMISSION_DENIED) {
-              if (confirm("This website wants to know your location.  Would you like to allow location access?")) {
-                navigator.geolocation.getCurrentPosition(
-                  (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude, timestamp: Date.now() }), 
-                  () => { 
-                    alert("Unable to retrieve your location. Some features may be limited."); 
-                    reject("Location access denied again.");
-                  } 
-                );
-              } else {
-                alert("Unable to retrieve your location. Some features may be limited."); 
-                reject("Location access denied.");
+              if (!hasShownError) {
+                hasShownError = true; // Set flag to true
+                alert("Please turn on your location to show available products.");
+                setTimeout(() => {
+                  location.reload(); // Reload the page after 1 second
+                }, 1000);
               }
+              reject("Location access denied.");
             } else {
-              alert("Unable to retrieve your location. Please try again later.");
+              if (!hasShownError) {
+                hasShownError = true; // Set flag to true
+                alert("Unable to retrieve your location. Please try again later.");
+                setTimeout(() => {
+                  location.reload(); // Reload the page after 1 second
+                }, 1000);
+              }
               reject("Unable to retrieve your location.");
             }
           }
@@ -562,7 +562,7 @@ async function fetchProductsForLocation(lat, lon) {
             const productLat = parseFloat(products[key].latitude); // Ensure latitude is a number
             const productLon = parseFloat(products[key].longitude); // Ensure longitude is a number
             const distance = calculateDistance(lat, lon, productLat, productLon);
-            if (distance <= 80) { // Only show products within 10 km
+            if (distance <= 10) { // Only show products within 10 km
                 const product = {
                     id: key,
                     availability: products[key].availability,
