@@ -82,7 +82,7 @@ body {
 }
 
 .card-img-top {
-    height: 120px !important; /* Force the height to 80px */
+    height: 140px !important; /* Force the height to 80px */
     object-fit:contain;
     border-top-left-radius: 6px; /* Smaller radius */
     border-top-right-radius: 6px; /* Smaller radius */
