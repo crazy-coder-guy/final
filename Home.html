@@ -147,11 +147,11 @@
 
     <div class="subcategories-row" id="row-2" style="display: none;">
         <div class="subcategories">
-            <a href="#Essentials Oils" onclick="scrollToSubcategory('EssentialsOils'); return false;">
+            <a href="#Essential Oils" onclick="scrollToSubcategory('EssentialOils'); return false;">
                 <img src="https://www.groocy.in/storage/app/public/product/2023-10-31-6540f465cb126.png" class="img-fluid subcategory-img" alt="Cooking Oils" />
-                <div class="text-center">Essentials Oils</div>
+                <div class="text-center">Essential Oils</div>
             </a>
-            <a href="#Spices" onclick="scrollToSubcategory('Spices'); return false;">
+            <a href="#Spices and Seasonings" onclick="scrollToSubcategory('SpicesandSeasonings'); return false;">
                 <img src="https://5.imimg.com/data5/SELLER/Default/2022/4/GZ/CD/PZ/140245462/90000486-500x500.jpg" class="img-fluid subcategory-img" alt="Spices and Seasonings" />
                 <div class="text-center">Spices and Seasonings</div>
             </a>
@@ -159,7 +159,7 @@
                 <img src="https://www.maltaproducts.com/wp-content/uploads/2020/08/ketchup-mayo.jpg" class="img-fluid subcategory-img" alt="Condiments and Sauces" />
                 <div class="text-center">Sauces</div>
             </a>
-            <a href="#Pasta" onclick="scrollToSubcategory('Pasta'); return false;">
+            <a href="#Pasta and Noodles" onclick="scrollToSubcategory('PastaandNoodles'); return false;">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRHVWvZcNJpaVaIHVEU4vVF4VmS72OtkrBFA&s" class="img-fluid subcategory-img" alt="Pasta and Noodles" />
                 <div class="text-center">Pasta and Noodles</div>
             </a>
@@ -188,7 +188,7 @@
                 <img src="https://homedelivery.ramachandran.in/media/catalog/product/cache/04c5c5c4276fe9dba74400abc896c29c/4/2/421420A001152.png" class="img-fluid subcategory-img" alt="Oral Care" />
                 <div class="text-center">Oral Care</div>
             </a>
-            <a href="#BathBody" onclick="scrollToSubcategory('BathBody'); return false;">
+            <a href="#BathandBody" onclick="scrollToSubcategory('BathandBody'); return false;">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRahVb2z5gktd3qWzQ9QJ3AAhOMofb62moTPw&s" class="img-fluid subcategory-img" alt="Bath and Body" />
                 <div class="text-center">Bath and Body</div>
             </a>
@@ -251,7 +251,7 @@
 
     <div class="subcategories-row" id="row-6" style="display: none;">
         <div class="subcategories">
-            <a href="#CleaningSupplies" onclick="scrollToSubcategory('CleaningSupplies'); return false;">
+            <a href="#Cleaning Supplies" onclick="scrollToSubcategory('CleaningSupplies'); return false;">
                 <img src="https://m.media-amazon.com/images/I/71MXA1DlSkL.jpg" class="img-fluid subcategory-img" alt="Cleaning Supplies" />
                 <div class="text-center">Cleaning Supplies</div>
             </a>
@@ -259,7 +259,7 @@
                 <img src="https://m.media-amazon.com/images/I/61BLaDOomiL.jpg" class="img-fluid subcategory-img" alt="Kitchenware" />
                 <div class="text-center">Kitchenware</div>
             </a>
-            <a href="#LaundryEssentials" onclick="scrollToSubcategory('LaundryEssentials'); return false;">
+            <a href="#Laundry Essentials" onclick="scrollToSubcategory('LaundryEssentials'); return false;">
                 <img src="https://m.media-amazon.com/images/I/41ynMRBlm6L._AC_.jpg" class="img-fluid subcategory-img" alt="Laundry Essentials" />
                 <div class="text-center">Laundry Essentials</div>
             </a>
@@ -452,7 +452,6 @@
             timestamp: Date.now(),
           };
           localStorage.setItem("userLocation", JSON.stringify(locationData));
-
           resolve(locationData);
         },
         (error) => {
